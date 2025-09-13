@@ -124,7 +124,8 @@ export default function Product({ productId }: ProductProps) {
             src={"/logo.jpg"}
             className="h-24 w-40 bg-transparent ml-10"
             alt="/placeholder.png"
-            fill
+            width={500}
+            height={500}
           />
         </Link>
         <div className="flex flex-col w-2/4 justify-around items-center h-full">
@@ -132,7 +133,8 @@ export default function Product({ productId }: ProductProps) {
             src={"/text.jpg"}
             className="object-contain w-full h-1/2"
             alt="/placeholder.png"
-            fill
+            width={500}
+            height={500}
           />
         </div>
         <div className="w-1/4" />

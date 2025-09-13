@@ -33,7 +33,8 @@ export default function sizePhotos() {
             src={"/logo.jpg"}
             className="h-24 w-40 bg-transparent ml-10"
             alt="/placeholder.png"
-            fill
+            width={501}
+            height={501}
           />
         </Link>
         <div className="flex flex-col w-2/4 justify-around items-center h-full">
@@ -41,7 +42,8 @@ export default function sizePhotos() {
             src={"/text.jpg"}
             className="object-contain w-full h-1/2"
             alt="/placeholder.png"
-            fill
+            width={501}
+            height={501}
           />
         </div>
         <div className="w-1/4" />
@@ -95,12 +97,14 @@ export default function sizePhotos() {
               src="/clothes/sizes/koszulkizwykle1.jpg"
               className="object-center h-full"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
             <Image
               src="/clothes/sizes/koszulkizwykle2.jpg"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
           </div>
         </div>
@@ -111,12 +115,14 @@ export default function sizePhotos() {
               src="/clothes/sizes/koszulkapremium1.jpg"
               className="object-center h-full"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
             <Image
               src="/clothes/sizes/koszulkapremium2.jpg"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
           </div>
         </div>
@@ -127,12 +133,14 @@ export default function sizePhotos() {
               src="/clothes/sizes/bluzakhaki1.jpg"
               className="object-center h-full"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
             <Image
               src="/clothes/sizes/bluzakhaki2.jpg"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
           </div>
         </div>
@@ -143,12 +151,14 @@ export default function sizePhotos() {
               src="/clothes/sizes/bluzastanleystella1.jpg"
               className="object-center h-full"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
             <Image
               src="/clothes/sizes/bluzastanleystella2.jpg"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
           </div>
         </div>
@@ -159,12 +169,14 @@ export default function sizePhotos() {
               src="/clothes/sizes/drespodnie1.jpg"
               className="object-center h-full"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
             <Image
               src="/clothes/sizes/drespodnie2.jpg"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
           </div>
         </div>
@@ -174,7 +186,8 @@ export default function sizePhotos() {
             <Image
               src="/clothes/sizes/czapkaopis.jpg"
               alt="/placeholder.png"
-              fill
+              width={2000}
+              height={2000}
             />
           </div>
         </div>

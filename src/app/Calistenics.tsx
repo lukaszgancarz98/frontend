@@ -124,7 +124,8 @@ export default function Calistenics() {
           <Image
             src={"/logo.jpg"}
             className="h-24 w-40 bg-transparent ml-10"
-            fill
+            width={500}
+            height={500}
             alt="/placeholder.png"
           />
         </a>
@@ -132,7 +133,8 @@ export default function Calistenics() {
           <Image
             src={"/text.jpg"}
             className="object-contain w-full h-1/2"
-            fill
+            width={500}
+            height={200}
             alt="/placeholder.png"
           />
         </div>

@@ -121,6 +121,8 @@ export default function Payment({ orderId }: { orderId: string }) {
             src={"/logo.jpg"}
             className="h-24 w-40 bg-transparent ml-10"
             alt="/placeholder.png"
+            width={500}
+            height={500}
           />
         </Link>
         <div className="text-white pr-10 flex justify-between gap-10">

@@ -69,7 +69,8 @@ export default function VideoProducts({
                 <Image
                   src={item?.image}
                   alt={item?.id}
-                  fill
+                  width={500}
+                  height={500}
                   className="h-max w-max object-center object-contain rounded-tl-lg rounded-t-lg rounded-tr-lg opacity-80"
                 />
                 <div className="absolute bottom-0 right-0 text-3xl font-semibold pr-4 pb-3 text-white text-shadow-lg/30">
