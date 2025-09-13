@@ -1,233 +1,236 @@
-"use client";
+'use client';
 
-import pkg from "lodash";
-import { useEffect, useState } from "react";
+import pkg from 'lodash';
+import { useEffect, useState } from 'react';
 import {
-  createOrder,
-  deleteOrder,
-  getOrder,
-  getOrderByEmail,
-  updateOrder,
-  type OrderType,
-} from "../api/orderApi";
+    createOrder,
+    deleteOrder,
+    getOrder,
+    getOrderByEmail,
+    updateOrder,
+    type OrderType,
+} from '../api/orderApi';
 import {
-  getAllProducts,
-  getAllProductTypes,
-  type ProductType,
-  type ProductTypeType,
-} from "../api/produktApi";
-import { useUser } from "../context/userContext";
-import type { DisplaySize } from "../pages/components/Cart/Cart";
-import { useOrder } from "../context/orderContext";
+    getAllProducts,
+    getAllProductTypes,
+    type ProductType,
+    type ProductTypeType,
+} from '../api/produktApi';
+import { useUser } from '../context/userContext';
+import type { DisplaySize } from '../pages/components/Cart/Cart';
+import { useOrder } from '../context/orderContext';
 
 export type CartItem = { id: string; amount: number };
 
 export function useCalistenics() {
-  const [productListCart, setProductListCart] = useState<OrderType>();
-  const [products, setProducts] = useState<ProductType[]>([]);
-  const [productTypes, setProductTypes] = useState<ProductTypeType[]>([]);
-  const { isEmpty } = pkg;
-  const { user } = useUser();
-  const {
-    order,
-    updateOrder: updateOrderContext,
-    expandCart,
-    updateExpanded,
-  } = useOrder();
+    const [productListCart, setProductListCart] = useState<OrderType>();
+    const [products, setProducts] = useState<ProductType[]>([]);
+    const [productTypes, setProductTypes] = useState<ProductTypeType[]>([]);
+    const { isEmpty } = pkg;
+    const { user } = useUser();
+    const {
+        order,
+        updateOrder: updateOrderContext,
+        expandCart,
+        updateExpanded,
+    } = useOrder();
 
-  const getProductsData = async () => {
-    const productResponse = await getAllProducts();
-    const productTypeResponse = await getAllProductTypes();
-    if (
-      productResponse.isValid &&
-      productTypeResponse.isValid &&
-      productResponse.data &&
-      productTypeResponse.data
-    ) {
-      setProducts(productResponse.data);
-      setProductTypes(productTypeResponse.data);
-    }
-  };
-
-  useEffect(() => {
-    getProductsData();
-  }, []);
-
-  const getOrderByEmailFunc = async () => {
-    const request = await getOrderByEmail({ email: user?.email as string });
-
-    if (!request.data) {
-      return;
-    }
-
-    setProductListCart(request.data);
-  };
-
-  const getOrderFunc = async () => {
-    const request = await getOrder({ id: order?.id as string });
-
-    if (!request.data) {
-      return;
-    }
-
-    setProductListCart(request.data);
-  };
-
-  useEffect(() => {
-    if (user?.email) {
-      getOrderByEmailFunc();
-    } else if (order?.id) {
-      getOrderFunc();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.email, order?.id]);
-
-  // Add product to cart
-  const addProductToProductList = async (product: CartItem) => {
-    const productType = productTypes.find((prod) => prod.id === product.id);
-
-    if (!productType) {
-      return;
-    }
-
-    const saveProduct = (product: OrderType) => {
-      setProductListCart(product);
-
-      return;
+    const getProductsData = async () => {
+        const productResponse = await getAllProducts();
+        const productTypeResponse = await getAllProductTypes();
+        if (
+            productResponse.isValid &&
+            productTypeResponse.isValid &&
+            productResponse.data &&
+            productTypeResponse.data
+        ) {
+            setProducts(productResponse.data);
+            setProductTypes(productTypeResponse.data);
+        }
     };
 
-    if (isEmpty(productListCart)) {
-      const response = await createOrder({
-        price: Number(productType.price),
-        products: [`${productType.id}`],
-        email: user?.email as string,
-        status: "new",
-      });
+    useEffect(() => {
+        getProductsData();
+    }, []);
 
-      if (response.isValid && response.data) {
-        saveProduct(response.data);
-        updateOrderContext({ id: response.data.id });
-      }
-    }
+    const getOrderByEmailFunc = async () => {
+        const request = await getOrderByEmail({ email: user?.email as string });
 
-    if (productListCart) {
-      const response = await updateOrder({
-        id: productListCart.id,
-        price: Number(productListCart.price) + Number(productType.price),
-        products: [...productListCart.products, product.id],
-        email: user?.email ? user?.email : "",
-      });
+        if (!request.data) {
+            return;
+        }
 
-      if (response.data) {
-        saveProduct(response.data);
-      }
-    }
+        setProductListCart(request.data);
+    };
 
-    updateExpanded(true);
-  };
+    const getOrderFunc = async () => {
+        const request = await getOrder({ id: order?.id as string });
 
-  const deleteFromCart = async (id: string) => {
-    const newOrder = productListCart;
+        if (!request.data) {
+            return;
+        }
 
-    const findProductType = productTypes.find((item) => item.id === id);
+        setProductListCart(request.data);
+    };
 
-    if (!newOrder || !findProductType) {
-      return;
-    }
+    useEffect(() => {
+        if (user?.email) {
+            getOrderByEmailFunc();
+        } else if (order?.id) {
+            getOrderFunc();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user?.email, order?.id]);
 
-    const index = newOrder.products.indexOf(id);
-    if (index !== -1 && typeof index === "number") {
-      newOrder.products.splice(index, 1);
-    }
+    // Add product to cart
+    const addProductToProductList = async (product: CartItem) => {
+        const productType = productTypes.find((prod) => prod.id === product.id);
 
-    const response = await updateOrder({
-      id: productListCart?.id as string,
-      price: Number(productListCart?.price) - Number(findProductType.price),
-      products: [...newOrder.products],
-    });
+        if (!productType) {
+            return;
+        }
 
-    if (response.data) {
-      setProductListCart(response.data);
-    }
-  };
+        const saveProduct = (product: OrderType) => {
+            setProductListCart(product);
 
-  const deleteWholeProduct = async (products: DisplaySize[]) => {
-    const newOrder = productListCart;
+            return;
+        };
 
-    let priceToDelete = 0;
-    const array: string[] = [];
+        if (isEmpty(productListCart)) {
+            const response = await createOrder({
+                price: Number(productType.price),
+                products: [`${productType.id}`],
+                email: user?.email as string,
+                status: 'new',
+            });
 
-    if (!newOrder) {
-      return;
-    }
+            if (response.isValid && response.data) {
+                saveProduct(response.data);
+                updateOrderContext({ id: response.data.id });
+            }
+        }
 
-    products.forEach((product) => {
-      priceToDelete += Number(product.price) * Number(product.amount);
-      array.push(product.id);
-    });
+        if (productListCart) {
+            const response = await updateOrder({
+                id: productListCart.id,
+                price:
+                    Number(productListCart.price) + Number(productType.price),
+                products: [...productListCart.products, product.id],
+                email: user?.email ? user?.email : '',
+            });
 
-    const updateProducts = newOrder.products.filter(
-      (product) => !array.includes(product),
-    );
+            if (response.data) {
+                saveProduct(response.data);
+            }
+        }
 
-    if (updateProducts.length > 0) {
-      const response = await updateOrder({
-        id: productListCart?.id as string,
-        price: Number(productListCart?.price) - Number(priceToDelete),
-        products: updateProducts,
-      });
+        updateExpanded(true);
+    };
 
-      if (response.data) {
-        setProductListCart(response.data);
-      }
+    const deleteFromCart = async (id: string) => {
+        const newOrder = productListCart;
 
-      return;
-    }
+        const findProductType = productTypes.find((item) => item.id === id);
 
-    const response = await deleteOrder(productListCart?.id as string);
+        if (!newOrder || !findProductType) {
+            return;
+        }
 
-    if (response.isValid) {
-      setProductListCart(undefined);
-    }
-  };
+        const index = newOrder.products.indexOf(id);
+        if (index !== -1 && typeof index === 'number') {
+            newOrder.products.splice(index, 1);
+        }
 
-  const addToCard = async (id: string) => {
-    const newOrder = productListCart;
+        const response = await updateOrder({
+            id: productListCart?.id as string,
+            price:
+                Number(productListCart?.price) - Number(findProductType.price),
+            products: [...newOrder.products],
+        });
 
-    const findProductType = productTypes.find((item) => item.id === id);
+        if (response.data) {
+            setProductListCart(response.data);
+        }
+    };
 
-    if (!newOrder || !findProductType) {
-      return;
-    }
+    const deleteWholeProduct = async (products: DisplaySize[]) => {
+        const newOrder = productListCart;
 
-    const response = await updateOrder({
-      id: productListCart?.id as string,
-      price: Number(productListCart?.price) + Number(findProductType.price),
-      products: [...newOrder.products, findProductType.id],
-    });
+        let priceToDelete = 0;
+        const array: string[] = [];
 
-    if (response.data) {
-      setProductListCart(response.data);
-    }
-  };
+        if (!newOrder) {
+            return;
+        }
 
-  const filterProducts = (type: string) => {
-    const filteredProductsArray = products.filter((product) =>
-      product.type.includes(type),
-    );
+        products.forEach((product) => {
+            priceToDelete += Number(product.price) * Number(product.amount);
+            array.push(product.id);
+        });
 
-    return filteredProductsArray;
-  };
+        const updateProducts = newOrder.products.filter(
+            (product) => !array.includes(product),
+        );
 
-  return {
-    allProducts: products,
-    products: filterProducts("clothes"),
-    productTypes: productTypes,
-    videoProducts: filterProducts("video"),
-    productListCart,
-    addProductToProductList,
-    cartFunctions: { deleteFromCart, deleteWholeProduct, addToCard },
-    expandCart,
-    updateExpanded,
-  };
+        if (updateProducts.length > 0) {
+            const response = await updateOrder({
+                id: productListCart?.id as string,
+                price: Number(productListCart?.price) - Number(priceToDelete),
+                products: updateProducts,
+            });
+
+            if (response.data) {
+                setProductListCart(response.data);
+            }
+
+            return;
+        }
+
+        const response = await deleteOrder(productListCart?.id as string);
+
+        if (response.isValid) {
+            setProductListCart(undefined);
+        }
+    };
+
+    const addToCard = async (id: string) => {
+        const newOrder = productListCart;
+
+        const findProductType = productTypes.find((item) => item.id === id);
+
+        if (!newOrder || !findProductType) {
+            return;
+        }
+
+        const response = await updateOrder({
+            id: productListCart?.id as string,
+            price:
+                Number(productListCart?.price) + Number(findProductType.price),
+            products: [...newOrder.products, findProductType.id],
+        });
+
+        if (response.data) {
+            setProductListCart(response.data);
+        }
+    };
+
+    const filterProducts = (type: string) => {
+        const filteredProductsArray = products.filter((product) =>
+            product.type.includes(type),
+        );
+
+        return filteredProductsArray;
+    };
+
+    return {
+        allProducts: products,
+        products: filterProducts('clothes'),
+        productTypes: productTypes,
+        videoProducts: filterProducts('video'),
+        productListCart,
+        addProductToProductList,
+        cartFunctions: { deleteFromCart, deleteWholeProduct, addToCard },
+        expandCart,
+        updateExpanded,
+    };
 }

@@ -1,19 +1,19 @@
-import { OrderProvider } from "@/context/orderContext";
-import { UserProvider } from "@/context/userContext";
-import Payment from "./Payment";
+import { OrderProvider } from '@/context/orderContext';
+import { UserProvider } from '@/context/userContext';
+import Payment from './Payment';
 
 export default async function PaymentPage({
-  params,
+    params,
 }: {
-  params: Promise<{ orderId: string }>;
+    params: Promise<{ orderId: string }>;
 }) {
-  const { orderId } = await params;
+    const { orderId } = await params;
 
-  return (
-    <OrderProvider>
-      <UserProvider>
-        <Payment orderId={orderId} />
-      </UserProvider>
-    </OrderProvider>
-  );
+    return (
+        <OrderProvider>
+            <UserProvider>
+                <Payment orderId={orderId} />
+            </UserProvider>
+        </OrderProvider>
+    );
 }

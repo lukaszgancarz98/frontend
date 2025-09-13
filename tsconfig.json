@@ -37,5 +37,10 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "formatCodeOptions": {
+		"tabSize": 4,
+		"indentSize": 4,
+		"convertTabsToSpaces": false
+	}
 }
