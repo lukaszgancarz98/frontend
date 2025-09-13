@@ -43,6 +43,9 @@ export default function ProductCard({
   const [pickedColor, setPickedColor] = useState<string>("");
   const { isEmpty } = pkg;
 
+  const body = document.body;
+  const breakPoint = body.clientWidth > 1024;
+
   useEffect(() => {
     const colorsArray: string[] = [];
     products?.forEach((item) => {
@@ -123,28 +126,30 @@ export default function ProductCard({
   );
 
   return (
-    <div className="fixed top-35 left-0 w-full h-full z-50">
+    <div className="pt-35 w-full h-max z-50">
       <Card className="h-full rounded-none">
         <CardContent className="px-1 h-full">
-          <div className="flex flex-row flex-row gap-20 h-full">
-            <div className="ml-40 w-1/2">
+          <div className="flex lg:flex-row flex-col lg:gap-20 h-full">
+            <div className="lg:ml-40 lg:w-1/2">
               {pickedProduct?.images && (
                 <ImageGalery images={pickedProduct?.images} />
               )}
             </div>
-            <div className="flex flex-col justify-between h-[80vh] w-full ml-10">
-              <div>
+            {breakPoint && (
+              <div className="flex flex-col justify-between h-[80vh] w-full ml-10">
                 <div className="flex flex-row justify-between">
                   <div className="flex flex-col justify-center">
-                    <div className="flex flex-row items-center gap-15">
+                    <div className="flex lg:flex-row flex-col items-center lg:gap-15">
                       <div className="text-3xl mb-1">{product?.name}</div>
-                      <div className="text-4xl font-bold pl-30">
+                      <div className="text-4xl font-bold lg:pl-30 w-max">
                         {displayPrice} zł
                       </div>
                     </div>
-                    <div className="text-lg">{product?.description}</div>
+                    <div className="text-lg pt-3 lg:pt-0">
+                      {product?.description}
+                    </div>
                   </div>
-                  <div className="flex items-start mr-5">
+                  <div className="fixed top-35 right-0 flex items-start mr-5 mt-3">
                     <CloseOutlined onClick={() => redirect("/#products")} />
                   </div>
                 </div>
@@ -157,99 +162,218 @@ export default function ProductCard({
                     {pickedProduct?.shortDescription}
                   </div>
                 </div>
-              </div>
-              <div className="flex justify-between mr-50 items-center mb-10">
-                <div className="flex flex-col items-start text-sm justify-start gap-6">
-                  {!isEmpty(colors) && (
-                    <div className="flex flex-row gap-3 justify-start">
-                      {colors?.map((color) => {
-                        const isColorPicked = color === pickedColor;
-                        const reformat = color.replaceAll(",", "");
+                <div className="flex flex-row justify-between mr-50 items-center gap-0 mb-10">
+                  <div className="flex flex-col items-start text-sm justify-start gap-6 mt-5">
+                    {!isEmpty(colors) && (
+                      <div className="flex flex-row gap-3 lg:justify-start justify-center w-full">
+                        {colors?.map((color) => {
+                          const isColorPicked = color === pickedColor;
+                          const reformat = color.replaceAll(",", "");
 
-                        return (
-                          <div
-                            key={product?.id + color}
-                            className="rounded-full w-10 h-10 border-black shadow-lg flex justify-center items-center"
-                            style={{
-                              borderColor: isColorPicked ? "green" : "",
-                              borderWidth: isColorPicked ? "1px" : "",
-                            }}
-                          >
+                          return (
                             <div
+                              key={product?.id + color}
+                              className="rounded-full w-10 h-10 border-black shadow-lg flex justify-center items-center"
                               style={{
-                                backgroundColor: reformat,
+                                borderColor: isColorPicked ? "green" : "",
+                                borderWidth: isColorPicked ? "1px" : "",
                               }}
-                              className={`rounded-full w-8 h-8 border-black shadow-lg`}
-                              onClick={() => {
-                                pickProductToDisplay(color);
-                                setSize("");
-                              }}
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                  {sizes.length > 0 && (
-                    <div className="mr-5 flex flex-row items-center gap-2">
-                      <div>
-                        <div className="flex flex-row items-center">
-                          <div className="pl-1 text-base">Rozmiar:</div>
-                          <div>
-                            <Tooltip>
-                              <TooltipTrigger className="pl-3">
-                                <QuestionCircleOutlined />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <a href="/sizes">Sprawdz nasze rozmiary</a>
-                              </TooltipContent>
-                            </Tooltip>
-                          </div>
-                        </div>
-                        <Select
-                          onValueChange={(value: string) => {
-                            pickNewProduct(value);
-                            setSize(value);
-                          }}
-                          value={size}
-                        >
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Wybierz rozmiar" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {sizes?.map((size) => {
-                              return (
-                                <SelectItem
-                                  value={size.size}
-                                  key={pickedProduct?.id + size.size}
-                                >
-                                  {size.size}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
+                            >
+                              <div
+                                style={{
+                                  backgroundColor: reformat,
+                                }}
+                                className={`rounded-full w-8 h-8 border-black shadow-lg`}
+                                onClick={() => {
+                                  pickProductToDisplay(color);
+                                  setSize("");
+                                }}
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
-                    </div>
-                  )}
-                  {pickedProduct?.sizePlaceHolder && (
-                    <div className="mr-5 flex flex-col gap-2">
-                      <div className="text-base">Rozmiar: </div>
-                      <div>{pickedProduct?.sizePlaceHolder}</div>
-                    </div>
-                  )}
+                    )}
+                    {sizes.length > 0 && (
+                      <div className="mr-5 flex flex-row items-center gap-2">
+                        <div>
+                          <div className="flex flex-row items-center">
+                            <div className="pl-1 text-base">Rozmiar:</div>
+                            <div>
+                              <Tooltip>
+                                <TooltipTrigger className="pl-3">
+                                  <QuestionCircleOutlined />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <a href="/sizes">Sprawdz nasze rozmiary</a>
+                                </TooltipContent>
+                              </Tooltip>
+                            </div>
+                          </div>
+                          <Select
+                            onValueChange={(value: string) => {
+                              pickNewProduct(value);
+                              setSize(value);
+                            }}
+                            value={size}
+                          >
+                            <SelectTrigger className="lg:w-[180px] w-[50vw]">
+                              <SelectValue placeholder="Wybierz rozmiar" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {sizes?.map((size) => {
+                                return (
+                                  <SelectItem
+                                    value={size.size}
+                                    key={pickedProduct?.id + size.size}
+                                  >
+                                    {size.size}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    )}
+                    {pickedProduct?.sizePlaceHolder && (
+                      <div className="mr-5 flex flex-col gap-2">
+                        <div className="text-base">Rozmiar: </div>
+                        <div>{pickedProduct?.sizePlaceHolder}</div>
+                      </div>
+                    )}
+                  </div>
+                  <Button
+                    disabled={disableButton}
+                    onClick={() => {
+                      addProduct();
+                    }}
+                  >
+                    <ShoppingCartOutlined />
+                    Dodaj do koszyka
+                  </Button>
                 </div>
-                <Button
-                  disabled={disableButton}
-                  onClick={() => {
-                    addProduct();
-                  }}
-                >
-                  <ShoppingCartOutlined />
-                  Dodaj do koszyka
-                </Button>
               </div>
-            </div>
+            )}
+            {!breakPoint && (
+              <div className="flex flex-col justify-between w-full">
+                <div className="flex flex-col justify-between">
+                  <div className="flex flex-col justify-center">
+                    <div className="flex flex-col items-center">
+                      <div className="text-3xl my-3">{product?.name}</div>
+                      <div className="text-4xl font-bold w-max pb-3">
+                        {displayPrice} zł
+                      </div>
+                      <Button
+                        disabled={disableButton}
+                        className="w-full"
+                        onClick={() => {
+                          addProduct();
+                        }}
+                      >
+                        <ShoppingCartOutlined />
+                        Dodaj do koszyka
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="fixed top-35 right-0 flex items-start mr-5 mt-3">
+                    <CloseOutlined onClick={() => redirect("/#products")} />
+                  </div>
+                </div>
+                <div className="flex flex-col justify-between items-center gap-5 mb-10">
+                  <div className="flex flex-col items-start text-sm justify-start gap-6 mt-5">
+                    {!isEmpty(colors) && (
+                      <div className="flex flex-row gap-3 justify-center w-full">
+                        {colors?.map((color) => {
+                          const isColorPicked = color === pickedColor;
+                          const reformat = color.replaceAll(",", "");
+
+                          return (
+                            <div
+                              key={product?.id + color}
+                              className="rounded-full w-10 h-10 border-black shadow-lg flex justify-center items-center"
+                              style={{
+                                borderColor: isColorPicked ? "green" : "",
+                                borderWidth: isColorPicked ? "1px" : "",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  backgroundColor: reformat,
+                                }}
+                                className={`rounded-full w-8 h-8 border-black shadow-lg`}
+                                onClick={() => {
+                                  pickProductToDisplay(color);
+                                  setSize("");
+                                }}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                    {sizes.length > 0 && (
+                      <div className="mr-5 flex flex-row items-center gap-2">
+                        <div>
+                          <div className="flex flex-row items-center">
+                            <div className="pl-1 text-base">Rozmiar:</div>
+                            <div>
+                              <Tooltip>
+                                <TooltipTrigger className="pl-3">
+                                  <QuestionCircleOutlined />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <a href="/sizes">Sprawdz nasze rozmiary</a>
+                                </TooltipContent>
+                              </Tooltip>
+                            </div>
+                          </div>
+                          <Select
+                            onValueChange={(value: string) => {
+                              pickNewProduct(value);
+                              setSize(value);
+                            }}
+                            value={size}
+                          >
+                            <SelectTrigger className="lg:w-[180px] w-[50vw]">
+                              <SelectValue placeholder="Wybierz rozmiar" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {sizes?.map((size) => {
+                                return (
+                                  <SelectItem
+                                    value={size.size}
+                                    key={pickedProduct?.id + size.size}
+                                  >
+                                    {size.size}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    )}
+                    {pickedProduct?.sizePlaceHolder && (
+                      <div className="mr-5 flex flex-col gap-2">
+                        <div className="text-base">Rozmiar: </div>
+                        <div>{pickedProduct?.sizePlaceHolder}</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col mt-10">
+                  <div className="text-2xl">Szczegóły produktu</div>
+                  <div className="text-lg pt-2">{product?.description}</div>
+                  <div
+                    className="w-full flex flex-col h-full text-lg mt-3"
+                    style={{ whiteSpace: "pre-line" }}
+                  >
+                    {pickedProduct?.shortDescription}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

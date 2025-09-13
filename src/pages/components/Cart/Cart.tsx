@@ -19,6 +19,7 @@ type CartProps = {
   };
   expand: boolean;
   setExpanded: (val: boolean) => void;
+  disabled?: boolean;
 };
 export type DisplaySize = {
   name: string;
@@ -39,6 +40,7 @@ export default function Cart({
   functions,
   expand,
   setExpanded,
+  disabled,
 }: CartProps) {
   const [openExtended, setOpenExtended] = useState<boolean>(false);
   const productsCount = useMemo(
@@ -84,16 +86,22 @@ export default function Cart({
   return (
     <div>
       <div
-        onClick={() => setOpenExtended(true)}
-        className="bg-white p-2 rounded-full relative cursor-pointer"
+        onClick={() => {
+          if (!disabled) {
+            setOpenExtended(true);
+          }
+        }}
+        className={`${disabled ? "bg-[oklch(0.6_0_0)]" : "bg-white"} p-2 rounded-full relative cursor-pointer`}
       >
-        <ShoppingCartOutlined className="text-3xl" />
-        <div className="absolute bg-red-100 bottom-0 left-0 w-5 h-5 rounded-full flex justify-center items-center text-sm font-semibold">
+        <ShoppingCartOutlined className="lg:text-3xl text-2xl" />
+        <div
+          className={`absolute ${disabled ? "bg-red-100" : "bg-red-200"} bottom-0 -left-1 w-5 h-5 rounded-full flex justify-center items-center text-sm font-semibold`}
+        >
           {productsCount}
         </div>
       </div>
       {openExtended && (
-        <div className="fixed inset-y-0 right-0 w-[30vw] min-w-96 bg-white shadow-lg z-50 flex flex-col">
+        <div className="fixed inset-y-0 right-0 lg:w-[30vw] w-[100vw] min-w-96 bg-white shadow-lg z-50 flex flex-col">
           <div className="p-5 flex-1 overflow-auto">
             <div className="flex justify-between">
               <h2 className="text-xl font-bold mb-4">Zakupy</h2>
@@ -109,7 +117,7 @@ export default function Cart({
               />
             </div>
             {productsCount > 0 &&
-              cartProducts.map((product) => {
+              cartProducts.map((product, index) => {
                 const parent = allProducts.find(
                   (item) => item.id === product?.productId,
                 );
@@ -117,7 +125,7 @@ export default function Cart({
                 if (parent && parent.type === "clothes") {
                   return (
                     <DisplayProduct
-                      key={product.id}
+                      key={product.id + index}
                       product={product}
                       parentProduct={parent}
                       functions={functions}
@@ -126,7 +134,7 @@ export default function Cart({
                 } else if (parent && parent.type.includes("video")) {
                   return (
                     <DisplayProductVideo
-                      key={product.id}
+                      key={product.id + index}
                       product={product}
                       parentProduct={parent}
                       functions={functions}

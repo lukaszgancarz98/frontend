@@ -94,7 +94,7 @@ export default function PaymentAddressForm({
               />
             </div>
             <div className="mx-5">Adress dostawy</div>
-            <div className="flex flex-row gap-5 mx-5">
+            <div className="flex lg:flex-row flex-col gap-5 mx-5">
               <div className="grid gap-3 w-full">
                 <Label htmlFor="name">Imię*</Label>
                 <Input
@@ -116,7 +116,7 @@ export default function PaymentAddressForm({
                 />
               </div>
             </div>
-            <div className="flex flex-row mx-5 gap-5">
+            <div className="flex lg:flex-row flex-col mx-5 gap-5">
               <div className="grid gap-3 w-full">
                 <Label htmlFor="street">Ulica*</Label>
                 <Input
@@ -127,24 +127,26 @@ export default function PaymentAddressForm({
                   value={address?.street}
                 />
               </div>
-              <div className="grid gap-3 w-1/4">
-                <Label htmlFor="streetNumber">Numer domu*</Label>
-                <Input
-                  id="streetNumber"
-                  type="text"
-                  name="streetNumber"
-                  required
-                  value={address?.streetNumber}
-                />
-              </div>
-              <div className="grid gap-3 w-1/4">
-                <Label htmlFor="parcelNumber">Numer mieszkania</Label>
-                <Input
-                  id="parcelNumber"
-                  type="text"
-                  name="parcelNumber"
-                  value={address?.parcelNumber}
-                />
+              <div className="flex flex-row justify-between gap-5 lg:gap-0">
+                <div className="grid gap-3 lg:w-1/4">
+                  <Label htmlFor="streetNumber">Numer domu*</Label>
+                  <Input
+                    id="streetNumber"
+                    type="text"
+                    name="streetNumber"
+                    required
+                    value={address?.streetNumber}
+                  />
+                </div>
+                <div className="grid gap-3 lg:w-1/4">
+                  <Label htmlFor="parcelNumber">Numer mieszkania</Label>
+                  <Input
+                    id="parcelNumber"
+                    type="text"
+                    name="parcelNumber"
+                    value={address?.parcelNumber}
+                  />
+                </div>
               </div>
             </div>
             <div className="grid gap-3 mx-5">
@@ -205,7 +207,7 @@ export default function PaymentAddressForm({
             </div>
             {editAddress && (
               <div className="flex flex-col gap-6 py-3">
-                <div className="flex flex-row gap-5 mx-5">
+                <div className="flex lg:flex-row flex-col gap-5 mx-5">
                   <div className="grid gap-3 w-full">
                     <Label htmlFor="nameAdd">Imię*</Label>
                     <Input
@@ -227,7 +229,7 @@ export default function PaymentAddressForm({
                     />
                   </div>
                 </div>
-                <div className="flex flex-row mx-5 gap-5">
+                <div className="flex lg:flex-row flex-col mx-5 gap-5">
                   <div className="grid gap-3 w-full">
                     <Label htmlFor="streetAdd">Ulica*</Label>
                     <Input
@@ -238,24 +240,26 @@ export default function PaymentAddressForm({
                       value={additionalPaymentInfo?.street}
                     />
                   </div>
-                  <div className="grid gap-3 w-1/4">
-                    <Label htmlFor="streetNumberAdd">Numer domu*</Label>
-                    <Input
-                      id="streetNumberAdd"
-                      type="text"
-                      name="streetNumberAdd"
-                      required={editAddress}
-                      value={additionalPaymentInfo?.streetNumber}
-                    />
-                  </div>
-                  <div className="grid gap-3 w-1/4">
-                    <Label htmlFor="parcelNumberAdd">Numer mieszkania</Label>
-                    <Input
-                      id="parcelNumberAdd"
-                      type="text"
-                      name="parcelNumberAdd"
-                      value={additionalPaymentInfo?.parcelNumber}
-                    />
+                  <div className="flex flex-row justify-between gap-5 lg:gap-0">
+                    <div className="grid gap-3 lg:w-1/4">
+                      <Label htmlFor="streetNumberAdd">Numer domu*</Label>
+                      <Input
+                        id="streetNumberAdd"
+                        type="text"
+                        name="streetNumberAdd"
+                        required={editAddress}
+                        value={additionalPaymentInfo?.streetNumber}
+                      />
+                    </div>
+                    <div className="grid gap-3 lg:w-1/4">
+                      <Label htmlFor="parcelNumberAdd">Numer mieszkania</Label>
+                      <Input
+                        id="parcelNumberAdd"
+                        type="text"
+                        name="parcelNumberAdd"
+                        value={additionalPaymentInfo?.parcelNumber}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="grid gap-3 mx-5">
@@ -331,7 +335,7 @@ export default function PaymentAddressForm({
           </div>
           <Button
             type="submit"
-            className="mt-5 w-1/4 ml-5 bg-green-400 hover:bg-green-600"
+            className="mt-5 lg:w-1/4 w-[90vw] lg:ml-5 mx-[5vw] bg-green-400 hover:bg-green-600"
           >
             Dalej
           </Button>

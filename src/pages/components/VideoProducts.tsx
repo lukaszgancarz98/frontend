@@ -49,29 +49,31 @@ export default function VideoProducts({
   };
 
   return (
-    <div className="flex flex-col pt-35" id="trainings">
+    <div className="flex flex-col lg:pt-35" id="trainings">
       <div>
-        <div className="mb-3 ml-15 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6 mt-5">
+        <div className="mb-3 lg:mx-15 mx-1 lg:text-3xl text-2xl font-semibold md:mb-4 md:text-4xl lg:mb-6 mt-5">
           {title}
         </div>
-        <div className="ml-15 text-lg w-2/3">{description}</div>
+        <div className="lg:mx-15 mx-2 lg:text-lg text-md lg:w-2/3">
+          {description}
+        </div>
       </div>
-      <div className="flex items-stretch flex-row py-20 h-max justify-evenly flex-wrap">
+      <div className="flex items-stretch lg:flex-row flex-col py-20 h-max justify-evenly flex-wrap">
         {videoProducts?.map((item) => {
           const productType = findProductType(item?.id);
 
           return (
             <div
               key={item?.id}
-              className="relative shadow-xl w-[28vw] h-auto mx-5 flex flex-col items-center min-h-1/3 rounded-xl min-w-[25vw] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              className="relative shadow-xl lg:w-[28vw] mb-5 lg:mb-0 h-auto mx-5 flex flex-col items-center min-h-1/3 rounded-xl min-w-[25vw] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
             >
-              <div className="relative">
+              <div className="relative w-full">
                 <Image
                   src={item?.image}
                   alt={item?.id}
                   width={500}
                   height={500}
-                  className="h-max w-max object-center object-contain rounded-tl-lg rounded-t-lg rounded-tr-lg opacity-80"
+                  className="h-max lg:w-max w-full object-center object-contain rounded-tl-lg rounded-t-lg rounded-tr-lg opacity-80"
                 />
                 <div className="absolute bottom-0 right-0 text-3xl font-semibold pr-4 pb-3 text-white text-shadow-lg/30">
                   {Number(productType?.price)?.toFixed(2).replace(".", ",")} zł
@@ -84,7 +86,7 @@ export default function VideoProducts({
                 <div className="flex flex-col">
                   <TextFade>
                     <div
-                      className="text-lg text-justify px-10 pb-5 indent-4 prose"
+                      className="text-lg text-justify lg:px-10 px-1 pb-5 indent-4 prose"
                       style={{ whiteSpace: "pre-line" }}
                     >
                       {item?.description}

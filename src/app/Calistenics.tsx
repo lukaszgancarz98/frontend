@@ -49,6 +49,8 @@ export default function Calistenics() {
   const vidLevelsRef = useRef<HTMLDivElement>(null);
   const additionalActivities = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+
   useEffect(() => {
     if (!randTriggered.current && products.length > 0) {
       randTriggered.current = true;
@@ -114,53 +116,62 @@ export default function Calistenics() {
     <div className="h-svh relative">
       <div
         id="header"
-        className={`flex flex-row justify-between items-center h-35 fixed top-0 left-0 w-full z-60 shadow-xl bg-black`}
+        className={`flex flex-row flex-wrap lg:flex-nowrap lg:justify-between lg:items-center lg:h-35 fixed top-0 left-0 w-full z-60 shadow-xl bg-black h-[20vh]`}
       >
         <a
           href="#home"
-          className="flex flex-col justify-start w-1/4"
+          className="flex flex-col justify-start lg:w-1/4 w-1/3 lg:h-full h-[10vh]"
           onClick={(e) => handleScroll(e, homeRef.current)}
         >
           <Image
             src={"/logo.jpg"}
-            className="h-24 w-40 bg-transparent ml-10"
+            className="lg:h-24 lg:w-40 bg-transparent lg:ml-10"
             width={500}
             height={500}
             alt="/placeholder.png"
           />
         </a>
-        <div className="flex flex-col w-2/4 justify-around items-center h-full">
+        <div className="flex flex-col lg:w-2/4 w-2/3 pr-3 lg:pr-0 justify-around lg:items-center lg:h-full h-[10vh]">
           <Image
             src={"/text.jpg"}
             className="object-contain w-full h-1/2"
-            width={500}
+            width={400}
             height={200}
             alt="/placeholder.png"
           />
         </div>
-        <div className="flex flex-row w-1/4 justify-end items-center gap-20">
+        <div className="flex flex-row lg:w-1/4 w-[100vw] lg:justify-end justify-between items-center lg:gap-20">
           {logged ? (
             <Button
               onClick={() => {
                 clearUser();
                 handleDialogOpenChange(false);
               }}
+              className="ml-3 lg:ml-0"
+              disabled={menuOpen}
             >
               Wyloguj się
             </Button>
           ) : (
             <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
               <DialogTrigger asChild>
-                <Button variant="outline">Zaloguj się</Button>
+                <Button
+                  className="ml-3 lg:ml-0"
+                  variant="outline"
+                  disabled={menuOpen}
+                >
+                  Zaloguj się
+                </Button>
               </DialogTrigger>
               <DialogTitle hidden />
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="w-[100vw] lg:w-[30vw] z-80">
                 {isLogin ? (
                   <LoginForm
                     loginFn={loginFn}
                     signupFn={signupFn}
                     googleAuth={googleAuth}
                     error={loginError}
+                    className="w-[80vw] lg:w-auto"
                   />
                 ) : (
                   <RegisterForm registerFn={registerFn} error={registerError} />
@@ -183,24 +194,25 @@ export default function Calistenics() {
               functions={cartFunctions}
               expand={expandCart}
               setExpanded={(val: boolean) => updateExpanded(val)}
+              disabled={menuOpen}
             />
           )}
-          <Menu settings={settings} />
+          <Menu settings={settings} setMenuOpen={setMenuOpen} />
         </div>
       </div>
       <div
         id="home"
         ref={homeRef}
-        className="flex flex-row w-full pt-35 pb-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl"
+        className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pt-[20vh] lg:pt-35 pb-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl"
       >
         <BackgroundOnScroll
           backgroundImageUrl="/kalintro02.jpg"
-          className="w-[70vw] h-200"
+          className="w-[70vw] lg:h-200 h-80 w-full"
           bgClassName=""
         />
-        <div className="w-1/2 text-white">
-          <TextFade className="p-10 h-full flex justify-center items-center">
-            <div className="text-3xl p-3 w-full prose prose-stone prose-invert text-justify">
+        <div className="lg:w-1/2 text-white">
+          <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
+            <div className="lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:indent-8 lg:text-justify">
               NIE MUSISZ BYĆ SILNYM ŻEBY ZACZĄĆ TRENOWAĆ, ALE MUSISZ ZACZĄĆ BY
               SILNYM SIĘ STAĆ.
             </div>
@@ -222,21 +234,25 @@ export default function Calistenics() {
                     trenować skutecznie, bezpiecznie i z realnymi efektami."
         />
       </div>
-      <div className="flex flex-row w-full pt-35 pb-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl">
-        <div className="w-1/2 bg-[oklch(0.13_0.03_246.56)] text-white">
-          <TextFade className="p-10">
-            <div className="text-3xl p-3 w-full prose prose-stone prose-invert indent-8 text-justify">
+      <div className="flex lg:flex-row flex-col-reverse h-[100vh] lg:h-auto w-full py-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl">
+        <div className="lg:w-1/2 bg-[oklch(0.13_0.03_246.56)] text-white">
+          <TextFade className="lg:p-10">
+            <div className="lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:indent-8 lg:text-justify">
               CYTATY
             </div>
           </TextFade>
         </div>
         <BackgroundOnScroll
           backgroundImageUrl="/kalintro03.jpg"
-          className="w-[70vw] h-200"
+          className="w-[70vw] lg:h-200 h-80 w-full"
           bgClassName=""
         />
       </div>
-      <div id="videosLevels" ref={vidLevelsRef} className="min-h-[100%] pb-30">
+      <div
+        id="videosLevels"
+        ref={vidLevelsRef}
+        className="min-h-[100%] lg:pb-30"
+      >
         <VideoProducts
           videoProducts={levelTrainings}
           productTypes={productTypes}
@@ -249,50 +265,71 @@ export default function Calistenics() {
                     trenować skutecznie, bezpiecznie i z realnymi efektami."
         />
       </div>
-      <div className="flex flex-row w-full bg-[oklch(0.13_0.03_246.56)] pt-10 pb-20">
+      <div className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full bg-[oklch(0.13_0.03_246.56)] pt-10 pb-20">
         <BackgroundOnScroll
           backgroundImageUrl="/kalintro01.jpg"
-          className="w-[70vw] h-200"
+          className="w-[70vw] lg:h-200 h-80 w-full"
           bgClassName=""
         />
-        <div className="w-1/2 text-white">
-          <TextFade className="p-10 h-full flex justify-center items-center">
-            <div className="text-3xl p-3 w-full prose prose-stone prose-invert indent-8 text-justify">
-              CYTATY
+        <div className=":lgw-1/2 text-white">
+          <TextFade className="lg:p-10 h-full flex justify-center items-center">
+            <div className="lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:indent-8 lg:text-justify">
+              SZEROKOŚĆ ZDJECIA ZALEŻNA OD ILOSCI TEKSTU i SZEROKOSCI ZDJECIA
             </div>
           </TextFade>
         </div>
       </div>
       <div
-        className="pt-40 mb-10 ml-15 font-semibold text-4xl"
+        className="lg:pt-40 pt-10 pt-3 lg:mb-10 mb-2 lg:ml-15 ml-3 font-semibold lg:text-4xl text-2xl"
         ref={additionalActivities}
         id="activities"
       >
         Trening personalny szkolenia, obozy
       </div>
       <div
-        className="relative w-auto h-auto flex flex-row flex-wrap shadow-2xl"
+        className="relative w-auto h-auto flex lg:flex-row flex-col flex-wrap shadow-2xl"
         id="photos"
       >
-        <div className="w-1/2">
+        <div className="lg:w-1/2">
           <Image
             src="/img1.jpg"
             className="h-full"
-            fill
+            width={1000}
+            height={500}
             alt="/placeholder.png"
           />
         </div>
-        <div className="w-1/2">
-          <Image src="/img2.jpg" fill alt="/placeholder.png" />
+        <div className="lg:w-1/2">
+          <Image
+            src="/img2.jpg"
+            width={1000}
+            height={500}
+            alt="/placeholder.png"
+          />
         </div>
-        <div className="w-1/2">
-          <Image src="/intro2.jpg" fill alt="/placeholder.png" />
+        <div className="lg:w-1/2">
+          <Image
+            src="/intro2.jpg"
+            width={1000}
+            height={500}
+            alt="/placeholder.png"
+          />
         </div>
-        <div className="w-1/2 -mt-10">
-          <Image src="/intro3.jpg" fill alt="/placeholder.png" />
+        <div className="lg:w-1/2 lg:-mt-10">
+          <Image
+            src="/intro3.jpg"
+            width={1000}
+            height={500}
+            alt="/placeholder.png"
+          />
         </div>
-        <div className="absolute w-1/2 bottom-0 right-0">
-          <Image src="/kal8.jpg" fill alt="/placeholder.png" />
+        <div className="lg:absolute lg:w-1/2 bottom-0 right-0">
+          <Image
+            src="/kal8.jpg"
+            width={1000}
+            height={500}
+            alt="/placeholder.png"
+          />
         </div>
       </div>
       <div id="products" ref={prodRef}>

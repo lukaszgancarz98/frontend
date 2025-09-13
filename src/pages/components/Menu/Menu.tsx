@@ -1,11 +1,17 @@
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 
 type MenuItem = { title: string; href: string; ref: HTMLDivElement | null };
 
-type MenuProps = { settings: MenuItem[] };
+type MenuProps = {
+  settings: MenuItem[];
+  setMenuOpen: Dispatch<SetStateAction<boolean>>;
+};
 
-export default function Menu({ settings }: MenuProps) {
+export default function Menu({
+  settings,
+  setMenuOpen: setInfoOpenMenu,
+}: MenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrollPosition = useRef(0);
 
@@ -14,7 +20,7 @@ export default function Menu({ settings }: MenuProps) {
     shouldScroll?: HTMLDivElement | null,
   ) => {
     const body = document.body;
-
+    const breakPoint = body.clientWidth > 1024;
     if (disable) {
       scrollPosition.current = window.scrollY;
 
@@ -22,15 +28,19 @@ export default function Menu({ settings }: MenuProps) {
       body.style.position = "fixed";
       body.style.top = `-${scrollPosition.current}px`;
       body.style.width = "100%";
-      body.style.paddingRight = "15px";
-      document.getElementById("header")!.style.paddingRight = "15px";
+      if (breakPoint) {
+        body.style.paddingRight = "15px";
+        document.getElementById("header")!.style.paddingRight = "15px";
+      }
     } else {
       body.style.overflowY = "";
       body.style.position = "";
       body.style.top = "";
       body.style.width = "";
-      body.style.paddingRight = "";
-      document.getElementById("header")!.style.paddingRight = "";
+      if (breakPoint) {
+        body.style.paddingRight = "";
+        document.getElementById("header")!.style.paddingRight = "";
+      }
 
       window.scrollTo(0, scrollPosition.current);
 
@@ -43,6 +53,7 @@ export default function Menu({ settings }: MenuProps) {
   const openMenu = () => {
     const prev = menuOpen;
     setMenuOpen(!prev);
+    setInfoOpenMenu(!prev);
 
     scrollBehaviourController(!prev);
   };
@@ -53,6 +64,7 @@ export default function Menu({ settings }: MenuProps) {
   ) => {
     e.preventDefault();
     setMenuOpen(false);
+    setInfoOpenMenu(false);
     scrollBehaviourController(false, ref);
   };
 
@@ -210,7 +222,7 @@ export default function Menu({ settings }: MenuProps) {
   return (
     <div className="relative">
       <div
-        className="flex flex-row mr-15 gap-2 items-center transition-all duration-300 ease-in-out hover:scale-110"
+        className="flex flex-row lg:mr-15 mr-5 gap-2 items-center transition-all duration-300 ease-in-out hover:scale-110"
         onClick={openMenu}
       >
         <div className="text-white text-2xl">Menu</div>
@@ -249,7 +261,7 @@ export default function Menu({ settings }: MenuProps) {
       {menuOpen && (
         <div
           id="menu"
-          className="fixed top-30 right-0 w-[100vw] h-[90vh] shadow-lg z-50 flex flex-col justify-center justify-around items-center text-white"
+          className="fixed lg:top-30 top-[20vh] right-0 w-[100vw] lg:h-[90vh] h-[80vh] shadow-lg z-50 flex flex-col justify-center justify-around items-center text-white"
         >
           <div className="absolute inset-0 backdrop-blur-md bg-black/40 z-40"></div>
           <div className="relative z-50 flex flex-col h-1/2 justify-between items-center mb-15">

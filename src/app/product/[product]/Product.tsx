@@ -117,27 +117,27 @@ export default function Product({ productId }: ProductProps) {
     <div id={productId}>
       <div
         id="header"
-        className={`flex flex-row justify-between items-center h-35 fixed top-0 left-0 w-full z-60 shadow-xl bg-black`}
+        className={`flex flex-row justify-between items-center h-35 fixed top-0 left-0 lg:w-full w-[100vw] z-60 shadow-xl bg-black`}
       >
         <Link href="/" className="flex flex-col justify-start w-1/4">
           <Image
             src={"/logo.jpg"}
-            className="h-24 w-40 bg-transparent ml-10"
+            className="h-24 w-40 bg-transparent lg:ml-10"
             alt="/placeholder.png"
-            width={500}
-            height={500}
+            width={1000}
+            height={1000}
           />
         </Link>
-        <div className="flex flex-col w-2/4 justify-around items-center h-full">
+        <div className="flex flex-col lg:w-2/4 w-3/4 justify-around items-center h-full">
           <Image
             src={"/text.jpg"}
-            className="object-contain w-full h-1/2"
+            className="object-contain w-full h-1/2 pr-1 lg:pr-0"
             alt="/placeholder.png"
             width={500}
             height={500}
           />
         </div>
-        <div className="w-1/4" />
+        <div className="lg:w-1/4" />
       </div>
       <ProductCard
         product={product}

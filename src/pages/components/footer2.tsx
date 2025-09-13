@@ -43,10 +43,10 @@ const Footer2 = ({
   copyright = "Copyright theschoolofcalistenics.pl 2025-2026",
 }: Footer2Props) => {
   return (
-    <section className="py-32 w-full bg-black text-white">
+    <section className="lg:py-24 py-5 w-full bg-black text-white">
       <div className="w-full">
         <footer>
-          <div className="flex grid-cols-2 gap-8 lg:grid-cols-6 justify-evenly items-start content-center">
+          <div className="flex px-5 grid-cols-2 gap-8 lg:grid-cols-6 justify-evenly items-start content-center">
             {menuItems.map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 <h3 className="mb-4 font-bold">{section.title}</h3>
@@ -63,8 +63,8 @@ const Footer2 = ({
               </div>
             ))}
           </div>
-          <div className="text-muted-foreground mt-24 flex flex-col justify-center gap-4 border-t pt-8 text-sm font-medium md:flex-row md:items-center">
-            <p>{copyright}</p>
+          <div className="text-muted-foreground lg:mt-24 mt-10 flex flex-col justify-center gap-4 border-t pt-8 text-sm font-medium md:flex-row md:items-center">
+            <p className="text-center">{copyright}</p>
           </div>
         </footer>
       </div>

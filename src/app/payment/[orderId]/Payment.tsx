@@ -112,20 +112,20 @@ export default function Payment({ orderId }: { orderId: string }) {
   const hardcodedEmail = "kalistenikazg@gmail.com";
 
   return (
-    <div className="w-[100%] shadow-lg z-50 flex flex-col">
+    <div className="lg:w-[100%] w-[100vw] shadow-lg z-50 flex flex-col">
       <div
         className={`flex flex-row justify-between items-center h-35 w-full z-60 shadow-3xl bg-black`}
       >
         <Link href={"/"}>
           <Image
             src={"/logo.jpg"}
-            className="h-24 w-40 bg-transparent ml-10"
+            className="h-24 w-40 bg-transparent lg:ml-10"
             alt="/placeholder.png"
             width={500}
             height={500}
           />
         </Link>
-        <div className="text-white pr-10 flex justify-between gap-10">
+        <div className="flex lg:flex-row flex-col text-white lg:pr-10 pr-2 justify-between lg:gap-10">
           <div>Kontakt:</div>
           <a
             onClick={(e) => {
@@ -138,8 +138,8 @@ export default function Payment({ orderId }: { orderId: string }) {
           </a>
         </div>
       </div>
-      <div className="w-full h-full flex bg-gray-200">
-        <div className="w-[60%] bg-white border m-5 rounded-sm flex flex-col">
+      <div className="flex flex-col-reverse lg:flex-row w-full h-full flex bg-gray-200">
+        <div className="lg:w-[60%] w-full bg-white border lg:m-5 rounded-sm flex flex-col">
           <PaymentAddressForm
             details={productListCart?.orderDetails}
             onFormSubmit={submitForm}
@@ -150,7 +150,7 @@ export default function Payment({ orderId }: { orderId: string }) {
           />
           <PaymentOptions />
         </div>
-        <div className="w-[40%] bg-white border m-5 rounded-sm">
+        <div className="lg:w-[40%] w-full bg-white border lg:m-5 rounded-sm">
           <PaymentCart
             products={cartProducts}
             price={Number(productListCart?.price) ?? 0}

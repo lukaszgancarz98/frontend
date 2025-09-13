@@ -55,15 +55,15 @@ const Gallery6 = ({ heading, items, productTypes }: Gallery6Props) => {
   };
 
   return (
-    <section className="pt-40" id="products">
+    <section className="lg:pt-40 pt-5" id="products">
       <div className="container">
         <div className="mb-2 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <h2 className="mb-3 ml-15 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6">
+            <h2 className="mb-3 lg:ml-15 ml-3 lg:text-3xl text-2xl font-semibold md:mb-4 md:text-4xl lg:mb-6">
               {heading}
             </h2>
           </div>
-          <div className="mt-8 flex shrink-0 items-center justify-start gap-2">
+          <div className="mt-8 flex shrink-0 items-center lg:justify-start justify-center gap-2">
             <Button
               size="icon"
               variant="outline"
@@ -99,11 +99,11 @@ const Gallery6 = ({ heading, items, productTypes }: Gallery6Props) => {
           }}
           className="w-full max-w-full md:left-[-1rem]"
         >
-          <CarouselContent className="hide-scrollbar w-full max-w-full mx-10 2xl:mr-[max(0rem,calc(50vw-700px-1rem))]">
-            {items?.map((item) => (
+          <CarouselContent className="hide-scrollbar w-full max-w-full lg:mx-10 2xl:mr-[max(0rem,calc(50vw-700px-1rem))]">
+            {items?.map((item, index) => (
               <CarouselItem
                 key={item?.id}
-                className="ml-8 md:max-w-[400px] shadow-lg my-8 py-8 pl-4 ml-8 rounded-lg"
+                className={`ml-8 lg:max-w-[400px] max-w-[90vw] w-full shadow-lg my-8 py-8 pl-4 ${index === 0 ? "" : "ml-8"} rounded-lg`}
                 onClick={() => redirect(`product/${item.id}`)}
               >
                 <Product

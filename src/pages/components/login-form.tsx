@@ -77,10 +77,9 @@ export default function LoginForm({
               </Button>
             </div>
           </form>
-          <div className="pt-3">
+          <div className="pt-3 flex justify-center">
             <GoogleOAuthProvider clientId={CLIENT_ID}>
               <GoogleLogin
-                width="327px"
                 size="large"
                 onSuccess={(e) => googleAuth(e)}
                 onError={() => console.log("ERROR")}
