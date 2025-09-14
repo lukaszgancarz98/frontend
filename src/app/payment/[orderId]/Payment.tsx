@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCalistenics } from '../../../hooks/useCalistenics';
 import PaymentCart from './PaymentCart';
 import type { DisplayProductType } from '../../../pages/components/Cart/Cart';
@@ -15,10 +15,12 @@ import PaymentAddressForm, {
     type DeliverTypesType,
 } from './PaymentAddressForm';
 import { DELIVER_TYPES } from '../../../common/constants';
-import PaymentOptions from './PaymentOptions';
 import Link from 'next/link';
 import { useUser } from '@/context/userContext';
 import Image from 'next/image';
+import { authorizePayment, createOrder } from '@/api/paymentApi';
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { redirect } from 'next/navigation';
 
 export default function Payment({ orderId }: { orderId: string }) {
     const { allProducts, productTypes, productListCart, cartFunctions } =
@@ -29,6 +31,8 @@ export default function Payment({ orderId }: { orderId: string }) {
         DELIVER_TYPES[0],
     );
     const { user } = useUser();
+    const token = useRef<string>('');
+    const [alert, setAlert] = useState<string>('')
 
     const getOrderRequest = async (orderId: string) => {
         const response = await getOrder({ id: orderId });
@@ -37,6 +41,20 @@ export default function Payment({ orderId }: { orderId: string }) {
             setOrder(response.data);
         }
     };
+    console.log(token.current, 'check')
+    const getAuthToken = async (orderId: string) => {
+        const response = await authorizePayment(orderId);
+
+        if (response.isValid && response.data) {
+            token.current = response.data;
+        }
+    };
+
+    useEffect(() => {
+        if (token.current.length === 0 && orderId) {
+            getAuthToken(orderId);
+        }
+    }, [token.current, orderId]);
 
     useEffect(() => {
         if (!order && orderId) {
@@ -57,6 +75,12 @@ export default function Payment({ orderId }: { orderId: string }) {
     }, [order, productTypes, allProducts]);
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+        if (token.current.length === 0) {
+            setAlert('Payment token not found');
+
+            return;
+        }
+
         const formData = new FormData(e.currentTarget);
 
         const data: AddressData = {
@@ -97,13 +121,24 @@ export default function Payment({ orderId }: { orderId: string }) {
             delete paymentAddressDetails.email;
         }
 
-        await updateOrderDetails({
+        const response = await updateOrderDetails({
             id: productListCart?.id as string,
             orderDetails: {
                 address: data,
                 paymentAddress: paymentAddressDetails,
             },
         });
+        if (!response.isValid) {
+            setAlert('Error');
+
+            return;
+        }
+
+        const paymentResponse = await createOrder(orderId);
+        
+        if (paymentResponse.isValid && paymentResponse.data) {
+            window.open(`${paymentResponse.data.redirectUri}`, "_blank", "noopener,noreferrer");
+        }
     };
 
     const setDeliverType = (val: string) => {
@@ -142,6 +177,19 @@ export default function Payment({ orderId }: { orderId: string }) {
                     </a>
                 </div>
             </div>
+            <AlertDialog open={alert.length === 0 ? false : true}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Błąd</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {alert}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setAlert('')}>Cancel</AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="flex flex-col-reverse lg:flex-row w-full h-full flex bg-gray-200">
                 <div className="lg:w-[60%] w-full bg-white border lg:m-5 rounded-sm flex flex-col">
                     <PaymentAddressForm
@@ -152,7 +200,6 @@ export default function Payment({ orderId }: { orderId: string }) {
                         pickedDelivery={deliverType.id}
                         user={user}
                     />
-                    <PaymentOptions />
                 </div>
                 <div className="lg:w-[40%] w-full bg-white border lg:m-5 rounded-sm">
                     <PaymentCart

@@ -73,7 +73,7 @@ export default function PaymentCart({
                                 />
                             </div>
                         );
-                    } else if (parent && parent.type === 'video') {
+                    } else if (parent && parent.type.includes('video')) {
                         return (
                             <div className="px-5" key={product.id}>
                                 <DisplayProductVideo

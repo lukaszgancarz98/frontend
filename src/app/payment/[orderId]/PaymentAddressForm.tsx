@@ -379,7 +379,7 @@ export default function PaymentAddressForm({
                         type="submit"
                         className="mt-5 lg:w-1/4 w-[90vw] lg:ml-5 mx-[5vw] bg-green-400 hover:bg-green-600"
                     >
-                        Dalej
+                        Zamawiam i płacę
                     </Button>
                 </form>
             </div>
