@@ -1,13 +1,11 @@
-import { BACKEND_URL } from "@/common/constants";
-import { ApiResponse } from "./userApi";
-
-type PaymentData = {
-    token: string;
-}
+import { BACKEND_URL } from '@/common/constants';
+import { ApiResponse } from './userApi';
 
 const url = `${BACKEND_URL}/order`;
 
-export const authorizePayment = async (id: string): Promise<ApiResponse<string>> => {
+export const authorizePayment = async (
+    id: string,
+): Promise<ApiResponse<string>> => {
     try {
         const res = await fetch(`${url}/auth/${id}`, {
             method: 'GET',
@@ -36,27 +34,27 @@ export const authorizePayment = async (id: string): Promise<ApiResponse<string>>
 };
 
 const getClientIp = async () => {
-  const res = await fetch("https://api.ipify.org?format=json");
-  const data = await res.json();
-  
-  return data.ip;
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+
+    return data.ip;
 };
-//paymentData: PaymentData, 
+//paymentData: PaymentData,
 export const createOrder = async (id: string) => {
     const clientId = await getClientIp();
 
     const payload = {
         customerIp: clientId,
-        merchantPosId: "495999",
-        description: "RTV market",
-        currencyCode: "PLN",
-        totalAmount: "210000",
+        merchantPosId: '495999',
+        description: 'RTV market',
+        currencyCode: 'PLN',
+        totalAmount: '210000',
         continueUrl: `http://localhost:3000/payment/completed/${id}`,
         products: [
             {
-                name: "Wireless Mouse for Laptop",
-                unitPrice: "210000",
-                quantity: "1",
+                name: 'Wireless Mouse for Laptop',
+                unitPrice: '210000',
+                quantity: '1',
             },
         ],
         // buyer: {
@@ -79,16 +77,16 @@ export const createOrder = async (id: string) => {
         //     }
         // },
     };
-    console.log(payload)
+    console.log(payload);
     try {
         const response = await fetch(`${url}/payment/${id}`, {
-            method: "POST",
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         });
-        
+
         const responseData = await response.json();
-        
+
         if (!response.ok) {
             return {
                 data: null,

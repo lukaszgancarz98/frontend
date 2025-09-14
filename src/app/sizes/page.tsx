@@ -29,7 +29,7 @@ export default function sizePhotos() {
             >
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
-                        src={'/logo.jpg'}
+                        src={'/logo.png'}
                         className="lg:h-24 h-18 w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}
@@ -38,7 +38,7 @@ export default function sizePhotos() {
                 </Link>
                 <div className="flex flex-col lg:w-2/4 w-3/4 justify-around items-center h-full">
                     <Image
-                        src={'/text.jpg'}
+                        src={'/text.png'}
                         className="object-contain lg:w-full h-1/2"
                         alt="/placeholder.png"
                         width={1000}

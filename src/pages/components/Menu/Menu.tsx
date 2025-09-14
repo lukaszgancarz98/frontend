@@ -1,5 +1,18 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { motion, type Variants } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import LoginForm from '../login-form';
+import RegisterForm from '../register-form';
+import { useUser } from '@/context/userContext';
+import useUserHook from '@/hooks/useUser';
 
 type MenuItem = { title: string; href: string; ref: HTMLDivElement | null };
 
@@ -14,6 +27,28 @@ export default function Menu({
 }: MenuProps) {
     const [menuOpen, setMenuOpen] = useState(false);
     const scrollPosition = useRef(0);
+    const [isLogin, setIsLogin] = useState(true);
+    const { clearUser } = useUser();
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const {
+        loginFn,
+        registerFn,
+        googleAuth,
+        loginError,
+        registerError,
+        logged,
+    } = useUserHook();
+
+    const signupFn = () => {
+        setIsLogin(false);
+    };
+
+    const handleDialogOpenChange = (open: boolean) => {
+        setDialogOpen(open);
+        if (!open) {
+            setIsLogin(true);
+        }
+    };
 
     const scrollBehaviourController = (
         disable: boolean,
@@ -225,7 +260,7 @@ export default function Menu({
                 className="flex flex-row lg:mr-15 mr-5 gap-2 items-center transition-all duration-300 ease-in-out hover:scale-110"
                 onClick={openMenu}
             >
-                <div className="text-white text-2xl">Menu</div>
+                <div className="text-white text-2xl">MENU</div>
                 <div className="relative flex flex-col items-start justify-around w-[20px] h-[20px]">
                     <motion.div
                         className="relative w-full h-full"
@@ -275,6 +310,58 @@ export default function Menu({
                                 {item.title}
                             </a>
                         ))}
+                        {logged ? (
+                            <Button
+                                onClick={() => {
+                                    clearUser();
+                                    handleDialogOpenChange(false);
+                                }}
+                                className="ml-3 lg:ml-0 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent"
+                            >
+                                WYLOGUJ SIĘ
+                            </Button>
+                        ) : (
+                            <Dialog
+                                open={dialogOpen}
+                                onOpenChange={handleDialogOpenChange}
+                            >
+                                <DialogTrigger asChild>
+                                    <Button
+                                        className="ml-3 lg:ml-0 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent"
+                                        variant="outline"
+                                    >
+                                        ZALOGUJ SIĘ
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogTitle hidden />
+                                <DialogContent className="w-[100vw] lg:w-[30vw] z-80">
+                                    {isLogin ? (
+                                        <LoginForm
+                                            loginFn={loginFn}
+                                            signupFn={signupFn}
+                                            googleAuth={googleAuth}
+                                            error={loginError}
+                                            className="w-[80vw] lg:w-auto"
+                                        />
+                                    ) : (
+                                        <RegisterForm
+                                            registerFn={registerFn}
+                                            error={registerError}
+                                        />
+                                    )}
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => setIsLogin(true)}
+                                            >
+                                                Anuluj
+                                            </Button>
+                                        </DialogClose>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                        )}
                     </div>
                 </div>
             )}

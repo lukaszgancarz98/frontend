@@ -6,6 +6,7 @@ type BackgroundOnScrollProps = {
     className?: string;
     bgClassName?: string;
     backgroundImageUrl: string;
+    shadow?: string;
 };
 
 const BackgroundOnScroll: React.FC<BackgroundOnScrollProps> = ({
@@ -13,6 +14,7 @@ const BackgroundOnScroll: React.FC<BackgroundOnScrollProps> = ({
     className = '',
     bgClassName = 'absolute top-0 left-0',
     backgroundImageUrl,
+    shadow,
 }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -39,14 +41,26 @@ const BackgroundOnScroll: React.FC<BackgroundOnScrollProps> = ({
         ? { backgroundImage: `url(${backgroundImageUrl})` }
         : {};
 
+    const returnShadow = () => {
+        if (shadow) {
+            return shadow;
+        }
+
+        return 'shadow-[inset_0_0_20px_20px_rgba(1,8,18,1)]';
+    };
+    console.log(shadow);
     return (
         <div ref={ref} className={`bgOnScrollWrapper relative ${className}`}>
             <div
                 className={`${isVisible ? 'visible' : ''} bg-cover bg-center bg-no-repeat h-full w-full ${bgClassName}`}
                 style={background}
             >
-                <div className="absolute top-0 left-0 w-full h-full shadow-[inset_0_0_80px_90px_rgba(1,8,18,1)]" />
-                <div className="absolute top-0 left-0 w-full h-full shadow-[inset_0_0_20px_20px_rgba(1,8,18,1)]" />
+                <div
+                    className={`absolute top-0 left-0 w-full h-full ${returnShadow()}`}
+                />
+                <div
+                    className={`absolute top-0 left-0 w-full h-full ${returnShadow()}`}
+                />
             </div>
             {children}
         </div>

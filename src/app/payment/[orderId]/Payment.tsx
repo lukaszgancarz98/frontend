@@ -19,8 +19,15 @@ import Link from 'next/link';
 import { useUser } from '@/context/userContext';
 import Image from 'next/image';
 import { authorizePayment, createOrder } from '@/api/paymentApi';
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { redirect } from 'next/navigation';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export default function Payment({ orderId }: { orderId: string }) {
     const { allProducts, productTypes, productListCart, cartFunctions } =
@@ -32,7 +39,7 @@ export default function Payment({ orderId }: { orderId: string }) {
     );
     const { user } = useUser();
     const token = useRef<string>('');
-    const [alert, setAlert] = useState<string>('')
+    const [alert, setAlert] = useState<string>('');
 
     const getOrderRequest = async (orderId: string) => {
         const response = await getOrder({ id: orderId });
@@ -41,7 +48,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             setOrder(response.data);
         }
     };
-    console.log(token.current, 'check')
+    console.log(token.current, 'check');
     const getAuthToken = async (orderId: string) => {
         const response = await authorizePayment(orderId);
 
@@ -54,7 +61,7 @@ export default function Payment({ orderId }: { orderId: string }) {
         if (token.current.length === 0 && orderId) {
             getAuthToken(orderId);
         }
-    }, [token.current, orderId]);
+    }, [token, orderId]);
 
     useEffect(() => {
         if (!order && orderId) {
@@ -135,9 +142,13 @@ export default function Payment({ orderId }: { orderId: string }) {
         }
 
         const paymentResponse = await createOrder(orderId);
-        
+
         if (paymentResponse.isValid && paymentResponse.data) {
-            window.open(`${paymentResponse.data.redirectUri}`, "_blank", "noopener,noreferrer");
+            window.open(
+                `${paymentResponse.data.redirectUri}`,
+                '_blank',
+                'noopener,noreferrer',
+            );
         }
     };
 
@@ -157,7 +168,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             >
                 <Link href={'/'}>
                     <Image
-                        src={'/logo.jpg'}
+                        src={'/logo.png'}
                         className="h-24 w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={500}
@@ -181,12 +192,12 @@ export default function Payment({ orderId }: { orderId: string }) {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Błąd</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {alert}
-                        </AlertDialogDescription>
+                        <AlertDialogDescription>{alert}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setAlert('')}>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel onClick={() => setAlert('')}>
+                            Cancel
+                        </AlertDialogCancel>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
