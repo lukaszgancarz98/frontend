@@ -48,7 +48,7 @@ const BackgroundOnScroll: React.FC<BackgroundOnScrollProps> = ({
 
         return 'shadow-[inset_0_0_20px_20px_rgba(1,8,18,1)]';
     };
-    console.log(shadow);
+
     return (
         <div ref={ref} className={`bgOnScrollWrapper relative ${className}`}>
             <div

@@ -9,8 +9,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import LoginForm from '../login-form';
-import RegisterForm from '../register-form';
+import LoginForm from '../pages/components/login-form';
+import RegisterForm from '../pages/components/register-form';
 import { useUser } from '@/context/userContext';
 import useUserHook from '@/hooks/useUser';
 

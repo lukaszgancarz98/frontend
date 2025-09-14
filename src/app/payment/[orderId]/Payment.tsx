@@ -48,7 +48,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             setOrder(response.data);
         }
     };
-    console.log(token.current, 'check');
+
     const getAuthToken = async (orderId: string) => {
         const response = await authorizePayment(orderId);
 

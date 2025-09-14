@@ -59,8 +59,12 @@ export default function Cart({
             const product = productTypes?.find(
                 (product) => product.id === itemId,
             );
+
             if (product) {
-                priceSum += Number(product.price);
+                const isSaleActive = Number(product?.sale_amount) > 0;
+                const price = isSaleActive ? Number(product?.sale_price) : Number(product?.price);
+
+                priceSum += price;
             }
         });
 

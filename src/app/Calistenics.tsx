@@ -6,7 +6,7 @@ import Gallery6 from '../pages/components/gallery6';
 import { useCalistenics } from '../hooks/useCalistenics';
 import VideoProducts from '../pages/components/VideoProducts';
 import type { ProductType } from '@/api/produktApi';
-import Menu from '../pages/components/Menu/Menu';
+import Menu from './Menu';
 import Footer2 from '../pages/components/footer2';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -91,17 +91,24 @@ export default function Calistenics() {
         [productListCart],
     );
 
-    window.addEventListener('scroll', () => {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-        if (scrollTop >= 50) {
-            setScrolled(true);
-        } else if (scrollTop < 50) {
-            setScrolled(false);
-        }
-    });
+            if (scrollTop >= 50) {
+                setScrolled(true);
+            } else if (scrollTop < 50) {
+                setScrolled(false);
+            }
+        };
 
-    console.log(scrolled);
+        window.addEventListener('scroll', handleScroll);
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <div className="h-svh relative">

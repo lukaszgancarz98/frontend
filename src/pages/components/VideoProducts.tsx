@@ -68,7 +68,7 @@ export default function VideoProducts({
             );
         });
     };
-    console.log(onlyTextDescription);
+
     return (
         <div className="flex flex-col lg:pt-35" id="trainings">
             <div className="flex flex-col justify-center items-center">
@@ -92,8 +92,8 @@ export default function VideoProducts({
 
                     const hovered = showLevel === productType?.id;
 
-                    const saleActive = Number(productType?.stock_quantity) > 0;
-
+                    const saleActive = Number(productType?.sale_amount) > 0 ;
+                    console.log(saleActive, productType?.sale_amount, productType)
                     return (
                         <div
                             key={item?.id}
@@ -146,7 +146,7 @@ export default function VideoProducts({
                                                     )}
                                                 </div>
                                                 {saleActive && (
-                                                    <div>50,00 zł</div>
+                                                    <div>{productType.sale_price} zł</div>
                                                 )}
                                             </div>
                                         </div>

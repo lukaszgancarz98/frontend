@@ -31,7 +31,6 @@ export default function Workshops({
     title,
     description,
 }: VideoProductsProps) {
-    console.log(products, 'xD');
     const [showLevel, setShowLevel] = useState<string>('');
     const [openAlert, setOpenAlert] = useState<string>('');
     const findProductType = (id: string) => {
@@ -61,7 +60,7 @@ export default function Workshops({
 
                     const hovered = showLevel === productType?.id;
 
-                    const saleActive = Number(productType?.stock_quantity) > 0;
+                    const saleActive = Number(productType?.sale_amount) > 0 ;
                     const priceExist = Number(productType?.price) !== 0;
 
                     return (
@@ -115,7 +114,7 @@ export default function Workshops({
                                                     </svg>
                                                 )}
                                             </div>
-                                            {saleActive && <div>50,00 zł</div>}
+                                            {saleActive && <div>{productType.sale_price} zł</div>}
                                         </div>
                                     </div>
                                 )}

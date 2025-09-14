@@ -96,9 +96,13 @@ export function useCalistenics() {
             return;
         };
 
+        const isSale = Number(productType.sale_amount) > 0;
+
+        const productPrice = isSale ? Number(productType.sale_price) : Number(productType.price);
+
         if (isEmpty(productListCart)) {
             const response = await createOrder({
-                price: Number(productType.price),
+                price: productPrice,
                 products: [`${productType.id}`],
                 email: user?.email as string,
                 status: 'new',
@@ -114,7 +118,7 @@ export function useCalistenics() {
             const response = await updateOrder({
                 id: productListCart.id,
                 price:
-                    Number(productListCart.price) + Number(productType.price),
+                    Number(productListCart.price) + productPrice,
                 products: [...productListCart.products, product.id],
                 email: user?.email ? user?.email : '',
             });
@@ -202,10 +206,14 @@ export function useCalistenics() {
             return;
         }
 
+        const isSale = Number(findProductType.sale_amount) > 0;
+
+        const productPrice = isSale ? Number(findProductType.sale_price) : Number(findProductType.price);
+
         const response = await updateOrder({
             id: productListCart?.id as string,
             price:
-                Number(productListCart?.price) + Number(findProductType.price),
+                Number(productListCart?.price) + productPrice,
             products: [...newOrder.products, findProductType.id],
         });
 

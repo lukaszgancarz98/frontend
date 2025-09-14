@@ -20,6 +20,8 @@ export type ProductTypeType = {
     sizePlaceHolder: string;
     stock_quantity: string;
     productId: string;
+    sale_price: string;
+    sale_amount: string;
 };
 
 const url = `${BACKEND_URL}/product`;
