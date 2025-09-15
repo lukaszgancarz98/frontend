@@ -62,7 +62,9 @@ export default function Cart({
 
             if (product) {
                 const isSaleActive = Number(product?.sale_amount) > 0;
-                const price = isSaleActive ? Number(product?.sale_price) : Number(product?.price);
+                const price = isSaleActive
+                    ? Number(product?.sale_price)
+                    : Number(product?.price);
 
                 priceSum += price;
             }

@@ -51,7 +51,10 @@ export default function VideoProducts({
             const dots = ['1', '2', '3', '4', '5'];
 
             return (
-                <div key={dots+items[0]} className="flex flex-row items-center justify-between">
+                <div
+                    key={dots + items[0]}
+                    className="flex flex-row items-center justify-between"
+                >
                     <div className="font-semibold">{items[0]}</div>
                     <div className="flex flex-row gap-1">
                         {dots.map((dot, index) => {
@@ -92,8 +95,12 @@ export default function VideoProducts({
 
                     const hovered = showLevel === productType?.id;
 
-                    const saleActive = Number(productType?.sale_amount) > 0 ;
-                    console.log(saleActive, productType?.sale_amount, productType)
+                    const saleActive = Number(productType?.sale_amount) > 0;
+                    console.log(
+                        saleActive,
+                        productType?.sale_amount,
+                        productType,
+                    );
                     return (
                         <div
                             key={item?.id}
@@ -146,7 +153,10 @@ export default function VideoProducts({
                                                     )}
                                                 </div>
                                                 {saleActive && (
-                                                    <div>{productType.sale_price} zł</div>
+                                                    <div>
+                                                        {productType.sale_price}{' '}
+                                                        zł
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>

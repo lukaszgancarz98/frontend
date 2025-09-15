@@ -294,3 +294,35 @@ export const deleteOrder = async (
         };
     }
 };
+
+export const updateProductOrder = async (
+    id: string,
+    amount: string,
+): Promise<ApiResponse<OrderType>> => {
+    try {
+        const res = await fetch(`${url}/product/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: amount }),
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error: responseData.message || 'Order update failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};

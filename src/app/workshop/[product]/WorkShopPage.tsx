@@ -8,7 +8,6 @@ import Link from 'next/link';
 type WorkShopPageProps = { productId: string };
 
 export default function WorkShopPage({ productId }: WorkShopPageProps) {
-
     return (
         <div>
             <div

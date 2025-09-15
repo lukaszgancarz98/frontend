@@ -8,6 +8,7 @@ import {
     getOrder,
     getOrderByEmail,
     updateOrder,
+    updateProductOrder,
     type OrderType,
 } from '../api/orderApi';
 import {
@@ -82,7 +83,6 @@ export function useCalistenics() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.email, order?.id]);
 
-    // Add product to cart
     const addProductToProductList = async (product: CartItem) => {
         const productType = productTypes.find((prod) => prod.id === product.id);
 
@@ -98,7 +98,9 @@ export function useCalistenics() {
 
         const isSale = Number(productType.sale_amount) > 0;
 
-        const productPrice = isSale ? Number(productType.sale_price) : Number(productType.price);
+        const productPrice = isSale
+            ? Number(productType.sale_price)
+            : Number(productType.price);
 
         if (isEmpty(productListCart)) {
             const response = await createOrder({
@@ -107,6 +109,10 @@ export function useCalistenics() {
                 email: user?.email as string,
                 status: 'new',
             });
+
+            if (!response.isValid) {
+                return;
+            }
 
             if (response.isValid && response.data) {
                 saveProduct(response.data);
@@ -117,15 +123,27 @@ export function useCalistenics() {
         if (productListCart) {
             const response = await updateOrder({
                 id: productListCart.id,
-                price:
-                    Number(productListCart.price) + productPrice,
+                price: Number(productListCart.price) + productPrice,
                 products: [...productListCart.products, product.id],
                 email: user?.email ? user?.email : '',
             });
 
+            if (!response.isValid) {
+                return;
+            }
+
             if (response.data) {
                 saveProduct(response.data);
             }
+        }
+
+        const updateProduct = await updateProductOrder(
+            product.id,
+            '-' + product.amount.toString(),
+        );
+
+        if (!updateProduct.isValid) {
+            return;
         }
 
         updateExpanded(true);
@@ -154,6 +172,12 @@ export function useCalistenics() {
 
         if (response.data) {
             setProductListCart(response.data);
+        }
+
+        const updateProduct = await updateProductOrder(id, '1');
+
+        if (!updateProduct.isValid) {
+            return;
         }
     };
 
@@ -195,6 +219,16 @@ export function useCalistenics() {
         if (response.isValid) {
             setProductListCart(undefined);
         }
+
+        try {
+            await Promise.all(
+                products.map((item) =>
+                    updateProductOrder(item.id, item.amount.toString()),
+                ),
+            );
+        } catch {
+            return;
+        }
     };
 
     const addToCard = async (id: string) => {
@@ -208,12 +242,13 @@ export function useCalistenics() {
 
         const isSale = Number(findProductType.sale_amount) > 0;
 
-        const productPrice = isSale ? Number(findProductType.sale_price) : Number(findProductType.price);
+        const productPrice = isSale
+            ? Number(findProductType.sale_price)
+            : Number(findProductType.price);
 
         const response = await updateOrder({
             id: productListCart?.id as string,
-            price:
-                Number(productListCart?.price) + productPrice,
+            price: Number(productListCart?.price) + productPrice,
             products: [...newOrder.products, findProductType.id],
         });
 

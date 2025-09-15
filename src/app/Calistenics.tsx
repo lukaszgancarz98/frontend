@@ -93,7 +93,8 @@ export default function Calistenics() {
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const scrollTop =
+                window.scrollY || document.documentElement.scrollTop;
 
             if (scrollTop >= 50) {
                 setScrolled(true);

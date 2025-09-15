@@ -18,8 +18,8 @@ export default function DisplayProductVideo({
     parentProduct,
     functions,
 }: DispalyProductProps) {
-    const sale = Number(product.sale_amount) > 0;
-    const price = sale ? Number(product.sale_price) : Number(product.price);
+    const sale = Number(product?.sale_amount) > 0;
+    const price = sale ? Number(product?.sale_price) : Number(product?.price);
 
     return (
         <div className="flex flex-col border rounded-lg mb-2 p-2">
@@ -50,9 +50,7 @@ export default function DisplayProductVideo({
             </div>
             <div className="flex flex-col justify-end content-center items-end pt-5">
                 <div className="font-semibold">Cena</div>
-                <div>
-                    {Number(price)?.toFixed(2).replace('.', ',')} zł
-                </div>
+                <div>{Number(price)?.toFixed(2).replace('.', ',')} zł</div>
             </div>
         </div>
     );
