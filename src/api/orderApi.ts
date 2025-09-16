@@ -25,6 +25,9 @@ export type OrderDataType = {
     products: string[];
     email: string;
     status: string;
+    finalize_date?: string;
+    payment_date?: string;
+    id?: string;
 };
 
 export type OrderType = {
@@ -34,8 +37,8 @@ export type OrderType = {
     email: string;
     status: string;
     createDate: string;
-    finalizeDate?: string;
-    paymentDate?: string;
+    finalize_date?: string;
+    payment_date?: string;
     orderDetails?: OrderAddressDetails;
 };
 
@@ -48,6 +51,8 @@ type UpdateOrderData = {
     price?: number;
     products?: string[];
     email?: string;
+    payment_date?: Date;
+    payment_id?: string;
 };
 
 type UpdateOrderDetailsData = { id: string; orderDetails: OrderAddressDetails };
@@ -94,6 +99,38 @@ export const createOrder = async (
 export const getAllOrders = async (): Promise<ApiResponse<OrderType[]>> => {
     try {
         const res = await fetch(`${url}/all`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error: responseData.message || 'Order get failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const getAllOrdersById = async ({
+    id,
+}: {
+    id: string;
+}): Promise<ApiResponse<OrderType[]>> => {
+    try {
+        const res = await fetch(`${url}/all/${id}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });

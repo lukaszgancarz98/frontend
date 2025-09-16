@@ -14,7 +14,7 @@ import TextFade from './Fade/FadeChildComponents';
 import Image from 'next/image';
 import { ProductType, ProductTypeType } from '@/api/produktApi';
 import { CartItem } from '@/hooks/useCalistenics';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 
 type VideoProductsProps = {
     products: ProductType[];
@@ -153,6 +153,7 @@ export default function Workshops({
                                               })
                                             : redirect(
                                                   `/workshop/${productType?.id}`,
+                                                  RedirectType.push,
                                               )
                                     }
                                 >

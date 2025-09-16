@@ -8,7 +8,13 @@ import {
     type ReactNode,
 } from 'react';
 
-type User = { email: string; password?: string; name: string; surname: string };
+type User = {
+    id: string;
+    email: string;
+    password?: string;
+    name: string;
+    surname: string;
+};
 
 type UserContextType = {
     user: User | null;

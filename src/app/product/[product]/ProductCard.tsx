@@ -23,7 +23,7 @@ import {
 import { SIZE_WEIGHT } from '../../../common/constants';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import ImageGalery from '../../../pages/components/ImageGalery';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 
 type ProductCardProps = {
     product?: ProductType;
@@ -154,7 +154,10 @@ export default function ProductCard({
                                     <div className="fixed top-35 right-0 flex items-start mr-5 mt-3">
                                         <CloseOutlined
                                             onClick={() =>
-                                                redirect('/#products')
+                                                redirect(
+                                                    '/#products',
+                                                    RedirectType.push,
+                                                )
                                             }
                                         />
                                     </div>
@@ -331,7 +334,10 @@ export default function ProductCard({
                                     <div className="fixed top-35 right-0 flex items-start mr-5 mt-3">
                                         <CloseOutlined
                                             onClick={() =>
-                                                redirect('/#products')
+                                                redirect(
+                                                    '/#products',
+                                                    RedirectType.push,
+                                                )
                                             }
                                         />
                                     </div>

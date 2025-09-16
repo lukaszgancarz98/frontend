@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/carousel';
 import Product from './productInGallery';
 import type { ProductType, ProductTypeType } from '@/api/produktApi';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 
 interface Gallery6Props {
     heading: string;
@@ -104,7 +104,12 @@ const Gallery6 = ({ heading, items, productTypes }: Gallery6Props) => {
                             <CarouselItem
                                 key={item?.id}
                                 className={`ml-8 lg:max-w-[400px] max-w-[90vw] w-full shadow-lg my-8 py-8 pl-4 ${index === 0 ? '' : 'ml-8'} rounded-lg`}
-                                onClick={() => redirect(`product/${item.id}`)}
+                                onClick={() =>
+                                    redirect(
+                                        `product/${item.id}`,
+                                        RedirectType.push,
+                                    )
+                                }
                             >
                                 <Product
                                     product={item}

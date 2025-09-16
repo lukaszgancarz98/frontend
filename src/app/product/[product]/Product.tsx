@@ -16,7 +16,7 @@ import {
     type OrderType,
 } from '../../../api/orderApi';
 import pkg from 'lodash';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import { useOrder } from '@/context/orderContext';
 import { useUser } from '@/context/userContext';
 import Link from 'next/link';
@@ -110,7 +110,7 @@ export default function Product({ productId }: ProductProps) {
 
         updateExpanded(true);
 
-        redirect('/#products');
+        redirect('/#products', RedirectType.push);
     };
 
     return (

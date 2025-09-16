@@ -1,5 +1,8 @@
+'use client';
+
 import { OrderProvider } from '@/context/orderContext';
 import { UserProvider } from '@/context/userContext';
+import PaymentCompleted from './PaymentComplete';
 
 export default async function PaymentPage({
     params,
@@ -11,7 +14,7 @@ export default async function PaymentPage({
     return (
         <OrderProvider>
             <UserProvider>
-                <div>{orderId}</div>
+                <PaymentCompleted id={orderId} />
             </UserProvider>
         </OrderProvider>
     );

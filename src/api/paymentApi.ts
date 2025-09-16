@@ -1,6 +1,30 @@
 import { BACKEND_URL } from '@/common/constants';
 import { ApiResponse } from './userApi';
 
+type PaymentProperties = { name: string; value: string };
+
+type PaymentProduct = { name: string; quantity: string; unitPrice: string };
+
+type PaymenOrder = {
+    buyer: { customerId: string; email: string };
+    currencyCode: string;
+    customerIp: string;
+    description: string;
+    merchantPosId: string;
+    rderCreateDate: string;
+    orderId: string;
+    payMethod: { amount: string; type: string };
+    products: PaymentProduct[];
+    status: string;
+    totalAmount: string;
+};
+
+export type CheckPaymentData = {
+    orders: PaymenOrder[];
+    properties: PaymentProperties[];
+    status: { statusCode: string; statusDesc: string };
+};
+
 const url = `${BACKEND_URL}/order`;
 
 export const authorizePayment = async (
@@ -9,6 +33,36 @@ export const authorizePayment = async (
     try {
         const res = await fetch(`${url}/auth/${id}`, {
             method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error: responseData.message || 'Oauth failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const checkPayment = async (
+    orderId: string,
+): Promise<ApiResponse<CheckPaymentData>> => {
+    try {
+        const res = await fetch(`${url}/payment/check/${orderId}`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
 
@@ -46,14 +100,14 @@ export const createOrder = async (id: string) => {
     const payload = {
         customerIp: clientId,
         merchantPosId: '495999',
-        description: 'RTV market',
+        description: 'Clothes shop',
         currencyCode: 'PLN',
-        totalAmount: '210000',
+        totalAmount: '2100',
         continueUrl: `http://localhost:3000/payment/completed/${id}`,
         products: [
             {
                 name: 'Wireless Mouse for Laptop',
-                unitPrice: '210000',
+                unitPrice: '2100',
                 quantity: '1',
             },
         ],

@@ -15,6 +15,7 @@ import { useUser } from '@/context/userContext';
 import useUserHook from '@/hooks/useUser';
 import { useOrder } from '@/context/orderContext';
 import { OrderType } from '@/api/orderApi';
+import Link from 'next/link';
 
 type MenuItem = { title: string; href: string; ref: HTMLDivElement | null };
 
@@ -315,6 +316,14 @@ export default function Menu({
                                 {item.title}
                             </a>
                         ))}
+                        {logged && (
+                            <Link
+                                className="ml-3 lg:ml-0 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent font-medium"
+                                href={'/user/orders'}
+                            >
+                                ZAMÓWIENIA
+                            </Link>
+                        )}
                         {logged ? (
                             <Button
                                 onClick={() => {
