@@ -5,9 +5,19 @@ import type {
 import type { ProductType } from '../../../api/produktApi';
 import DisplayProduct from '../../../pages/components/Cart/DisplayProduct';
 import DisplayProductVideo from '../../../pages/components/Cart/DisplayProductVideo';
-import { useMemo } from 'react';
-
-type User = { email: string };
+import { useEffect, useMemo, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Dialog } from '@radix-ui/react-dialog';
+import {
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import LoginForm from '@/pages/components/login-form';
+import RegisterForm from '@/pages/components/register-form';
+import useUserHook from '@/hooks/useUser';
+import { updateOrder } from '@/api/orderApi';
 
 type PaymentCartProps = {
     products: DisplayProductType[];
@@ -19,7 +29,7 @@ type PaymentCartProps = {
     };
     deliveryPrice: number;
     price: number;
-    user: User | null;
+    order: string;
 };
 
 export default function PaymentCart({
@@ -28,17 +38,121 @@ export default function PaymentCart({
     func,
     deliveryPrice,
     price,
-    user,
+    order,
 }: PaymentCartProps) {
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [isLogin, setIsLogin] = useState(true);
     const fullPrice = useMemo(() => {
         return (price + deliveryPrice)?.toFixed(2).replace('.', ',');
     }, [price, deliveryPrice]);
 
+    const {
+        loginFn,
+        registerFn,
+        googleAuth,
+        loginError,
+        registerError,
+        logged,
+        clearUser,
+        user,
+    } = useUserHook();
+
+    const signupFn = () => {
+        setIsLogin(false);
+    };
+
+    const loginFunction = async (e: React.FormEvent<HTMLFormElement>) => {
+        const resp = await loginFn(e);
+
+        if (resp?.email) {
+            const response = await updateOrder({
+                id: order,
+                email: resp.email,
+            });
+
+            if (!response.isValid && !response.data) {
+                clearUser();
+
+                return;
+            }
+        }
+    };
+
+    const registerFunction = async (e: React.FormEvent<HTMLFormElement>) => {
+        const resp = await registerFn(e);
+
+        if (resp?.email) {
+            const response = await updateOrder({
+                id: order,
+                email: resp.email,
+            });
+
+            if (!response.isValid && !response.data) {
+                clearUser();
+
+                return;
+            }
+        }
+    };
+
+    const handleDialogOpenChange = (open: boolean) => {
+        setDialogOpen(open);
+        if (!open) {
+            setIsLogin(true);
+        }
+    };
+
+    useEffect(() => {
+        if (logged) {
+            setDialogOpen(!logged);
+        }
+    }, [logged]);
+
     return (
         <div className="flex flex-col">
-            {!user?.email && <div>Masz już konto?</div>}
+            {!user?.email && (
+                <div className="flex flex-row gap-1 stext-sm pt-2 pl-2">
+                    Masz już konto?{' '}
+                    <div
+                        className="text-blue underline decoration-solid hover:text-blue-600"
+                        onClick={() => setDialogOpen(true)}
+                    >
+                        Zaloguj się
+                    </div>{' '}
+                    i śledź zamówienie
+                </div>
+            )}
+            <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
+                <DialogTitle hidden />
+                <DialogContent className="w-[100vw] lg:w-[30vw] z-80">
+                    {isLogin ? (
+                        <LoginForm
+                            loginFn={loginFunction}
+                            signupFn={signupFn}
+                            googleAuth={googleAuth}
+                            error={loginError}
+                            className="w-[80vw] lg:w-auto"
+                        />
+                    ) : (
+                        <RegisterForm
+                            registerFn={registerFunction}
+                            error={registerError}
+                        />
+                    )}
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button
+                                variant="outline"
+                                onClick={() => setIsLogin(true)}
+                            >
+                                Anuluj
+                            </Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
             <div className="flex flex-col gap-3">
-                <div className="text-xl font-semibold pl-5 pt-5">
+                <div className="text-xl font-semibold pl-5 pt-3">
                     Podsumowanie
                 </div>
                 <div className="flex w-full justify-between px-10">

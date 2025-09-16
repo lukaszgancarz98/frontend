@@ -219,7 +219,7 @@ export default function Payment({ orderId }: { orderId: string }) {
                         allProducts={allProducts}
                         func={cartFunctions}
                         deliveryPrice={deliverType.price}
-                        user={user}
+                        order={orderId}
                     />
                 </div>
             </div>

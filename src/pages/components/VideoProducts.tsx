@@ -176,7 +176,7 @@ export default function VideoProducts({
                                         </TextFade>
                                         <TextFade>
                                             <div
-                                                className="flex flex-col text-lg text-justify px-10 pb-5 indent-4 prose"
+                                                className="flex flex-col text-lg text-justify px-15 pb-5 prose"
                                                 style={{
                                                     whiteSpace: 'pre-line',
                                                 }}
@@ -188,6 +188,16 @@ export default function VideoProducts({
                                                     : item.description}
                                             </div>
                                         </TextFade>
+                                        {productType.shortDescription && (
+                                            <TextFade>
+                                                <div
+                                                    className="flex flex-col text-lg text-start px-15 pb-5 prose"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: productType.shortDescription,
+                                                    }}
+                                                />
+                                            </TextFade>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -198,6 +208,7 @@ export default function VideoProducts({
                                         addProductToProductList({
                                             id: productType?.id as string,
                                             amount: 1,
+                                            trening: true,
                                         })
                                     }
                                 >

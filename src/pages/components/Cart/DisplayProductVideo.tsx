@@ -28,9 +28,12 @@ export default function DisplayProductVideo({
                 <div className="pl-2 flex flex-row w-full justify-between">
                     <div>
                         <p className="pt-1 font-bold">{parentProduct?.name}</p>
-                        <p className="pt-1 font-light text-xs">
-                            {parentProduct?.description}
-                        </p>
+                        <div
+                            className="pt-1 font-light text-xs"
+                            dangerouslySetInnerHTML={{
+                                __html: product?.shortDescription,
+                            }}
+                        />
                     </div>
                     <div className="flex flex-row justify-around items-start p-1">
                         <DeleteOutlined

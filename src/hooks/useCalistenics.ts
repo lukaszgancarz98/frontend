@@ -8,7 +8,6 @@ import {
     getOrder,
     getOrderByEmail,
     updateOrder,
-    updateProductOrder,
     type OrderType,
 } from '../api/orderApi';
 import {
@@ -21,7 +20,7 @@ import { useUser } from '../context/userContext';
 import type { DisplaySize } from '../pages/components/Cart/Cart';
 import { useOrder } from '../context/orderContext';
 
-export type CartItem = { id: string; amount: number };
+export type CartItem = { id: string; amount: number; trening?: boolean };
 
 export function useCalistenics() {
     const [productListCart, setProductListCart] = useState<OrderType>();
@@ -121,6 +120,15 @@ export function useCalistenics() {
         }
 
         if (productListCart) {
+            if (product.trening) {
+                const exist = productListCart.products.find(
+                    (item) => item === product.id,
+                );
+
+                if (exist) {
+                    return;
+                }
+            }
             const response = await updateOrder({
                 id: productListCart.id,
                 price: Number(productListCart.price) + productPrice,
@@ -135,15 +143,6 @@ export function useCalistenics() {
             if (response.data) {
                 saveProduct(response.data);
             }
-        }
-
-        const updateProduct = await updateProductOrder(
-            product.id,
-            '-' + product.amount.toString(),
-        );
-
-        if (!updateProduct.isValid) {
-            return;
         }
 
         updateExpanded(true);
@@ -172,12 +171,6 @@ export function useCalistenics() {
 
         if (response.data) {
             setProductListCart(response.data);
-        }
-
-        const updateProduct = await updateProductOrder(id, '1');
-
-        if (!updateProduct.isValid) {
-            return;
         }
     };
 
@@ -218,16 +211,6 @@ export function useCalistenics() {
 
         if (response.isValid) {
             setProductListCart(undefined);
-        }
-
-        try {
-            await Promise.all(
-                products.map((item) =>
-                    updateProductOrder(item.id, item.amount.toString()),
-                ),
-            );
-        } catch {
-            return;
         }
     };
 
@@ -275,5 +258,6 @@ export function useCalistenics() {
         cartFunctions: { deleteFromCart, deleteWholeProduct, addToCard },
         expandCart,
         updateExpanded,
+        setProductListCart,
     };
 }

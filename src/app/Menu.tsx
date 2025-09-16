@@ -13,22 +13,27 @@ import LoginForm from '../pages/components/login-form';
 import RegisterForm from '../pages/components/register-form';
 import { useUser } from '@/context/userContext';
 import useUserHook from '@/hooks/useUser';
+import { useOrder } from '@/context/orderContext';
+import { OrderType } from '@/api/orderApi';
 
 type MenuItem = { title: string; href: string; ref: HTMLDivElement | null };
 
 type MenuProps = {
     settings: MenuItem[];
     setMenuOpen: Dispatch<SetStateAction<boolean>>;
+    resetOrder: Dispatch<SetStateAction<OrderType | undefined>>;
 };
 
 export default function Menu({
     settings,
     setMenuOpen: setInfoOpenMenu,
+    resetOrder,
 }: MenuProps) {
     const [menuOpen, setMenuOpen] = useState(false);
     const scrollPosition = useRef(0);
     const [isLogin, setIsLogin] = useState(true);
     const { clearUser } = useUser();
+    const { clearOrder } = useOrder();
     const [dialogOpen, setDialogOpen] = useState(false);
     const {
         loginFn,
@@ -314,6 +319,8 @@ export default function Menu({
                             <Button
                                 onClick={() => {
                                     clearUser();
+                                    clearOrder();
+                                    resetOrder(undefined);
                                     handleDialogOpenChange(false);
                                 }}
                                 className="ml-3 lg:ml-0 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent"

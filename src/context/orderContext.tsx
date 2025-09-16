@@ -49,7 +49,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
 
     const clearOrder = () => {
         setOrder(null);
-        localStorage.removeItem('user');
+        localStorage.removeItem('order');
     };
 
     const updateOrder = (order: Order) => {

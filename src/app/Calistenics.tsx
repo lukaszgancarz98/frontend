@@ -24,6 +24,7 @@ export default function Calistenics() {
         cartFunctions,
         expandCart,
         updateExpanded,
+        setProductListCart,
     } = useCalistenics();
     const [randomSortedProducts, setRandomSortedProducts] =
         useState<ProductType[]>();
@@ -87,7 +88,7 @@ export default function Calistenics() {
     };
 
     const productsCount = useMemo(
-        () => productListCart?.products.length ?? 0,
+        () => productListCart?.products?.length ?? 0,
         [productListCart],
     );
 
@@ -151,7 +152,11 @@ export default function Calistenics() {
                             disabled={menuOpen}
                         />
                     )}
-                    <Menu settings={settings} setMenuOpen={setMenuOpen} />
+                    <Menu
+                        settings={settings}
+                        setMenuOpen={setMenuOpen}
+                        resetOrder={setProductListCart}
+                    />
                 </div>
             </div>
             <div
@@ -166,16 +171,19 @@ export default function Calistenics() {
                 />
                 <div className="lg:w-1/2 text-white">
                     <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                        <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
-                            <div className="pb-2 font-bold">
-                                DOŁĄCZ DO SZKOŁY KALISTENIKI
+                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
+                            <div className="pb-2">
+                                TO KIM JESTEŚ, JAKIE MASZ UMIEJĘTNOŚCI, JAK
+                                TRENUJESZ I CO OSIĄGASZ ZALEŻY TYLKO I WYŁĄCZNIE
+                                OD CIEBIE
                             </div>
-                            <div className="pb-7 font-bold">
-                                ZOSTAŃ TRENEREM
-                            </div>
+                            <div className="pb-2">ZOSTAŃ JEDNYM Z NAS</div>
                             <Button className="w-1/3 bg-white text-black hover:bg-green-400">
                                 KONTAKT
                             </Button>
+                            <div className="pb-7">
+                                RAZEM ZREWOLUCJONIZUJEMY POLSKĄ KALISTENIKĘ
+                            </div>
                         </div>
                     </TextFade>
                 </div>
@@ -191,10 +199,19 @@ export default function Calistenics() {
             </div>
             <div className="flex lg:flex-row flex-col-reverse h-[100vh] lg:h-auto w-full py-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl">
                 <div className="lg:w-1/2 bg-[oklch(0.13_0.03_246.56)] text-white">
-                    <TextFade className="lg:p-10">
-                        <div className="lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:indent-8 lg:text-justify">
-                            TRENUJESZ OD LAT? PIZDO? NIE WIDZISZ PROGRESU CIOTO?
-                            MATI WYMYŚL COŚ
+                    <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
+                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
+                            <div>
+                                MOMENT, W KTÓRYM NIEMOŻLIWE STAJE SIĘ MOŻLIWE
+                                JEST NIESAMOWITY.
+                            </div>
+                            <div>
+                                KIEDY Z NISKIEJ SAMOOCENY WYRSTA OGROMNA PEWNOŚĆ
+                                SIEBIE.
+                            </div>
+                            <div>
+                                KIEDY PRZECIĘTNOŚĆ PRZERADZA SIĘ W WYBITNOŚĆ.
+                            </div>
                         </div>
                     </TextFade>
                 </div>
@@ -229,9 +246,11 @@ export default function Calistenics() {
                 />
                 <div className=":lgw-1/2 text-white">
                     <TextFade className="lg:p-10 h-full flex justify-center items-center">
-                        <div className="lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:indent-8 lg:text-justify">
-                            SZEROKOŚĆ ZDJECIA ZALEŻNA OD ILOSCI TEKSTU i
-                            SZEROKOSCI ZDJECIA
+                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
+                            <div>MASZ JEDNĄ SZANSĘ BY STAĆ SIĘ LEGENDĄ</div>
+                            <div>
+                                WYWALCZ SOBIE DROGĘ ABY ZOSTAĆ ZAPAMIĘTANYM
+                            </div>
                         </div>
                     </TextFade>
                 </div>

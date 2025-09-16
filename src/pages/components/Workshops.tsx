@@ -70,89 +70,96 @@ export default function Workshops({
                             onMouseLeave={() => setShowLevel('')}
                             onTouchStart={() => setShowLevel(productType?.id)}
                             onTouchEnd={() => setShowLevel('')}
-                            onClick={() =>
-                                priceExist && setOpenAlert(productType?.id)
-                            }
                             className="relative shadow-xl lg:w-[28vw] mb-5 lg:mb-0 h-auto mx-5 flex flex-col items-center min-h-1/3 rounded-xl min-w-[25vw] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                         >
-                            <div className="relative w-full">
-                                {hovered && (
-                                    <div className="absolute top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-black text-white z-30 shadow-xl font-['Graduate'] text-center">
-                                        {item?.name}
-                                    </div>
-                                )}
-                                <Image
-                                    src={item?.image}
-                                    alt={item?.id}
-                                    width={900}
-                                    height={350}
-                                    className="h-max lg:w-max w-full object-center object-contain rounded-tl-lg rounded-t-lg rounded-tr-lg z-20"
-                                />
-                                {hovered && priceExist && (
-                                    <div className="absolute bottom-0 right-0 w-full text-3xl font-semibold text-white text-shadow-lg/30 flex  justify-center">
-                                        <div
-                                            className={`flex flex-col gap-5 ${!hovered ? 'bg-transparent' : 'bg-black animate-bounce'} text-center w-fit py-4 px-3 rounded-tr-xl rounded-tl-xl px-4`}
-                                        >
-                                            <div className="relative inline-block ">
-                                                {Number(productType?.price)
-                                                    ?.toFixed(2)
-                                                    .replace('.', ',')}{' '}
-                                                zł
-                                                {saleActive && (
-                                                    <svg
-                                                        className="absolute top-0 left-0 w-full h-full"
-                                                        preserveAspectRatio="none"
-                                                    >
-                                                        <line
-                                                            x1="0"
-                                                            y1="9"
-                                                            x2="100%"
-                                                            y2="90%"
-                                                            stroke="red"
-                                                            strokeWidth="2"
-                                                        />
-                                                    </svg>
-                                                )}
-                                            </div>
-                                            {saleActive && (
-                                                <div>
-                                                    {productType.sale_price} zł
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="text-center w-full flex flex-col justify-between h-full mt-5">
-                                <div className="flex flex-col">
-                                    <TextFade>
-                                        <div
-                                            className="text-3xl text-center font-bold lg:px-10 px-1 pb-5 indent-4 prose font-['Graduate']"
-                                            style={{ whiteSpace: 'pre-line' }}
-                                        >
+                            <div
+                                onClick={() =>
+                                    priceExist && setOpenAlert(productType?.id)
+                                }
+                            >
+                                <div className="relative w-full">
+                                    {hovered && (
+                                        <div className="absolute top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-black text-white z-30 shadow-xl font-['Graduate'] text-center">
                                             {item?.name}
                                         </div>
-                                    </TextFade>
+                                    )}
+                                    <Image
+                                        src={item?.image}
+                                        alt={item?.id}
+                                        width={900}
+                                        height={400}
+                                        className="h-max lg:w-max w-full object-center object-contain rounded-tl-lg rounded-t-lg rounded-tr-lg z-20"
+                                    />
+                                    {hovered && priceExist && (
+                                        <div className="absolute bottom-0 right-0 w-full text-3xl font-semibold text-white text-shadow-lg/30 flex  justify-center">
+                                            <div
+                                                className={`flex flex-col gap-5 ${hovered ? 'bg-black' : 'bg-transparent'} ${hovered && saleActive ? 'animate-bounce' : ''} text-center w-fit py-4 px-3 rounded-tr-xl rounded-tl-xl px-4`}
+                                            >
+                                                <div className="relative inline-block ">
+                                                    {Number(productType?.price)
+                                                        ?.toFixed(2)
+                                                        .replace('.', ',')}{' '}
+                                                    zł
+                                                    {saleActive && (
+                                                        <svg
+                                                            className="absolute top-0 left-0 w-full h-full"
+                                                            preserveAspectRatio="none"
+                                                        >
+                                                            <line
+                                                                x1="0"
+                                                                y1="9"
+                                                                x2="100%"
+                                                                y2="90%"
+                                                                stroke="red"
+                                                                strokeWidth="2"
+                                                            />
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                                {saleActive && (
+                                                    <div>
+                                                        {productType.sale_price}{' '}
+                                                        zł
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="mb-10 w-full text-center flex justify-center items-center">
-                                    <Button
-                                        className="bg-white text-grey-900 font-bold px-6 py-3 rounded-xl hover:bg-green-600 transition"
-                                        onClick={() =>
-                                            priceExist
-                                                ? addProductToProductList({
-                                                      id: productType?.id as string,
-                                                      amount: 1,
-                                                  })
-                                                : redirect(
-                                                      `/workshop/${productType?.id}`,
-                                                  )
-                                        }
-                                    >
-                                        {priceExist
-                                            ? 'DODAJ DO KOSZYKA'
-                                            : 'DOWIEDZ SIĘ WIĘCEJ'}
-                                    </Button>
+                                <div className="text-center w-full flex flex-col justify-between h-full mt-5">
+                                    <div className="flex flex-col">
+                                        <TextFade>
+                                            <div
+                                                className="text-3xl text-center font-bold lg:px-10 px-1 pb-5 indent-4 prose font-['Graduate']"
+                                                style={{
+                                                    whiteSpace: 'pre-line',
+                                                }}
+                                            >
+                                                {item?.name}
+                                            </div>
+                                        </TextFade>
+                                    </div>
                                 </div>
+                            </div>
+                            <div className="mb-10 w-full text-center flex justify-center items-center">
+                                <Button
+                                    className={`bg-white text-grey-900 font-bold px-6 py-3 rounded-xl hover:bg-green-600 transition ${hovered ? 'border-1 bg-stone-200' : 'shadow-none'}`}
+                                    onClick={() =>
+                                        priceExist
+                                            ? addProductToProductList({
+                                                  id: productType?.id as string,
+                                                  amount: 1,
+                                                  trening: true,
+                                              })
+                                            : redirect(
+                                                  `/workshop/${productType?.id}`,
+                                              )
+                                    }
+                                >
+                                    {priceExist
+                                        ? 'DODAJ DO KOSZYKA'
+                                        : 'DOWIEDZ SIĘ WIĘCEJ'}
+                                </Button>
                             </div>
                         </div>
                     );

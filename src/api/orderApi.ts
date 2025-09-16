@@ -45,8 +45,8 @@ type GetOrderData = { id: string };
 
 type UpdateOrderData = {
     id: string;
-    price: number;
-    products: string[];
+    price?: number;
+    products?: string[];
     email?: string;
 };
 
@@ -139,11 +139,14 @@ export const getOrderByEmail = async ({
             };
         }
 
+        let details = {};
+
+        if (responseData.data.orderDetails) {
+            details = JSON.parse(responseData.data.orderDetails);
+        }
+
         return {
-            data: {
-                ...responseData.data,
-                orderDetails: JSON.parse(responseData.data.orderDetails),
-            },
+            data: { ...responseData.data, orderDetails: details },
             isValid: true,
         };
     } catch {
@@ -175,11 +178,14 @@ export const getOrder = async ({
             };
         }
 
+        let details = {};
+
+        if (responseData.data.orderDetails) {
+            details = JSON.parse(responseData.data.orderDetails);
+        }
+
         return {
-            data: {
-                ...responseData.data,
-                orderDetails: JSON.parse(responseData.data.orderDetails),
-            },
+            data: { ...responseData.data, orderDetails: details },
             isValid: true,
         };
     } catch {
@@ -212,11 +218,14 @@ export const updateOrderDetails = async (
             };
         }
 
+        let details = {};
+
+        if (responseData.data.orderDetails) {
+            details = JSON.parse(responseData.data.orderDetails);
+        }
+
         return {
-            data: {
-                ...responseData.data,
-                orderDetails: JSON.parse(responseData.data.orderDetails),
-            },
+            data: { ...responseData.data, orderDetails: details },
             isValid: true,
         };
     } catch {
@@ -249,11 +258,14 @@ export const updateOrder = async (
             };
         }
 
+        let details = {};
+
+        if (responseData.data.orderDetails) {
+            details = JSON.parse(responseData.data.orderDetails);
+        }
+
         return {
-            data: {
-                ...responseData.data,
-                orderDetails: JSON.parse(responseData.data.orderDetails),
-            },
+            data: { ...responseData.data, orderDetails: details },
             isValid: true,
         };
     } catch {

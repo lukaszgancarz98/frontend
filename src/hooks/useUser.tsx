@@ -5,13 +5,26 @@ import pkg from 'lodash';
 import { jwtDecode } from 'jwt-decode';
 import { CredentialResponse } from '@react-oauth/google';
 
+export type User = {
+    email: string;
+    password?: string;
+    name: string;
+    surname: string;
+};
+
 type UseUserReturnType = {
-    loginFn: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-    registerFn: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    loginFn: (
+        e: React.FormEvent<HTMLFormElement>,
+    ) => Promise<{ email: string } | undefined>;
+    registerFn: (
+        e: React.FormEvent<HTMLFormElement>,
+    ) => Promise<{ email: string } | undefined>;
     googleAuth: (e: CredentialResponse) => void;
     loginError?: string;
     registerError?: string;
     logged: boolean;
+    user: User | null;
+    clearUser: () => void;
 };
 
 type GogleReturnType = {
@@ -23,7 +36,7 @@ type GogleReturnType = {
 const { isUndefined } = pkg;
 
 export default function useUserHook(): UseUserReturnType {
-    const { user, updateUser } = useUser();
+    const { user, updateUser, clearUser } = useUser();
     const [registerError, setRegisterError] = useState<string>();
     const [loginError, setLoginError] = useState<string>();
 
@@ -46,6 +59,8 @@ export default function useUserHook(): UseUserReturnType {
         }
 
         updateUser(res.data);
+
+        return { email: res.data.email };
     };
 
     const registerFn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,7 +74,7 @@ export default function useUserHook(): UseUserReturnType {
 
         const res = await registerUser({ email, password, name, surname });
 
-        if (!res.isValid) {
+        if (!res.isValid || !res.data) {
             setRegisterError('Ten email jest używany na innym koncie');
             return;
         }
@@ -67,6 +82,8 @@ export default function useUserHook(): UseUserReturnType {
         if (res.data) {
             updateUser(res.data);
         }
+
+        return { email: res.data.email };
     };
 
     const googleAuth = async (e: CredentialResponse) => {
@@ -94,5 +111,7 @@ export default function useUserHook(): UseUserReturnType {
         loginError,
         registerError,
         logged,
+        user,
+        clearUser,
     };
 }
