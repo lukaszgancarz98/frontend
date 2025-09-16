@@ -22,7 +22,7 @@ type ItemType = {
 type Order = {
     id: string;
     createdDate: string;
-    paymentDate?: string;
+    payment_date?: string;
     price: number;
     items: ItemType[];
     status: string;
@@ -75,7 +75,7 @@ export function useAdmin(): UseAdminReturnType {
             const orderData: Order = {
                 id: order.id,
                 createdDate: order.createDate,
-                paymentDate: order.paymentDate,
+                payment_date: order.payment_date,
                 price: Number(order.price),
                 items: [],
                 status: order.status,

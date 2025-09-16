@@ -1,7 +1,7 @@
 import { BACKEND_URL } from '../common/constants';
 
 export type UserType = {
-    id: number;
+    id: string;
     email: string;
     name: string;
     surname: string;
