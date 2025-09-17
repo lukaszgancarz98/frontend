@@ -6,6 +6,7 @@ import { redirect, RedirectType } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import sendEmail from './SendConfirmationEmail';
 import { useUser } from '@/context/userContext';
+import Link from 'next/link';
 
 type PaymentCompletedProps = { id: string };
 
@@ -77,8 +78,14 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                         </div>
                     ) : (
                         <div>
-                            Zapisz numer zamówienia i śledź zamówienie bez
-                            rejestracji
+                            Zapisz numer zamówienia i śledź zamówienie{' '}
+                            <Link
+                                href={`/order/${id}`}
+                                className="underline text-blue-600 hover:text-blue-900"
+                            >
+                                tutaj
+                            </Link>
+                            .
                         </div>
                     )}
                     <div>

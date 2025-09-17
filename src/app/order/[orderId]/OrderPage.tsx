@@ -1,6 +1,6 @@
 'use client';
 
-import { getAllOrdersById, OrderType } from '@/api/orderApi';
+import { getOrder, OrderType } from '@/api/orderApi';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -9,7 +9,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useUser } from '@/context/userContext';
 import { AlertDialogContent } from '@radix-ui/react-alert-dialog';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,41 +17,27 @@ import { useEffect, useState } from 'react';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { GoPackageDependents } from 'react-icons/go';
 
-export default function UserOrders() {
-    const [userOrders, setUserOrders] = useState<OrderType[]>();
+export default function OrderPage({ orderId }: { orderId: string }) {
+    const [order, setOrder] = useState<OrderType>();
     const [error, setError] = useState<string>('');
-    const { user } = useUser();
 
-    const getOrdersData = async (id: string) => {
-        const response = await getAllOrdersById({ id });
+    const searchOrderRedirect = async (id: string) => {
+        const response = await getOrder({ id });
 
         if (!response.isValid) {
             setError('Unable to get user orders');
         }
 
-        const filteredOrders = response?.data?.filter(
-            (item) => item.payment_date,
-        );
-        const sortedByPaymentDate = filteredOrders?.sort((a, b) => {
-            const dateA = a.payment_date
-                ? new Date(a.payment_date).getTime()
-                : 0;
-            const dateB = b.payment_date
-                ? new Date(b.payment_date).getTime()
-                : 0;
-
-            return dateB - dateA;
-        });
-
-        setUserOrders(sortedByPaymentDate);
+        if (response.data) {
+            setOrder(response.data);
+        }
     };
 
     useEffect(() => {
-        if (user?.id && !userOrders) {
-            getOrdersData(user.id);
+        if (orderId) {
+            searchOrderRedirect(orderId);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user?.id]);
+    }, [orderId]);
 
     const status = (data: OrderType) => {
         const preparingDelivery = <div>Przygotowanie do wysyłki</div>;
@@ -152,15 +137,17 @@ export default function UserOrders() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <div className="pt-35 w-screen h-screen flex flex-col items-center">
-                <div className="pt-10 text-3xl font-semibold">Zamówienia:</div>
-                {userOrders?.map((order) => (
-                    <div key={order.id} className="w-[50vw] py-5">
-                        <div className="font-bold">Zamowienie {order.id}</div>
-                        {status(order)}
+            {order && (
+                <div
+                    key={order.id}
+                    className="w-full flex flex-col pt-35 items-center gap-5"
+                >
+                    <div className="font-bold pt-10">
+                        Zamowienie: {order.id}
                     </div>
-                ))}
-            </div>
+                    {status(order)}
+                </div>
+            )}
         </div>
     );
 }

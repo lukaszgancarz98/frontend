@@ -172,18 +172,17 @@ export default function Calistenics() {
                 <div className="lg:w-1/2 text-white">
                     <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
                         <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
-                            <div className="pb-2">
-                                TO KIM JESTEŚ, JAKIE MASZ UMIEJĘTNOŚCI, JAK
-                                TRENUJESZ I CO OSIĄGASZ ZALEŻY TYLKO I WYŁĄCZNIE
-                                OD CIEBIE
+                            <div className="pb-2">KIM JESTEŚ?</div>
+                            <div>JAKIE MASZ UMIEJĘTNOŚCI?</div>
+                            <div>JAK TRENUJESZ?</div>
+                            <div className="pb-5">CO OSIĄGASZ?</div>
+                            <div className="w-full text-center pb-5">
+                                ZALEŻY TYLKO I WYŁĄCZNIE OD CIEBIE
                             </div>
-                            <div className="pb-2">ZOSTAŃ JEDNYM Z NAS</div>
-                            <Button className="w-1/3 bg-white text-black hover:bg-green-400">
+                            <Button className="w-1/3 bg-blue-500 text-black hover:bg-green-400 hover:text-xl">
                                 KONTAKT
                             </Button>
-                            <div className="pb-7">
-                                RAZEM ZREWOLUCJONIZUJEMY POLSKĄ KALISTENIKĘ
-                            </div>
+                            <div className="pb-2 pt-3">ZOSTAŃ JEDNYM Z NAS</div>
                         </div>
                     </TextFade>
                 </div>
@@ -245,11 +244,13 @@ export default function Calistenics() {
                     bgClassName=""
                 />
                 <div className=":lgw-1/2 text-white">
-                    <TextFade className="lg:p-10 h-full flex justify-center items-center">
-                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
-                            <div>MASZ JEDNĄ SZANSĘ BY STAĆ SIĘ LEGENDĄ</div>
-                            <div>
-                                WYWALCZ SOBIE DROGĘ ABY ZOSTAĆ ZAPAMIĘTANYM
+                    <TextFade className="lg:p-10 h-full flex items-center">
+                        <div className="flex flex-col gap-10 lg:text-3xl text-2xl p-3 w-full items-center font-medium font-comic">
+                            <div className="text-center">
+                                MASZ JEDNĄ SZANSĘ BY STAĆ SIĘ LEGENDĄ.
+                            </div>
+                            <div className="text-center">
+                                WYWALCZ SOBIE DROGĘ ABY ZOSTAĆ ZAPAMIĘTANYM.
                             </div>
                         </div>
                     </TextFade>

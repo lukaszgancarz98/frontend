@@ -27,7 +27,7 @@ export default function Product({ product, price }: ProductProps) {
                                 fill
                             />
                         </div>
-                        <div className="absolute top-0 right-0 mr-5 shadow-md rounded-sm px-2 py-1 text-md self-center font-medium">
+                        <div className="absolute top-0 right-0 mr-5 shadow-md rounded-sm px-2 py-1 text-md self-center font-medium transition duration-300 group-hover:scale-130">
                             {price?.toFixed(2).replace('.', ',')} zł
                         </div>
                     </div>

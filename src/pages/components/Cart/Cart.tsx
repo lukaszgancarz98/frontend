@@ -172,6 +172,7 @@ export default function Cart({
                                 <div className="flex flex-row justify-between items-center  text-sm">
                                     <div>Koszt dostawy</div>
                                     <div>
+                                        od{' '}
                                         {transportCost
                                             .toFixed(2)
                                             .replace('.', ',')}{' '}

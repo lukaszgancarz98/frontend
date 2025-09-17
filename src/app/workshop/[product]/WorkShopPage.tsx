@@ -6,6 +6,9 @@ import {
     ProductType,
     ProductTypeType,
 } from '@/api/produktApi';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useUser } from '@/context/userContext';
 import BackgroundOnScroll from '@/pages/components/Fade/BackgroundOnScroll/BackgroundOnScroll';
 import TextFade from '@/pages/components/Fade/FadeChildComponents';
 import Image from 'next/image';
@@ -17,6 +20,7 @@ type WorkShopPageProps = { productId: string };
 export default function WorkShopPage({ productId }: WorkShopPageProps) {
     const [product, setProduct] = useState<ProductType>();
     const [productType, setProductType] = useState<ProductTypeType>();
+    const { user } = useUser();
 
     const getProducts = async () => {
         const responseProductType = await getProductTypesByProductId(productId);
@@ -41,6 +45,13 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
         () => productType?.shortDescription.split(':'),
         [productType],
     );
+
+    const saveEmailForNotifications = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(e);
+
+        //todo: Luki weź coś zrób
+    };
 
     return (
         <div>
@@ -68,58 +79,72 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                 </div>
                 <div className="lg:w-1/4" />
             </div>
-            <div className="pt-35 font-comic">
-                <div className="w-full text-center text-5xl font-semibold py-5">
+            <div className="pt-35 font-comic bg-[oklch(0.13_0.03_246.75)] text-stone-300">
+                <div className="text-center text-5xl font-semibold pt-10 pb-15">
                     {product?.name}
                 </div>
                 {descriptions?.map((item, index) => {
                     const displayVarian = index % 2 === 0;
                     const image = productType?.images[index];
 
-                    return displayVarian ? (
+                    return (
                         <div
                             key={index.toString()}
-                            className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pb-10 bg-white shadow-2xl"
+                            className={`flex ${displayVarian ? 'lg:flex-row' : 'lg:flex-row-reverse'} flex-col h-[100vh] lg:h-auto w-full pb-10 shadow-2xl`}
                         >
                             <BackgroundOnScroll
                                 backgroundImageUrl={image as string}
-                                className="w-[60vw] lg:h-150 h-80"
+                                className="w-1/2 lg:h-150 h-80"
                                 bgClassName="object-contain"
-                                shadow="shadow-[inset_0_0_20px_20px_rgba(255,255,255,1)]"
                             />
-                            <div className="lg:w-1/2 text-black">
+                            <div className="text-black w-1/2">
                                 <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                                    <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
+                                    <div className="relative flex flex-col lg:text-4xl text-2xl p-3 w-full h-full text-stone-300 lg:text-center justify-center items-center">
                                         <div className="pb-2 font-bold">
                                             {item}
+                                        </div>
+                                        <div className="absolute bottom-10 left-0 w-full flex items-center justify-center">
+                                            <Link
+                                                href={'#kontakt'}
+                                                className="text-3xl bg-blue-300 py-2 px-5 rounded-lg text-black transition-all duration-300 hover:text-4xl"
+                                            >
+                                                Kontakt
+                                            </Link>
                                         </div>
                                     </div>
                                 </TextFade>
                             </div>
-                        </div>
-                    ) : (
-                        <div
-                            key={index.toString()}
-                            className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pb-10 bg-white shadow-2xl"
-                        >
-                            <div className="lg:w-1/2 text-black">
-                                <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                                    <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
-                                        <div className="pb-2 font-bold">
-                                            {item}
-                                        </div>
-                                    </div>
-                                </TextFade>
-                            </div>
-                            <BackgroundOnScroll
-                                backgroundImageUrl={image as string}
-                                className="w-[60vw] lg:h-150 h-80"
-                                bgClassName=""
-                                shadow="shadow-[inset_0_0_20px_20px_rgba(255,255,255,1)]"
-                            />
                         </div>
                     );
                 })}
+                <div
+                    id="kontakt"
+                    className="w-full flex flex-col items-center py-20 gap-5"
+                >
+                    <div className="text-4xl">
+                        ZOSTAW EMAIL ABY DOWIEDZIEĆ SIĘ WIĘCEJ
+                    </div>
+                    <form
+                        className="w-full flex flex-col items-center gap-5"
+                        onSubmit={(e) => saveEmailForNotifications(e)}
+                    >
+                        <Input
+                            className="w-1/4"
+                            placeholder="EMAIL"
+                            name="email"
+                            type="email"
+                            required
+                            value={user?.email}
+                        />
+                        <Button
+                            type="submit"
+                            className="text-3xl bg-blue-300 py-7 px-5 rounded-lg text-black transition-all duration-300 hover:scale-120 hover:bg-blue-500"
+                            onClick={() => console.log('check')}
+                        >
+                            Poinformuj mnie
+                        </Button>
+                    </form>
+                </div>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 'use client';
 
-import { getAllOrdersById, OrderType } from '@/api/orderApi';
+import { getOrder, OrderType } from '@/api/orderApi';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -9,50 +9,36 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useUser } from '@/context/userContext';
 import { AlertDialogContent } from '@radix-ui/react-alert-dialog';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect, RedirectType } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { GoPackageDependents } from 'react-icons/go';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
-export default function UserOrders() {
-    const [userOrders, setUserOrders] = useState<OrderType[]>();
+export default function OrderPage() {
+    const [order, setOrder] = useState<OrderType>();
     const [error, setError] = useState<string>('');
-    const { user } = useUser();
 
-    const getOrdersData = async (id: string) => {
-        const response = await getAllOrdersById({ id });
+    const searchOrder = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+
+        const id = formData.get('id') as string;
+        const response = await getOrder({ id });
 
         if (!response.isValid) {
             setError('Unable to get user orders');
         }
 
-        const filteredOrders = response?.data?.filter(
-            (item) => item.payment_date,
-        );
-        const sortedByPaymentDate = filteredOrders?.sort((a, b) => {
-            const dateA = a.payment_date
-                ? new Date(a.payment_date).getTime()
-                : 0;
-            const dateB = b.payment_date
-                ? new Date(b.payment_date).getTime()
-                : 0;
-
-            return dateB - dateA;
-        });
-
-        setUserOrders(sortedByPaymentDate);
-    };
-
-    useEffect(() => {
-        if (user?.id && !userOrders) {
-            getOrdersData(user.id);
+        if (response.data) {
+            setOrder(response.data);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user?.id]);
+    };
 
     const status = (data: OrderType) => {
         const preparingDelivery = <div>Przygotowanie do wysyłki</div>;
@@ -153,13 +139,27 @@ export default function UserOrders() {
                 </AlertDialogContent>
             </AlertDialog>
             <div className="pt-35 w-screen h-screen flex flex-col items-center">
-                <div className="pt-10 text-3xl font-semibold">Zamówienia:</div>
-                {userOrders?.map((order) => (
-                    <div key={order.id} className="w-[50vw] py-5">
-                        <div className="font-bold">Zamowienie {order.id}</div>
+                <form
+                    onSubmit={(e) => searchOrder(e)}
+                    className="flex flex-row w-full items-center justify-center gap-10 py-10"
+                >
+                    <div className="text-3xl font-semibold">
+                        Wprowadź numer zamówiena:
+                    </div>
+                    <Input name="id" className="w-1/4" />
+                    <Button type="submit">Szukaj</Button>
+                </form>
+                {order && (
+                    <div
+                        key={order.id}
+                        className="w-[50vw] py-5 flex flex-col items-center"
+                    >
+                        <div className="font-bold pb-5">
+                            Zamowienie {order.id}
+                        </div>
                         {status(order)}
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );

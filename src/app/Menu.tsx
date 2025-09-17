@@ -67,10 +67,12 @@ export default function Menu({
             body.style.overflowY = 'hidden';
             body.style.position = 'fixed';
             body.style.top = `-${scrollPosition.current}px`;
+            body.style.width = '100vw';
         } else {
             body.style.overflowY = '';
             body.style.position = '';
             body.style.top = '';
+            body.style.width = '100vw';
 
             window.scrollTo(0, scrollPosition.current);
 
@@ -299,16 +301,23 @@ export default function Menu({
                             <a
                                 href={item.href}
                                 onClick={(e) => handleScroll(e, item.ref)}
-                                className="hover:text-blue-800 px-3 py-2 text-xl font-medium"
+                                className="hover:text-blue-500 px-3 py-2 text-2xl font-medium transition duration-300 hover:scale-150"
                                 key={item.title}
                             >
                                 {item.title}
                             </a>
                         ))}
-                        {logged && (
+                        {logged ? (
                             <Link
-                                className="ml-3 lg:ml-0 px-2 py-3 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent font-medium"
+                                className="ml-3 lg:ml-0 px-2 py-3 bg-transparent border-none text-2xl hover:text-blue-500 hover:bg-transparent font-medium transition duration-300 hover:scale-150"
                                 href={'/user/orders'}
+                            >
+                                ZAMÓWIENIA
+                            </Link>
+                        ) : (
+                            <Link
+                                className="ml-3 lg:ml-0 px-2 py-3 bg-transparent border-none text-2xl hover:text-blue-500 hover:bg-transparent font-medium transition duration-300 hover:scale-150"
+                                href={'/order'}
                             >
                                 ZAMÓWIENIA
                             </Link>
@@ -321,9 +330,11 @@ export default function Menu({
                                     resetOrder(undefined);
                                     handleDialogOpenChange(false);
                                 }}
-                                className="ml-3 lg:ml-0 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent"
+                                className="ml-3 lg:ml-0 bg-transparent border-none hover:bg-transparent"
                             >
-                                WYLOGUJ SIĘ
+                                <div className="text-2xl transition duration-300 hover:scale-150 hover:text-blue-500">
+                                    WYLOGUJ SIĘ
+                                </div>
                             </Button>
                         ) : (
                             <Dialog
@@ -332,10 +343,12 @@ export default function Menu({
                             >
                                 <DialogTrigger asChild>
                                     <Button
-                                        className="ml-3 lg:ml-0 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent"
+                                        className="ml-3 lg:ml-0 bg-transparent border-none hover:bg-transparent"
                                         variant="outline"
                                     >
-                                        ZALOGUJ SIĘ
+                                        <div className="text-2xl transition duration-300 hover:scale-150 hover:text-blue-500">
+                                            ZALOGUJ SIĘ
+                                        </div>
                                     </Button>
                                 </DialogTrigger>
                                 <DialogTitle hidden />

@@ -55,7 +55,9 @@ export default function Product({ productId }: ProductProps) {
         const response = await getOrder({ id });
 
         if (response.isValid && response.data) {
-            setOrder(response.data);
+            if (!response.data.payment_date) {
+                setOrder(response.data);
+            }
         }
     };
 

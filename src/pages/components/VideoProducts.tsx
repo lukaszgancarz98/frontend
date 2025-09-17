@@ -125,7 +125,7 @@ export default function VideoProducts({
                                     {hovered && (
                                         <div className="absolute bottom-0 right-0 w-full text-3xl font-semibold text-white text-shadow-lg/30 flex  justify-center">
                                             <div
-                                                className={`flex flex-col gap-5 ${!hovered ? 'bg-transparent' : 'bg-[oklch(0.61_0.16_252.06)] animate-bounce'} text-center w-fit py-4 px-3 rounded-tr-xl rounded-tl-xl px-4`}
+                                                className={`flex flex-col gap-5 ${!hovered ? 'bg-transparent' : 'bg-[oklch(0.61_0.16_252.06)] animate-bounce'} text-center w-fit py-4 px-3 rounded-xl px-4`}
                                             >
                                                 <div className="relative inline-block ">
                                                     {Number(productType?.price)
@@ -187,7 +187,7 @@ export default function VideoProducts({
                                         {productType.shortDescription && (
                                             <TextFade>
                                                 <div
-                                                    className="flex flex-col text-lg text-start px-15 pb-5 prose"
+                                                    className="flex flex-col text-lg text-center px-15 pb-5 prose"
                                                     dangerouslySetInnerHTML={{
                                                         __html: productType.shortDescription,
                                                     }}

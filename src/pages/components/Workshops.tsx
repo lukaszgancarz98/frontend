@@ -148,7 +148,7 @@ export default function Workshops({
                             </div>
                             <div className="mb-10 w-full text-center flex justify-center items-center">
                                 <Button
-                                    className={`bg-white text-grey-900 font-bold px-6 py-3 rounded-xl hover:bg-green-600 transition ${hovered ? 'border-1 bg-stone-200' : 'shadow-none'}`}
+                                    className={`bg-white bg-blue-400 font-bold px-6 py-3 rounded-xl hover:bg-green-400 transition hover:scale-115`}
                                     onClick={() =>
                                         priceExist
                                             ? addProductToProductList({
@@ -164,7 +164,7 @@ export default function Workshops({
                                 >
                                     {priceExist
                                         ? 'DODAJ DO KOSZYKA'
-                                        : 'DOWIEDZ SIĘ WIĘCEJ'}
+                                        : 'WIĘCEJ INFO'}
                                 </Button>
                             </div>
                         </div>
