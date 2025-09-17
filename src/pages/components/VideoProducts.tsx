@@ -143,7 +143,22 @@ export default function VideoProducts({
                                                                 x2="100%"
                                                                 y2="90%"
                                                                 stroke="red"
-                                                                strokeWidth="2"
+                                                                strokeWidth="3"
+                                                            />
+                                                        </svg>
+                                                    )}
+                                                    {saleActive && (
+                                                        <svg
+                                                            className="absolute top-0 left-0 w-full h-full"
+                                                            preserveAspectRatio="none"
+                                                        >
+                                                            <line
+                                                                x1="100%"
+                                                                y1="9"
+                                                                x2="0"
+                                                                y2="90%"
+                                                                stroke="red"
+                                                                strokeWidth="3"
                                                             />
                                                         </svg>
                                                     )}
@@ -158,7 +173,7 @@ export default function VideoProducts({
                                         </div>
                                     )}
                                 </div>
-                                <div className="text-center w-full flex flex-col justify-between h-full mt-5">
+                                <div className="text-center w-full flex flex-col justify-between mt-5">
                                     <div className="flex flex-col">
                                         <TextFade>
                                             <div

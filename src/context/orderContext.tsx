@@ -40,7 +40,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
         if (typeof window !== 'undefined') {
             try {
                 const stored = localStorage.getItem('expand');
-                if (stored) setExpanded(false);
+                if (stored) setExpanded(JSON.parse(stored));
             } catch (e) {
                 console.error('localStorage read failed:', e);
             }

@@ -242,7 +242,7 @@ export function useCalistenics() {
 
     const filterProducts = (type: string) => {
         const filteredProductsArray = products.filter((product) =>
-            product.type.includes(type),
+            product.category.includes(type),
         );
 
         return filteredProductsArray;

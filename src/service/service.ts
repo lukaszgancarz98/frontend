@@ -21,7 +21,7 @@ export const displayProducts = ({
             );
 
             if (find && parentType) {
-                if (parentType?.type === 'clothes') {
+                if (parentType?.category === 'clothes') {
                     const repeatedItem = arr.findIndex(
                         (x) => find.color === x.color,
                     );

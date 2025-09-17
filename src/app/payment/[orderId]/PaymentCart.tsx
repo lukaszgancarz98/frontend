@@ -177,7 +177,7 @@ export default function PaymentCart({
                         (item) => item.id === product?.productId,
                     );
 
-                    if (parent && parent.type === 'clothes') {
+                    if (parent && parent.category === 'clothes') {
                         return (
                             <div className="px-5" key={product.id}>
                                 <DisplayProduct
@@ -187,7 +187,7 @@ export default function PaymentCart({
                                 />
                             </div>
                         );
-                    } else if (parent && parent.type.includes('video')) {
+                    } else if (parent && parent.category.includes('video')) {
                         return (
                             <div className="px-5" key={product.id}>
                                 <DisplayProductVideo

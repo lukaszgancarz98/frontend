@@ -126,7 +126,7 @@ export default function Workshops({
                                         </div>
                                     )}
                                 </div>
-                                <div className="text-center w-full flex flex-col justify-between h-full mt-5">
+                                <div className="text-center w-full flex flex-col justify-between mt-5">
                                     <div className="flex flex-col">
                                         <TextFade>
                                             <div

@@ -11,6 +11,7 @@ import {
 import Product from './productInGallery';
 import type { ProductType, ProductTypeType } from '@/api/produktApi';
 import { redirect, RedirectType } from 'next/navigation';
+import Link from 'next/link';
 
 interface Gallery6Props {
     heading: string;
@@ -56,37 +57,41 @@ const Gallery6 = ({ heading, items, productTypes }: Gallery6Props) => {
 
     return (
         <section className="lg:pt-40 pt-5" id="products">
-            <div className="container">
-                <div className="mb-2 flex flex-col justify-between md:flex-row md:items-end">
-                    <div>
-                        <h2 className="mb-3 lg:ml-15 ml-3 lg:text-3xl text-2xl font-semibold md:mb-4 md:text-4xl lg:mb-6">
-                            {heading}
-                        </h2>
+            <div className="relative mb-2 flex justify-center flex-row items-center w-full">
+                <div className="flex flex-col font-['Graduate']">
+                    <div className="lg:text-5xl font-semibold lg:mb-6">
+                        {heading}
                     </div>
-                    <div className="mt-8 flex shrink-0 items-center lg:justify-start justify-center gap-2">
-                        <Button
-                            size="icon"
-                            variant="outline"
-                            onClick={() => {
-                                carouselApi?.scrollPrev();
-                            }}
-                            disabled={!canScrollPrev}
-                            className="disabled:pointer-events-auto"
-                        >
-                            <ArrowLeft className="size-5" />
-                        </Button>
-                        <Button
-                            size="icon"
-                            variant="outline"
-                            onClick={() => {
-                                carouselApi?.scrollNext();
-                            }}
-                            disabled={!canScrollNext}
-                            className="disabled:pointer-events-auto"
-                        >
-                            <ArrowRight className="size-5" />
-                        </Button>
-                    </div>
+                    <Link
+                        href={'/shop'}
+                        className="text-xl text-center underline hover:text-blue-600"
+                    >
+                        Przejdz do sklepu
+                    </Link>
+                </div>
+                <div className="absolute top-0 right-10 mt-8 flex shrink-0 items-center lg:justify-start justify-center gap-2">
+                    <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => {
+                            carouselApi?.scrollPrev();
+                        }}
+                        disabled={!canScrollPrev}
+                        className="disabled:pointer-events-auto"
+                    >
+                        <ArrowLeft className="size-5" />
+                    </Button>
+                    <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => {
+                            carouselApi?.scrollNext();
+                        }}
+                        disabled={!canScrollNext}
+                        className="disabled:pointer-events-auto"
+                    >
+                        <ArrowRight className="size-5" />
+                    </Button>
                 </div>
             </div>
             <div className="w-full max-w-full">

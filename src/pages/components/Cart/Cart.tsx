@@ -130,7 +130,7 @@ export default function Cart({
                                     (item) => item.id === product?.productId,
                                 );
 
-                                if (parent && parent.type === 'clothes') {
+                                if (parent && parent.category === 'clothes') {
                                     return (
                                         <DisplayProduct
                                             key={product.id + index}
@@ -141,7 +141,7 @@ export default function Cart({
                                     );
                                 } else if (
                                     parent &&
-                                    parent.type.includes('video')
+                                    parent.category.includes('video')
                                 ) {
                                     return (
                                         <DisplayProductVideo

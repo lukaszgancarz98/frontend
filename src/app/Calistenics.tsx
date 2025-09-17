@@ -77,11 +77,12 @@ export default function Calistenics() {
 
     const filteredTrainings = (type: string) => {
         const filtered = videoProducts.filter((product) =>
-            product.type.includes(type),
+            product.category.includes(type),
         );
         const sortedProducts = filtered.sort(
             (a, b) =>
-                Number(a.type.split('-')[2]) - Number(b.type.split('-')[2]),
+                Number(a.category.split('-')[2]) -
+                Number(b.category.split('-')[2]),
         );
 
         return sortedProducts;
@@ -227,7 +228,7 @@ export default function Calistenics() {
             >
                 <VideoProducts
                     videoProducts={videoProducts.filter((product) =>
-                        product.type.includes('extend'),
+                        product.category.includes('extend'),
                     )}
                     productTypes={productTypes}
                     addProductToProductList={addProductToProductList}
