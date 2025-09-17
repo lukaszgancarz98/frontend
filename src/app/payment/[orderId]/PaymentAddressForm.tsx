@@ -127,8 +127,8 @@ export default function PaymentAddressForm({
                                     value={address?.street}
                                 />
                             </div>
-                            <div className="flex flex-row justify-between gap-5 lg:gap-0">
-                                <div className="grid gap-3 lg:w-1/4">
+                            <div className="flex flex-row justify-between gap-5">
+                                <div className="grid gap-3">
                                     <Label htmlFor="streetNumber">
                                         Numer domu*
                                     </Label>
@@ -140,7 +140,7 @@ export default function PaymentAddressForm({
                                         value={address?.streetNumber}
                                     />
                                 </div>
-                                <div className="grid gap-3 lg:w-1/4">
+                                <div className="grid gap-3">
                                     <Label htmlFor="parcelNumber">
                                         Numer mieszkania
                                     </Label>
@@ -373,7 +373,13 @@ export default function PaymentAddressForm({
                     </div>
                     <div className="grid gap-3 px-5">
                         <Label htmlFor="phone">Telefon*</Label>
-                        <Input id="phone" type="phone" required />
+                        <Input
+                            name="phone"
+                            id="phone"
+                            type="phone"
+                            required
+                            value={address?.phone}
+                        />
                     </div>
                     <Button
                         type="submit"

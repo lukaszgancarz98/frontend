@@ -1,5 +1,3 @@
-'use client';
-
 import { OrderProvider } from '@/context/orderContext';
 import { UserProvider } from '@/context/userContext';
 import PaymentCompleted from './PaymentComplete';

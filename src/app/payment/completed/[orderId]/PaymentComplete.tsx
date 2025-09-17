@@ -1,3 +1,5 @@
+'use client';
+
 import { updateOrder } from '@/api/orderApi';
 import { checkPayment } from '@/api/paymentApi';
 import { redirect, RedirectType } from 'next/navigation';

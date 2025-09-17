@@ -46,6 +46,7 @@ export default function UserOrders() {
         });
 
         setUserOrders(sortedByPaymentDate);
+        setExtended(sortedByPaymentDate?.[0].id as string);
     };
 
     useEffect(() => {

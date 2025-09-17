@@ -1,3 +1,4 @@
+import { DeliverTypesType } from '@/app/payment/[orderId]/PaymentAddressForm';
 import { BACKEND_URL } from '../common/constants';
 import type { ApiResponse } from './userApi';
 
@@ -12,12 +13,13 @@ export type AddressData = {
     postalCode: string;
     city: string;
     country: string;
+    phone: string;
 };
 
 export type OrderAddressDetails = {
     address: AddressData;
     paymentAddress: AddressData;
-    deliver?: { id: string };
+    deliver: DeliverTypesType;
 };
 
 export type OrderDataType = {

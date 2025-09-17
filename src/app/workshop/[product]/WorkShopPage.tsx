@@ -1,13 +1,47 @@
 'use client';
 
+import {
+    getProduct,
+    getProductTypesByProductId,
+    ProductType,
+    ProductTypeType,
+} from '@/api/produktApi';
 import BackgroundOnScroll from '@/pages/components/Fade/BackgroundOnScroll/BackgroundOnScroll';
 import TextFade from '@/pages/components/Fade/FadeChildComponents';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
 
 type WorkShopPageProps = { productId: string };
 
 export default function WorkShopPage({ productId }: WorkShopPageProps) {
+    const [product, setProduct] = useState<ProductType>();
+    const [productType, setProductType] = useState<ProductTypeType>();
+
+    const getProducts = async () => {
+        const responseProductType = await getProductTypesByProductId(productId);
+        const respnseProduct = await getProduct(productId);
+
+        if (responseProductType.isValid && respnseProduct.isValid) {
+            setProduct(respnseProduct?.data as ProductType);
+            setProductType(responseProductType?.data?.[0]);
+        }
+
+        console.log(responseProductType, respnseProduct);
+    };
+
+    useEffect(() => {
+        if (productId) {
+            getProducts();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [productId]);
+
+    const descriptions = useMemo(
+        () => productType?.shortDescription.split(':'),
+        [productType],
+    );
+
     return (
         <div>
             <div
@@ -34,79 +68,58 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                 </div>
                 <div className="lg:w-1/4" />
             </div>
-            <div className="pt-35">
-                <div
-                    id="oboz1"
-                    className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pb-10 bg-white shadow-2xl"
-                >
-                    <BackgroundOnScroll
-                        backgroundImageUrl="/kalintro02.jpg"
-                        className="w-[60vw] lg:h-150 h-80"
-                        bgClassName=""
-                        shadow="shadow-[inset_0_0_20px_20px_rgba(255,255,255,1)]"
-                    />
-                    <div className="lg:w-1/2 text-black">
-                        <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                            <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
-                                <div className="pb-2 font-bold">
-                                    DOŁĄCZ DO SZKOŁY KALISTENIKI
-                                </div>
-                                <div className="pb-7 font-bold">
-                                    ZOSTAŃ TRENEREM
-                                </div>
-                            </div>
-                        </TextFade>
-                    </div>
+            <div className="pt-35 font-comic">
+                <div className="w-full text-center text-5xl font-semibold py-5">
+                    {product?.name}
                 </div>
-                <div
-                    id="oboz1"
-                    className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pb-10 bg-white shadow-2xl"
-                >
-                    <div className="lg:w-1/2 text-black">
-                        <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                            <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
-                                <div className="pb-2 font-bold">
-                                    DOŁĄCZ DO SZKOŁY KALISTENIKI
-                                </div>
-                                <div className="pb-7 font-bold">
-                                    ZOSTAŃ TRENEREM
-                                </div>
+                {descriptions?.map((item, index) => {
+                    const displayVarian = index % 2 === 0;
+                    const image = productType?.images[index];
+
+                    return displayVarian ? (
+                        <div
+                            key={index.toString()}
+                            className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pb-10 bg-white shadow-2xl"
+                        >
+                            <BackgroundOnScroll
+                                backgroundImageUrl={image as string}
+                                className="w-[60vw] lg:h-150 h-80"
+                                bgClassName="object-contain"
+                                shadow="shadow-[inset_0_0_20px_20px_rgba(255,255,255,1)]"
+                            />
+                            <div className="lg:w-1/2 text-black">
+                                <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
+                                    <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
+                                        <div className="pb-2 font-bold">
+                                            {item}
+                                        </div>
+                                    </div>
+                                </TextFade>
                             </div>
-                        </TextFade>
-                    </div>
-                    <BackgroundOnScroll
-                        backgroundImageUrl="/kalintro02.jpg"
-                        className="w-[60vw] lg:h-150 h-80"
-                        bgClassName=""
-                        shadow="shadow-[inset_0_0_20px_20px_rgba(255,255,255,1)]"
-                    />
-                </div>
-                <div
-                    id="oboz1"
-                    className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pb-10 bg-white shadow-2xl"
-                >
-                    <BackgroundOnScroll
-                        backgroundImageUrl="/kalintro02.jpg"
-                        className="w-[60vw] lg:h-150 h-80"
-                        bgClassName=""
-                        shadow="shadow-[inset_0_0_20px_20px_rgba(255,255,255,1)]"
-                    />
-                    <div className="lg:w-1/2 text-black">
-                        <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                            <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
-                                <div className="pb-2 font-bold">
-                                    DOŁĄCZ DO SZKOŁY KALISTENIKI
-                                </div>
-                                <div className="pb-7 font-bold">
-                                    ZOSTAŃ TRENEREM
-                                </div>
+                        </div>
+                    ) : (
+                        <div
+                            key={index.toString()}
+                            className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pb-10 bg-white shadow-2xl"
+                        >
+                            <div className="lg:w-1/2 text-black">
+                                <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
+                                    <div className="flex flex-col lg:text-3xl text-2xl p-3 w-full prose prose-stone prose-invert lg:text-justify justify-center items-center">
+                                        <div className="pb-2 font-bold">
+                                            {item}
+                                        </div>
+                                    </div>
+                                </TextFade>
                             </div>
-                        </TextFade>
-                    </div>
-                </div>
-                <div className="w-full"></div>
-                <div className="w-full"></div>
-                {productId}
+                            <BackgroundOnScroll
+                                backgroundImageUrl={image as string}
+                                className="w-[60vw] lg:h-150 h-80"
+                                bgClassName=""
+                                shadow="shadow-[inset_0_0_20px_20px_rgba(255,255,255,1)]"
+                            />
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

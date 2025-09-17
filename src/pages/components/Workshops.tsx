@@ -138,6 +138,11 @@ export default function Workshops({
                                                 {item?.name}
                                             </div>
                                         </TextFade>
+                                        <TextFade>
+                                            <div className="flex flex-col text-lg text-start px-15 pb-5 prose">
+                                                {item.description}
+                                            </div>
+                                        </TextFade>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +157,7 @@ export default function Workshops({
                                                   trening: true,
                                               })
                                             : redirect(
-                                                  `/workshop/${productType?.id}`,
+                                                  `/workshop/${item?.id}`,
                                                   RedirectType.push,
                                               )
                                     }

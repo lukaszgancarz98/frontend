@@ -96,11 +96,7 @@ export default function VideoProducts({
                     const hovered = showLevel === productType?.id;
 
                     const saleActive = Number(productType?.sale_amount) > 0;
-                    console.log(
-                        saleActive,
-                        productType?.sale_amount,
-                        productType,
-                    );
+
                     return (
                         <div
                             key={item?.id}

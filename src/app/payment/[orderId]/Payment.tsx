@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCalistenics } from '../../../hooks/useCalistenics';
 import PaymentCart from './PaymentCart';
 import type { DisplayProductType } from '../../../pages/components/Cart/Cart';
@@ -18,7 +18,11 @@ import { DELIVER_TYPES } from '../../../common/constants';
 import Link from 'next/link';
 import { useUser } from '@/context/userContext';
 import Image from 'next/image';
-import { authorizePayment, createOrder } from '@/api/paymentApi';
+import {
+    authorizePayment,
+    createOrder,
+    PaymentProduct,
+} from '@/api/paymentApi';
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -28,6 +32,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { omit } from 'lodash';
 
 export default function Payment({ orderId }: { orderId: string }) {
     const { allProducts, productTypes, productListCart, cartFunctions } =
@@ -38,7 +43,7 @@ export default function Payment({ orderId }: { orderId: string }) {
         DELIVER_TYPES[0],
     );
     const { user } = useUser();
-    const token = useRef<string>('');
+    const [token, setToken] = useState<string>('');
     const [alert, setAlert] = useState<string>('');
 
     const getOrderRequest = async (orderId: string) => {
@@ -53,12 +58,12 @@ export default function Payment({ orderId }: { orderId: string }) {
         const response = await authorizePayment(orderId);
 
         if (response.isValid && response.data) {
-            token.current = response.data;
+            setToken(response.data);
         }
     };
 
     useEffect(() => {
-        if (token.current.length === 0 && orderId) {
+        if (token.length === 0 && orderId) {
             getAuthToken(orderId);
         }
     }, [token, orderId]);
@@ -82,7 +87,7 @@ export default function Payment({ orderId }: { orderId: string }) {
     }, [order, productTypes, allProducts]);
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        if (token.current.length === 0) {
+        if (token.length === 0) {
             setAlert('Payment token not found');
 
             return;
@@ -103,6 +108,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             postalCode: formData.get('postalCode') as string,
             city: formData.get('city') as string,
             country: formData.get('country') as string,
+            phone: formData.get('phone') as string,
         };
         let paymentAddressDetails;
 
@@ -110,7 +116,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             const dataAdd: AddressData = {
                 name: formData.get('nameAdd') as string,
                 surname: formData.get('surnameAdd') as string,
-                email: formData.get('emailAdd') as string,
+                email: formData.get('email') as string,
                 street: formData.get('streetAdd') as string,
                 streetNumber: formData.get('streetNumberAdd') as string,
                 parcelNumber: formData.get('parcelNumberAdd') as string,
@@ -120,12 +126,12 @@ export default function Payment({ orderId }: { orderId: string }) {
                 postalCode: formData.get('postalCodeAdd') as string,
                 city: formData.get('cityAdd') as string,
                 country: formData.get('countryAdd') as string,
+                phone: formData.get('phone') as string,
             };
 
             paymentAddressDetails = dataAdd;
         } else {
             paymentAddressDetails = data;
-            delete paymentAddressDetails.email;
         }
 
         const response = await updateOrderDetails({
@@ -133,6 +139,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             orderDetails: {
                 address: data,
                 paymentAddress: paymentAddressDetails,
+                deliver: deliverType,
             },
         });
         if (!response.isValid) {
@@ -141,7 +148,101 @@ export default function Payment({ orderId }: { orderId: string }) {
             return;
         }
 
-        const paymentResponse = await createOrder(orderId);
+        const totalAmount =
+            Number(productListCart?.price) + Number(deliverType.price);
+
+        const totalAmountString = totalAmount
+            .toFixed(2)
+            .replace('.', '')
+            .toString();
+
+        const productList = productListCart?.products.reduce(
+            (arr: PaymentProduct[], item) => {
+                const findProductType = productTypes.find((x) => x.id === item);
+                const findProduct = allProducts?.find(
+                    (product) => product?.id === findProductType?.productId,
+                );
+                const indexExist = arr.findIndex(
+                    (x) => x.id === findProductType?.id,
+                );
+
+                if (indexExist !== -1) {
+                    const number = Number(arr[indexExist].quantity);
+                    const amount = number + 1;
+                    arr[indexExist].quantity = amount.toString();
+
+                    return arr;
+                }
+
+                if (!findProductType) {
+                    return arr;
+                }
+
+                const price =
+                    Number(findProductType?.sale_amount) > 0
+                        ? Number(findProductType?.sale_price)
+                        : Number(findProductType?.price);
+                const name = findProductType?.size
+                    ? ` ${findProductType?.size}`
+                    : '';
+                arr.push({
+                    name: findProduct?.name + name,
+                    quantity: '1',
+                    id: findProductType.id,
+                    unitPrice: price
+                        ?.toFixed(2)
+                        .replace('.', '')
+                        .toString() as string,
+                });
+
+                return arr;
+            },
+            [],
+        );
+
+        const productData = productList?.reduce(
+            (arr: PaymentProduct[], item) => {
+                arr.push(omit(item, 'id'));
+
+                return arr;
+            },
+            [],
+        );
+        const deliveryPrice = deliverType.price.toFixed(2).replace('.', '');
+        productData?.push({
+            name: 'Delivery',
+            unitPrice: deliveryPrice.toString(),
+            quantity: '1',
+        });
+
+        const parcelNumber = paymentAddressDetails.parcelNumber
+            ? `/${paymentAddressDetails.parcelNumber}`
+            : '';
+
+        const paymentData = {
+            totalAmount: totalAmountString,
+            buyer: {
+                email: paymentAddressDetails.email as string,
+                phone: paymentAddressDetails.phone,
+                firstName: paymentAddressDetails.name,
+                lastName: paymentAddressDetails.surname,
+                delivery: {
+                    street: paymentAddressDetails.street,
+                    postalBox:
+                        paymentAddressDetails.streetNumber + parcelNumber,
+                    postalCode: paymentAddressDetails.postalCode,
+                    city: paymentAddressDetails.city,
+                    recipientName: paymentAddressDetails.name,
+                    recipientEmail: paymentAddressDetails.email as string,
+                    recipientPhone: paymentAddressDetails.phone,
+                },
+            },
+            products: productData as PaymentProduct[],
+        };
+
+        console.log(paymentData);
+
+        const paymentResponse = await createOrder(orderId, paymentData);
 
         if (paymentResponse.isValid && paymentResponse.data) {
             window.open(

@@ -3,15 +3,40 @@ import { ApiResponse } from './userApi';
 
 type PaymentProperties = { name: string; value: string };
 
-type PaymentProduct = { name: string; quantity: string; unitPrice: string };
+export type PaymentProduct = {
+    id?: string;
+    name: string;
+    quantity: string;
+    unitPrice: string;
+};
 
-type PaymenOrder = {
+type PaymentCreateOrderData = {
+    totalAmount: string;
+    buyer: {
+        email: string;
+        phone: string;
+        firstName: string;
+        lastName: string;
+        delivery: {
+            street: string;
+            postalBox: string;
+            postalCode: string;
+            city: string;
+            recipientName: string;
+            recipientEmail: string;
+            recipientPhone: string;
+        };
+    };
+    products: PaymentProduct[];
+};
+
+type PaymentOrder = {
     buyer: { customerId: string; email: string };
     currencyCode: string;
     customerIp: string;
     description: string;
     merchantPosId: string;
-    rderCreateDate: string;
+    orderCreateDate: string;
     orderId: string;
     payMethod: { amount: string; type: string };
     products: PaymentProduct[];
@@ -20,7 +45,7 @@ type PaymenOrder = {
 };
 
 export type CheckPaymentData = {
-    orders: PaymenOrder[];
+    orders: PaymentOrder[];
     properties: PaymentProperties[];
     status: { statusCode: string; statusDesc: string };
 };
@@ -93,45 +118,19 @@ const getClientIp = async () => {
 
     return data.ip;
 };
-//paymentData: PaymentData,
-export const createOrder = async (id: string) => {
+
+export const createOrder = async (id: string, data: PaymentCreateOrderData) => {
     const clientId = await getClientIp();
 
     const payload = {
         customerIp: clientId,
-        merchantPosId: '495999',
-        description: 'Clothes shop',
+        description: 'Calistenics shop',
         currencyCode: 'PLN',
-        totalAmount: '2100',
-        continueUrl: `http://localhost:3000/payment/completed/${id}`,
-        products: [
-            {
-                name: 'Wireless Mouse for Laptop',
-                unitPrice: '2100',
-                quantity: '1',
-            },
-        ],
-        // buyer: {
-        //     extCustomerId: "string",
-        //     email: "email@email.com",
-        //     phone: "+48 225108001",
-        //     firstName: "John",
-        //     lastName: "Doe",
-        //     nin: 123456789,
-        //     language: "pl",
-        //     delivery: {
-        //         street: "string",
-        //         postalBox: "string",
-        //         postalCode: "string",
-        //         city: "string",
-        //         name: "string",
-        //         recipientName: "string",
-        //         recipientEmail: "string",
-        //         recipientPhone: "string"
-        //     }
-        // },
+        continueUrl: `${process.env.NEXT_PUBLIC_REDIRECT_URL}/payment/completed/${id}`,
+        ...data,
     };
     console.log(payload);
+
     try {
         const response = await fetch(`${url}/payment/${id}`, {
             method: 'POST',

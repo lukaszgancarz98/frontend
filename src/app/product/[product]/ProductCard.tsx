@@ -43,7 +43,7 @@ export default function ProductCard({
     const [pickedColor, setPickedColor] = useState<string>('');
     const { isEmpty } = pkg;
 
-    const body = document.body;
+    const body = document?.body;
     const breakPoint = body.clientWidth > 1024;
 
     useEffect(() => {

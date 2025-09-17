@@ -61,27 +61,16 @@ export default function Menu({
         shouldScroll?: HTMLDivElement | null,
     ) => {
         const body = document.body;
-        const breakPoint = body.clientWidth > 1024;
         if (disable) {
             scrollPosition.current = window.scrollY;
 
             body.style.overflowY = 'hidden';
             body.style.position = 'fixed';
             body.style.top = `-${scrollPosition.current}px`;
-            body.style.width = '100%';
-            if (breakPoint) {
-                body.style.paddingRight = '15px';
-                document.getElementById('header')!.style.paddingRight = '15px';
-            }
         } else {
             body.style.overflowY = '';
             body.style.position = '';
             body.style.top = '';
-            body.style.width = '';
-            if (breakPoint) {
-                body.style.paddingRight = '';
-                document.getElementById('header')!.style.paddingRight = '';
-            }
 
             window.scrollTo(0, scrollPosition.current);
 
@@ -305,7 +294,7 @@ export default function Menu({
                     className="fixed lg:top-30 top-[20vh] right-0 w-[100vw] lg:h-[90vh] h-[80vh] shadow-lg z-50 flex flex-col justify-center justify-around items-center text-white"
                 >
                     <div className="absolute inset-0 backdrop-blur-md bg-black/40 z-40"></div>
-                    <div className="relative z-50 flex flex-col h-1/2 justify-between items-center mb-15">
+                    <div className="relative z-50 flex flex-col h-2/3 justify-between items-center mb-15">
                         {settings.map((item) => (
                             <a
                                 href={item.href}
@@ -318,7 +307,7 @@ export default function Menu({
                         ))}
                         {logged && (
                             <Link
-                                className="ml-3 lg:ml-0 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent font-medium"
+                                className="ml-3 lg:ml-0 px-2 py-3 bg-transparent border-none text-xl hover:text-blue-800 hover:bg-transparent font-medium"
                                 href={'/user/orders'}
                             >
                                 ZAMÓWIENIA
