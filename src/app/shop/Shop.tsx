@@ -46,9 +46,10 @@ export default function Shop() {
     };
 
     const settings = [
-        { tag: 'male', title: 'MĘSKIE' },
-        { tag: 'female', title: 'DAMSKIE' },
+        { tag: 'male', title: 'KOLEKCJA MĘSKA' },
+        { tag: 'female', title: 'KOLEKCJA DAMSKA' },
         { tag: 'unisex', title: 'UNISEX' },
+        { tag: 'accessories', title: 'DODATKI'}
     ];
 
     return (
