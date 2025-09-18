@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCalistenics } from '../../../hooks/useCalistenics';
 import PaymentCart from './PaymentCart';
 import type { DisplayProductType } from '../../../pages/components/Cart/Cart';
@@ -57,6 +57,14 @@ export default function Payment({ orderId }: { orderId: string }) {
         }
     };
 
+    const onlyTrainingProducts = useMemo(() => {
+        const filter = cartProducts.filter(
+            (item) => !isEmpty(item.size) || !isEmpty(item.sizePlaceHolder),
+        );
+
+        return filter.length === 0;
+    }, [cartProducts]);
+
     const getAuthToken = async (orderId: string) => {
         const response = await authorizePayment(orderId);
 
@@ -97,6 +105,12 @@ export default function Payment({ orderId }: { orderId: string }) {
             setCartProducts(data);
         }
     }, [order, productTypes, allProducts]);
+
+    const deliveryPriceCheck = onlyTrainingProducts
+        ? 0
+        : Number(deliverType.price);
+
+    const totalAmount = Number(productListCart?.price) + deliveryPriceCheck;
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         if (token.length === 0) {
@@ -151,7 +165,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             orderDetails: {
                 address: data,
                 paymentAddress: paymentAddressDetails,
-                deliver: deliverType,
+                deliver: onlyTrainingProducts ? undefined : deliverType,
             },
         });
         if (!response.isValid) {
@@ -159,9 +173,6 @@ export default function Payment({ orderId }: { orderId: string }) {
 
             return;
         }
-
-        const totalAmount =
-            Number(productListCart?.price) + Number(deliverType.price);
 
         const totalAmountString = totalAmount
             .toFixed(2)
@@ -221,11 +232,14 @@ export default function Payment({ orderId }: { orderId: string }) {
             [],
         );
         const deliveryPrice = deliverType.price.toFixed(2).replace('.', '');
-        productData?.push({
-            name: 'Delivery',
-            unitPrice: deliveryPrice.toString(),
-            quantity: '1',
-        });
+
+        if (!onlyTrainingProducts) {
+            productData?.push({
+                name: 'Delivery',
+                unitPrice: deliveryPrice.toString(),
+                quantity: '1',
+            });
+        }
 
         const parcelNumber = paymentAddressDetails.parcelNumber
             ? `/${paymentAddressDetails.parcelNumber}`
@@ -251,8 +265,6 @@ export default function Payment({ orderId }: { orderId: string }) {
             },
             products: productData as PaymentProduct[],
         };
-
-        console.log(paymentData);
 
         const paymentResponse = await createOrder(orderId, paymentData);
 
@@ -329,10 +341,11 @@ export default function Payment({ orderId }: { orderId: string }) {
                 <div className="lg:w-[40%] w-full bg-white border lg:m-5 rounded-sm">
                     <PaymentCart
                         products={cartProducts}
-                        price={Number(productListCart?.price) ?? 0}
+                        price={totalAmount}
                         allProducts={allProducts}
                         func={cartFunctions}
                         deliveryPrice={deliverType.price}
+                        displayDelivery={!onlyTrainingProducts}
                         order={orderId}
                     />
                 </div>

@@ -7,6 +7,7 @@ import type { ProductType, ProductTypeType } from '../../../api/produktApi';
 import DisplayProductVideo from './DisplayProductVideo';
 import Link from 'next/link';
 import { displayProducts } from '../../../service/service';
+import { isEmpty } from 'lodash';
 
 type CartProps = {
     products?: OrderType;
@@ -52,6 +53,14 @@ export default function Cart({
     const [cartProducts, setCartProducts] = useState<DisplayProductType[]>([]);
     const transportCost = 15;
 
+    const onlyTrainingProducts = useMemo(() => {
+        const filter = cartProducts.filter(
+            (item) => !isEmpty(item.size) || !isEmpty(item.sizePlaceHolder),
+        );
+
+        return filter.length === 0;
+    }, [cartProducts]);
+
     useEffect(() => {
         let priceSum = 0;
 
@@ -90,6 +99,12 @@ export default function Cart({
             setOpenExtended(true);
         }
     }, [expand, openExtended]);
+
+    const finalPrice = () => {
+        const delivery = onlyTrainingProducts ? 0 : 15;
+
+        return sum + delivery;
+    };
 
     return (
         <div>
@@ -169,22 +184,24 @@ export default function Cart({
                                         {sum.toFixed(2).replace('.', ',')} zł
                                     </div>
                                 </div>
-                                <div className="flex flex-row justify-between items-center  text-sm">
-                                    <div>Koszt dostawy</div>
-                                    <div>
-                                        od{' '}
-                                        {transportCost
-                                            .toFixed(2)
-                                            .replace('.', ',')}{' '}
-                                        zł
+                                {!onlyTrainingProducts && (
+                                    <div className="flex flex-row justify-between items-center  text-sm">
+                                        <div>Koszt dostawy</div>
+                                        <div>
+                                            od{' '}
+                                            {transportCost
+                                                .toFixed(2)
+                                                .replace('.', ',')}{' '}
+                                            zł
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                                 <div className="flex flex-row justify-between items-center text-2xl mt-3">
                                     <div className="font-bold">
                                         Koszt całkowity
                                     </div>
                                     <div className="font-bold">
-                                        {(sum + transportCost)
+                                        {finalPrice()
                                             .toFixed(2)
                                             .replace('.', ',')}{' '}
                                         zł

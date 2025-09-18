@@ -1,27 +1,5 @@
 import { BACKEND_URL } from '../common/constants';
-
-export type UserType = {
-    id: string;
-    email: string;
-    name: string;
-    surname: string;
-};
-
-export type ApiResponse<T> = {
-    data: T | null;
-    isValid: boolean;
-    error?: string;
-    status?: number;
-};
-
-export type UserLoginData = { email: string; password: string };
-
-export type UserRegisterData = {
-    email: string;
-    password: string;
-    name: string;
-    surname: string;
-};
+import { ApiResponse } from './userApi';
 
 export type ReciverData = { email: string; id: string };
 

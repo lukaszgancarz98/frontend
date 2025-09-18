@@ -1,15 +1,33 @@
 'use server';
 
+import { Attachment } from '@/api/documentApi';
 import { OrderType, updateOrder } from '@/api/orderApi';
 import nodemailer from 'nodemailer';
 
-export default async function sendEmail({ order }: { order: OrderType }) {
+export default async function sendEmail({
+    order,
+    files,
+}: {
+    order: OrderType;
+    files?: Attachment[];
+}) {
     const transporter = nodemailer.createTransport({
         host: 'mail.theschoolofcalisthenics.pl',
         port: 587,
         secure: false,
         auth: { user: 'kontakt@theschoolofcalisthenics.pl', pass: '123456789' },
     });
+
+    const attachments = await Promise.all(
+        files?.map(async (file) => {
+            const buffer = Buffer.from(await file.file.arrayBuffer());
+            return {
+                filename: file.name,
+                content: buffer,
+                contentType: file.file.type,
+            };
+        }) || [],
+    );
 
     const userData = order.orderDetails?.address;
 
@@ -69,6 +87,7 @@ export default async function sendEmail({ order }: { order: OrderType }) {
             to: userData?.email,
             subject: `Zamówienie ${order.id}`,
             html,
+            attachments,
         })
         .then(async () => {
             try {

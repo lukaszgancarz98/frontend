@@ -10,6 +10,7 @@ export type ProductType = {
     type: string;
     category: string;
     tag?: string;
+    file_id?: string;
 };
 
 export type ProductTypeType = {

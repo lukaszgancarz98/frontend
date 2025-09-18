@@ -30,6 +30,7 @@ type PaymentCartProps = {
     deliveryPrice: number;
     price: number;
     order: string;
+    displayDelivery: boolean;
 };
 
 export default function PaymentCart({
@@ -39,12 +40,18 @@ export default function PaymentCart({
     deliveryPrice,
     price,
     order,
+    displayDelivery,
 }: PaymentCartProps) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(true);
+
+    const deliveryPriceDispaly = useMemo(
+        () => (displayDelivery ? deliveryPrice : 0),
+        [displayDelivery, deliveryPrice],
+    );
     const fullPrice = useMemo(() => {
-        return (price + deliveryPrice)?.toFixed(2).replace('.', ',');
-    }, [price, deliveryPrice]);
+        return (price + deliveryPriceDispaly)?.toFixed(2).replace('.', ',');
+    }, [price, deliveryPriceDispaly]);
 
     const {
         loginFn,
@@ -159,10 +166,14 @@ export default function PaymentCart({
                     <div className="">Koszty produktów</div>
                     <div>{price?.toFixed(2).replace('.', ',')} zł</div>
                 </div>
-                <div className="flex w-full justify-between px-10">
-                    <div>Koszty przesyłki</div>
-                    <div>{deliveryPrice?.toFixed(2).replace('.', ',')} zł</div>
-                </div>
+                {displayDelivery && (
+                    <div className="flex w-full justify-between px-10">
+                        <div>Koszty przesyłki</div>
+                        <div>
+                            {deliveryPrice?.toFixed(2).replace('.', ',')} zł
+                        </div>
+                    </div>
+                )}
                 <div className="flex w-full justify-between px-10 font-bold text-lg pb-5">
                     <div>Razem</div>
                     <div>{fullPrice} zł</div>

@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import sendEmail from './SendConfirmationEmail';
 import { useUser } from '@/context/userContext';
 import Link from 'next/link';
+import { isEmpty } from 'lodash';
+import { Attachment, getDocumentsForEmail } from '@/api/documentApi';
 
 type PaymentCompletedProps = { id: string };
 
@@ -49,9 +51,24 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                 payment_id: paymentId,
             });
 
+            const data = responseUpdate.data;
+
+            const docs = await getDocumentsForEmail({
+                orderId: data?.id as string,
+                products: data?.products as string[],
+            });
+
             if (responseUpdate.isValid) {
                 setDone(true);
-                sendEmail({ order: responseUpdate?.data as OrderType });
+
+                if (isEmpty(docs.data)) {
+                    sendEmail({ order: responseUpdate?.data as OrderType });
+                }
+
+                sendEmail({
+                    order: responseUpdate?.data as OrderType,
+                    files: docs.data as Attachment[],
+                });
             }
         }
     };

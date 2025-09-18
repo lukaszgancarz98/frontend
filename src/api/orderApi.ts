@@ -19,7 +19,7 @@ export type AddressData = {
 export type OrderAddressDetails = {
     address: AddressData;
     paymentAddress: AddressData;
-    deliver: DeliverTypesType;
+    deliver: DeliverTypesType | undefined;
 };
 
 export type OrderDataType = {
