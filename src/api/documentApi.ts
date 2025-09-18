@@ -53,7 +53,7 @@ export const getDocument = async (
         return {
             data: null,
             isValid: false,
-            error: err.message || 'Network error or server unreachable',
+            error: 'Network error or server unreachable',
         };
     }
 };
