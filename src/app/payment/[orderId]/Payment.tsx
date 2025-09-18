@@ -32,7 +32,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { omit } from 'lodash';
+import { isEmpty, omit } from 'lodash';
+import { redirect } from 'next/navigation';
+import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 
 export default function Payment({ orderId }: { orderId: string }) {
     const { allProducts, productTypes, productListCart, cartFunctions } =
@@ -57,9 +60,18 @@ export default function Payment({ orderId }: { orderId: string }) {
     const getAuthToken = async (orderId: string) => {
         const response = await authorizePayment(orderId);
 
-        if (response.isValid && response.data) {
-            setToken(response.data);
+        if (response.isValid && !isEmpty(response.data)) {
+            setToken(response.data as string);
+
+            return;
         }
+        
+        toast("To zamówienie zostało już wcześniej opłacone", {
+          action: {
+            label: "Przejdz do zamówienia",
+            onClick: () => redirect(`/order/${orderId}`),
+          },
+        })
     };
 
     useEffect(() => {
@@ -289,6 +301,7 @@ export default function Payment({ orderId }: { orderId: string }) {
                     </a>
                 </div>
             </div>
+            <Toaster position="top-center" richColors/>
             <AlertDialog open={alert.length === 0 ? false : true}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

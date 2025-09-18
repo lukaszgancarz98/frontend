@@ -30,8 +30,6 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
             setProduct(respnseProduct?.data as ProductType);
             setProductType(responseProductType?.data?.[0]);
         }
-
-        console.log(responseProductType, respnseProduct);
     };
 
     useEffect(() => {
@@ -48,7 +46,6 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
 
     const saveEmailForNotifications = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(e);
 
         //todo: Luki weź coś zrób
     };

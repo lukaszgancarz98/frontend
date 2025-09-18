@@ -70,6 +70,10 @@ export function useCalistenics() {
             return;
         }
 
+        if (request.data.payment_date) {
+            updateOrderContext(null);
+        }
+
         setProductListCart(request.data);
     };
 

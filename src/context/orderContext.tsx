@@ -15,7 +15,7 @@ type OrderContextType = {
     expandCart: boolean;
     setOrder: (order: Order | null) => void;
     clearOrder: () => void;
-    updateOrder: (order: Order) => void;
+    updateOrder: (order: Order | null) => void;
     updateExpanded: (expand: boolean) => void;
 };
 
@@ -52,7 +52,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem('order');
     };
 
-    const updateOrder = (order: Order) => {
+    const updateOrder = (order: Order | null) => {
         setOrder(order);
         if (typeof window !== 'undefined') {
             try {

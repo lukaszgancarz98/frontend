@@ -33,6 +33,7 @@ export type OrderDataType = {
 };
 
 export type OrderType = {
+    email_send?: boolean;
     id: string;
     price: number;
     products: string[];
@@ -55,6 +56,7 @@ type UpdateOrderData = {
     email?: string;
     payment_date?: Date;
     payment_id?: string;
+    email_send?: boolean;
 };
 
 type UpdateOrderDetailsData = { id: string; orderDetails: OrderAddressDetails };

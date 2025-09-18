@@ -1,6 +1,6 @@
 'use client';
 
-import { updateOrder } from '@/api/orderApi';
+import { getOrder, OrderType, updateOrder } from '@/api/orderApi';
 import { checkPayment } from '@/api/paymentApi';
 import { redirect, RedirectType } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -15,6 +15,22 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
     const { user } = useUser();
 
     const checkPaymentRequest = async (order: string) => {
+        const getData = await getOrder({id: order});
+
+        if (!getData.isValid) {
+            return;
+        }
+
+        if (getData.data?.payment_date) {
+            if (getData.data?.email_send) {
+                sendEmail({ order: getData.data as OrderType});
+            }
+
+            setDone(true);
+
+            return;
+        }
+
         const response = await checkPayment(order);
 
         if (!response.isValid) {
@@ -35,7 +51,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
 
             if (responseUpdate.isValid) {
                 setDone(true);
-                sendEmail({ id: id });
+                sendEmail({ order: responseUpdate?.data as OrderType});
             }
         }
     };
