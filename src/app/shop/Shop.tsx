@@ -49,7 +49,7 @@ export default function Shop() {
         { tag: 'male', title: 'KOLEKCJA MĘSKA' },
         { tag: 'female', title: 'KOLEKCJA DAMSKA' },
         { tag: 'unisex', title: 'UNISEX' },
-        { tag: 'accessories', title: 'DODATKI'}
+        { tag: 'accessories', title: 'DODATKI' },
     ];
 
     return (
