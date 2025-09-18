@@ -5,13 +5,10 @@ import nodemailer from 'nodemailer';
 
 export default async function sendEmail({ order }: { order: OrderType }) {
     const transporter = nodemailer.createTransport({
-        host: "mail.theschoolofcalisthenics.pl",
+        host: 'mail.theschoolofcalisthenics.pl',
         port: 587,
         secure: false,
-        auth: {
-            user: "kontakt@theschoolofcalisthenics.pl",
-            pass: "123456789",
-        },
+        auth: { user: 'kontakt@theschoolofcalisthenics.pl', pass: '123456789' },
     });
 
     const userData = order.orderDetails?.address;
@@ -19,7 +16,7 @@ export default async function sendEmail({ order }: { order: OrderType }) {
     const formatter = new Intl.DateTimeFormat('pl-PL', {
         day: '2-digit',
         month: '2-digit',
-        year: 'numeric'
+        year: 'numeric',
     });
 
     const orderDate = new Date(order.payment_date as string);
@@ -65,20 +62,20 @@ export default async function sendEmail({ order }: { order: OrderType }) {
         </body>
         </html>
     `;
-    
+
     transporter
         .sendMail({
-                from: 'TheSchoolOfCalisthenicsShop <kontakt@theschoolofcalisthenics.pl>',
-                to: userData?.email,
-                subject: `Zamówienie ${order.id}`,
-                html
+            from: 'TheSchoolOfCalisthenicsShop <kontakt@theschoolofcalisthenics.pl>',
+            to: userData?.email,
+            subject: `Zamówienie ${order.id}`,
+            html,
         })
         .then(async () => {
             try {
-                await updateOrder({id: order.id, email_send: true});
+                await updateOrder({ id: order.id, email_send: true });
             } catch {
-                console.log('Error')
+                console.log('Error');
             }
-        }).catch(console.log);
-
+        })
+        .catch(console.log);
 }

@@ -6,7 +6,7 @@ export type ProductType = {
     name: string;
     description: string;
     image: string;
-    imageSize: string;
+    size_image: string;
     type: string;
     category: string;
     tag?: string;
@@ -31,8 +31,9 @@ const url = `${BACKEND_URL}/product`;
 export const getAllProducts = async (): Promise<ApiResponse<ProductType[]>> => {
     try {
         const res = await fetch(`${url}/products`, {
-            method: 'GET',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ page: 'kalistenika' }),
         });
 
         const responseData = await res.json();

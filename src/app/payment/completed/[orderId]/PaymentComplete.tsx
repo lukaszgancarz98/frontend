@@ -15,7 +15,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
     const { user } = useUser();
 
     const checkPaymentRequest = async (order: string) => {
-        const getData = await getOrder({id: order});
+        const getData = await getOrder({ id: order });
 
         if (!getData.isValid) {
             return;
@@ -23,7 +23,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
 
         if (getData.data?.payment_date) {
             if (getData.data?.email_send) {
-                sendEmail({ order: getData.data as OrderType});
+                sendEmail({ order: getData.data as OrderType });
             }
 
             setDone(true);
@@ -51,7 +51,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
 
             if (responseUpdate.isValid) {
                 setDone(true);
-                sendEmail({ order: responseUpdate?.data as OrderType});
+                sendEmail({ order: responseUpdate?.data as OrderType });
             }
         }
     };

@@ -6,14 +6,18 @@ import {
     ProductType,
     ProductTypeType,
 } from '@/api/produktApi';
+import { createWorkShopReceiver } from '@/api/workShopApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Toaster } from '@/components/ui/sonner';
 import { useUser } from '@/context/userContext';
 import BackgroundOnScroll from '@/pages/components/Fade/BackgroundOnScroll/BackgroundOnScroll';
 import TextFade from '@/pages/components/Fade/FadeChildComponents';
+import { isEmpty } from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 type WorkShopPageProps = { productId: string };
 
@@ -44,10 +48,31 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
         [productType],
     );
 
-    const saveEmailForNotifications = (e: React.FormEvent<HTMLFormElement>) => {
+    const saveEmailForNotifications = async (
+        e: React.FormEvent<HTMLFormElement>,
+    ) => {
         e.preventDefault();
 
-        //todo: Luki weź coś zrób
+        const formData = new FormData(e.currentTarget);
+
+        const email = formData.get('email') as string;
+
+        if (email) {
+            const response = await createWorkShopReceiver({
+                id: productId,
+                email: email,
+            });
+
+            if (isEmpty(response.data)) {
+                toast.warning('Ten email został już dodany');
+
+                return;
+            }
+
+            if (response.isValid) {
+                toast.info('Poinformujemy Cię o najbliższych eventach');
+            }
+        }
     };
 
     return (
@@ -76,6 +101,7 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                 </div>
                 <div className="lg:w-1/4" />
             </div>
+            <Toaster position="top-center" richColors />
             <div className="pt-35 font-comic bg-[oklch(0.13_0.03_246.75)] text-stone-300">
                 <div className="text-center text-5xl font-semibold pt-10 pb-15">
                     {product?.name}
@@ -136,7 +162,6 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                         <Button
                             type="submit"
                             className="text-3xl bg-blue-300 py-7 px-5 rounded-lg text-black transition-all duration-300 hover:scale-120 hover:bg-blue-500"
-                            onClick={() => console.log('check')}
                         >
                             Poinformuj mnie
                         </Button>

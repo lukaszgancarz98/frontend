@@ -65,13 +65,13 @@ export default function Payment({ orderId }: { orderId: string }) {
 
             return;
         }
-        
-        toast("To zamówienie zostało już wcześniej opłacone", {
-          action: {
-            label: "Przejdz do zamówienia",
-            onClick: () => redirect(`/order/${orderId}`),
-          },
-        })
+
+        toast('To zamówienie zostało już wcześniej opłacone', {
+            action: {
+                label: 'Przejdz do zamówienia',
+                onClick: () => redirect(`/order/${orderId}`),
+            },
+        });
     };
 
     useEffect(() => {
@@ -301,7 +301,7 @@ export default function Payment({ orderId }: { orderId: string }) {
                     </a>
                 </div>
             </div>
-            <Toaster position="top-center" richColors/>
+            <Toaster position="top-center" richColors />
             <AlertDialog open={alert.length === 0 ? false : true}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
