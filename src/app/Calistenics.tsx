@@ -132,7 +132,7 @@ export default function Calistenics() {
             >
                 <a
                     href="#home"
-                    className="flex flex-col justify-center lg:w-1/4 w-1/3 lg:h-full h-[10vh]"
+                    className="lg:relative fixed left-0 top-15 lg:top-2 flex flex-col justify-center w-1/4 lg:h-full h-[10vh]"
                     onClick={(e) => handleScroll(e, homeRef.current)}
                 >
                     <Image
@@ -143,7 +143,7 @@ export default function Calistenics() {
                         alt="/placeholder.png"
                     />
                 </a>
-                <div className="flex flex-col lg:w-2/4 w-2/3 pr-3 lg:pr-0 justify-around lg:items-center lg:h-full h-[10vh]">
+                <div className="flex flex-col lg:w-2/4 w-full justify-around lg:items-center lg:h-full h-[10vh]">
                     <Image
                         src={'/text.png'}
                         className="object-contain w-full h-full"
@@ -184,7 +184,7 @@ export default function Calistenics() {
                 />
                 <div className="lg:w-1/2 text-white">
                     <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
+                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium lg:font-comic">
                             <div className="pb-2">KIM JESTEŚ?</div>
                             <div className="text-center">
                                 JAKIE MASZ UMIEJĘTNOŚCI?
@@ -194,7 +194,10 @@ export default function Calistenics() {
                             <div className="w-full text-center pb-5">
                                 ZALEŻY TYLKO I WYŁĄCZNIE OD CIEBIE
                             </div>
-                            <Dialog open={open}>
+                            <Dialog
+                                open={open}
+                                onOpenChange={() => setOpen(false)}
+                            >
                                 <DialogTrigger asChild>
                                     <Button
                                         className="w-1/3 bg-blue-500 text-black hover:bg-green-400 hover:text-xl"
@@ -235,7 +238,7 @@ export default function Calistenics() {
             <div className="flex lg:flex-row flex-col-reverse h-[100vh] lg:h-auto w-full py-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl">
                 <div className="lg:w-1/2 bg-[oklch(0.13_0.03_246.56)] text-white">
                     <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
+                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium lg:font-comic">
                             <div>
                                 MOMENT, W KTÓRYM NIEMOŻLIWE STAJE SIĘ MOŻLIWE
                                 JEST NIESAMOWITY.
@@ -281,7 +284,7 @@ export default function Calistenics() {
                 />
                 <div className=":lgw-1/2 text-white">
                     <TextFade className="lg:p-10 h-full flex items-center">
-                        <div className="flex flex-col gap-10 lg:text-3xl text-2xl p-3 w-full items-center font-medium font-comic">
+                        <div className="flex flex-col gap-10 lg:text-3xl text-2xl p-3 w-full items-center font-medium lg:font-comic">
                             <div className="text-center">
                                 MASZ JEDNĄ SZANSĘ BY STAĆ SIĘ LEGENDĄ.
                             </div>

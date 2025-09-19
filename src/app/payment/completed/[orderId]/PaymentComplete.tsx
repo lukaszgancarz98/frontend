@@ -88,8 +88,9 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
         <div className="w-screen h-screen flex justify-center items-center">
             {done ? (
                 <div className="lg:w-3/6 text-center flex flex-col gap-3 text-xl px-3 lg:px-0">
-                    <div className="text-2xl font-bold">
-                        Numer zamówienia: {id}
+                    <div className="text-2xl font-bold flex flex-col lg:flex-row gap-0 lg:gap-2 items-center justify-center">
+                        <div>Numer zamówienia: </div>
+                        <div>{id}</div>
                     </div>
                     <div className="font-medium text-2xl pb-3">
                         Twoja płatność została pomyślnie zaksięgowana.

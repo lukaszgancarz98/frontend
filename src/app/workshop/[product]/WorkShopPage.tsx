@@ -87,7 +87,7 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                 >
                     <Image
                         src={'/logo.png'}
-                        className="h-24 w-40 bg-transparent lg:ml-10"
+                        className="lg:h-24 lg:w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}
                         height={1000}
@@ -105,7 +105,7 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                 <div className="lg:w-1/4" />
             </div>
             <Toaster position="top-center" richColors />
-            <div className="pt-35 font-comic bg-[oklch(0.13_0.03_246.75)] text-stone-300">
+            <div className="pt-35 lg:font-comic bg-[oklch(0.13_0.03_246.75)] text-stone-300">
                 <div className="text-center text-5xl font-semibold pt-10 pb-15">
                     {product?.name}
                 </div>

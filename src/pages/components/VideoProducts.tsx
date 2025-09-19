@@ -104,13 +104,16 @@ export default function VideoProducts({
                             onMouseLeave={() => setShowLevel('')}
                             onTouchStart={() => setShowLevel(productType?.id)}
                             onTouchEnd={() => setShowLevel('')}
-                            className="relative shadow-xl w-full lg:w-[28vw] mb-5 lg:mb-0 h-auto px-5 lg:px-0 lg:mx-5 flex flex-col items-center min-h-1/3 rounded-xl min-w-[25vw] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                            className="relative shadow-xl w-full lg:w-[28vw] mb-5 lg:mb-0 h-auto px-5 lg:px-0 lg:mx-5 flex flex-col items-center min-h-1/3 rounded-xl min-w-[25vw] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 justify-between"
                         >
-                            <div onClick={() => setOpenAlert(productType?.id)}>
+                            <div
+                                onClick={() => setOpenAlert(productType?.id)}
+                                className="flex flex-col"
+                            >
                                 <div className="relative lg:w-full">
                                     {hovered && (
                                         <div
-                                            className={`absolute top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-[oklch(0.61_0.16_252.06)] text-white z-30 shadow-xl ${useFont ? "font-['Graduate']" : ''} text-center`}
+                                            className={`absolute top-0 rounded-tl-lg rounded-tr-lg lg:rounded-tl-none lg:rounded-tr-none lg:top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-[oklch(0.61_0.16_252.06)] text-white z-30 shadow-xl ${useFont ? "font-['Graduate']" : ''} text-center`}
                                         >
                                             {item?.name}
                                         </div>
@@ -187,7 +190,7 @@ export default function VideoProducts({
                                         </TextFade>
                                         <TextFade>
                                             <div
-                                                className="flex flex-col text-lg text-justify px-15 pb-5 prose"
+                                                className="flex flex-col text-lg text-justify lg:px-15 pb-5 prose"
                                                 style={{
                                                     whiteSpace: 'pre-line',
                                                 }}
@@ -202,7 +205,7 @@ export default function VideoProducts({
                                         {productType.shortDescription && (
                                             <TextFade>
                                                 <div
-                                                    className="flex flex-col text-lg text-center px-15 pb-5 prose"
+                                                    className="flex flex-col text-lg text-center lg:px-15 pb-5 prose"
                                                     dangerouslySetInnerHTML={{
                                                         __html: productType.shortDescription,
                                                     }}
@@ -212,9 +215,9 @@ export default function VideoProducts({
                                     </div>
                                 </div>
                             </div>
-                            <div className="mb-10 w-full text-center flex justify-center items-center">
+                            <div className="w-full text-center flex justify-center items-center pb-7">
                                 <Button
-                                    className="bg-white text-grey-900 font-bold px-6 py-3 rounded-xl hover:bg-green-600 transition"
+                                    className="bg-blue-400 text-white font-bold px-6 py-3 rounded-xl hover:bg-green-500 transition hover:scale-120"
                                     onClick={() =>
                                         addProductToProductList({
                                             id: productType?.id as string,
@@ -223,7 +226,7 @@ export default function VideoProducts({
                                         })
                                     }
                                 >
-                                    Dodaj do koszyka
+                                    DODAJ DO KOSZYKA
                                 </Button>
                             </div>
                         </div>

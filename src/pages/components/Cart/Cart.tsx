@@ -124,8 +124,8 @@ export default function Cart({
                 </div>
             </div>
             {openExtended && (
-                <div className="fixed inset-y-0 right-0 lg:w-[30vw] w-[100vw] min-w-96 bg-white shadow-lg z-50 flex flex-col">
-                    <div className="p-5 flex-1 overflow-auto">
+                <div className="fixed inset-y-0 right-0 lg:w-[30vw] w-auto lg:w-[100vw] lg:min-w-96 bg-white shadow-lg z-50 flex flex-col">
+                    <div className="p-2 lg:p-5 flex-1 overflow-auto">
                         <div className="flex justify-between">
                             <h2 className="text-xl font-bold mb-4">Zakupy</h2>
                             <CloseOutlined

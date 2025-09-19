@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Product from '@/pages/components/productInGallery';
 import { ProductType } from '@/api/produktApi';
 import { redirect, RedirectType } from 'next/navigation';
+import Footer2 from '@/pages/components/footer2';
 
 export default function Shop() {
     const {
@@ -96,7 +97,7 @@ export default function Shop() {
                     )}
                 </div>
             </div>
-            <div className="h-screen flex flex-col lg:pt-35 pt-25 font-comic">
+            <div className="h-auto flex flex-col lg:pt-35 pt-25 lg:font-comic">
                 {settings.map((setting, index) => {
                     const products = tagProducts(setting.tag);
 
@@ -131,10 +132,15 @@ export default function Shop() {
                                     );
                                 })}
                             </div>
-                            <div className="h-[3px] w-full bg-stone-200 shadow-xl mt-10" />
+                            {index !== settings.length - 1 && (
+                                <div className="h-[3px] w-full bg-stone-200 shadow-xl mt-10" />
+                            )}
                         </div>
                     );
                 })}
+            </div>
+            <div id="footer" className="w-[100%] pt-20">
+                <Footer2 />
             </div>
         </div>
     );

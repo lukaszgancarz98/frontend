@@ -59,17 +59,17 @@ const Gallery6 = ({ heading, items, productTypes }: Gallery6Props) => {
         <section className="lg:pt-40 pt-5" id="products">
             <div className="relative mb-2 flex justify-center flex-row items-center w-full">
                 <div className="flex flex-col font-['Graduate']">
-                    <div className="lg:text-5xl font-semibold lg:mb-6">
+                    <div className="lg:text-5xl text-3xl font-semibold lg:mb-6 text-center">
                         {heading}
                     </div>
                     <Link
                         href={'/shop'}
-                        className="text-xl text-center underline hover:text-blue-600"
+                        className="text-xl text-center bg-blue-400 rounded-lg py-1 transition hover:scale-130"
                     >
                         Przejdz do sklepu
                     </Link>
                 </div>
-                <div className="absolute top-0 right-10 mt-8 flex shrink-0 items-center lg:justify-start justify-center gap-2">
+                <div className="absolute lg:top-0 top-15 right-10 mt-8 flex shrink-0 items-center lg:justify-start justify-center gap-2">
                     <Button
                         size="icon"
                         variant="outline"

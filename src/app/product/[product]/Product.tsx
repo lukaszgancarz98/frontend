@@ -1,6 +1,5 @@
 'use client';
 
-import ProductCard from './ProductCard';
 import {
     getProduct,
     getProductTypesByProductId,
@@ -21,6 +20,7 @@ import { useOrder } from '@/context/orderContext';
 import { useUser } from '@/context/userContext';
 import Link from 'next/link';
 import Image from 'next/image';
+import ProductCard from '@/pages/components/ProductCard';
 
 type ProductProps = { productId: string };
 
@@ -119,12 +119,12 @@ export default function Product({ productId }: ProductProps) {
         <div id={productId}>
             <div
                 id="header"
-                className={`flex flex-row justify-between items-center h-35 fixed top-0 left-0 lg:w-full w-[100vw] z-60 shadow-xl bg-black`}
+                className={`flex flex-row justify-between items-center lg:h-35 h-25 fixed top-0 left-0 lg:w-full w-[100vw] z-60 shadow-xl bg-black`}
             >
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
                         src={'/logo.png'}
-                        className="h-24 w-40 bg-transparent lg:ml-10"
+                        className="lg:h-24 lg:w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}
                         height={1000}
@@ -145,6 +145,7 @@ export default function Product({ productId }: ProductProps) {
                 product={product}
                 products={productTypes}
                 addToCart={addProductToProductList}
+                redirectPath="/#products"
             />
         </div>
     );

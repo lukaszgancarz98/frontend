@@ -14,6 +14,8 @@ import { redirect, RedirectType } from 'next/navigation';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { GoPackageDependents } from 'react-icons/go';
 import { getDocument } from '@/api/documentApi';
+import { ProductType, ProductTypeType } from '@/api/produktApi';
+import { isEmpty } from 'lodash';
 
 export type OrderPageProps = { error: string; children: React.ReactNode };
 
@@ -27,7 +29,7 @@ export function Order({ error, children }: OrderPageProps) {
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
                         src={'/logo.png'}
-                        className="lg:h-24 h-18 w-40 bg-transparent lg:ml-10"
+                        className="lg:h-24 h-15 w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}
                         height={1000}
@@ -140,4 +142,91 @@ export const handleDownload = async (id: string, productId: string) => {
     } catch (err) {
         console.log(err);
     }
+};
+
+export const displayProducts = (
+    data: OrderType,
+    productsTypes?: ProductTypeType[],
+    products?: ProductType[],
+) => {
+    const productsIds: string[] = [];
+
+    const productTypesData = productsTypes;
+    productsTypes?.forEach((prod) => {
+        const include = data.products.includes(prod.id);
+        if (include) {
+            productsIds.push(prod.productId);
+        }
+
+        return include;
+    });
+    const orderProducts = products?.filter((prod) =>
+        productsIds?.includes(prod.id),
+    );
+    const fileProducts = orderProducts?.filter((item) =>
+        item.category.includes('video'),
+    );
+
+    const clothProducts = orderProducts?.filter((item) =>
+        item.category.includes('clothes'),
+    );
+
+    return (
+        <div>
+            {fileProducts?.map((item) => {
+                const productType = productsTypes?.find(
+                    (prod) => prod.productId === item.id,
+                );
+
+                if (!productType) {
+                    return;
+                }
+
+                return (
+                    <div
+                        key={item.id}
+                        className="border border-black rounded-lg my-2 bg-stone-200"
+                    >
+                        <div className="w-full text-center text-xl pt-1">
+                            {item.name}
+                        </div>
+                        <div
+                            className="underline text-blue-400 text-center py-1"
+                            onClick={() =>
+                                handleDownload(data.id, productType?.id)
+                            }
+                        >
+                            Pobierz trening
+                        </div>
+                    </div>
+                );
+            })}
+            <div className="mt-2 bg-stone-200">
+                {clothProducts?.map((item) => {
+                    const productType = productTypesData?.find(
+                        (type) => type.productId === item.id,
+                    );
+
+                    return (
+                        <div
+                            key={item.id}
+                            className="border border-black rounded-lg p-2"
+                        >
+                            <div className="text-xl">{item.name}</div>
+                            <div className="py-2">
+                                Rozmiar: {productType?.size}
+                            </div>
+                            <div className="flex flex-row gap-5">
+                                <div>Kolor: </div>
+                                <div
+                                    className={`h-6 w-6 bg-[${productType?.color.replaceAll(', ', '_')}] rounded-full`}
+                                />
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+            {!isEmpty(clothProducts) && status(data)}
+        </div>
+    );
 };

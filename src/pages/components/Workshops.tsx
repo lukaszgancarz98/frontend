@@ -79,7 +79,7 @@ export default function Workshops({
                             >
                                 <div className="relative w-full">
                                     {hovered && (
-                                        <div className="absolute top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-black text-white z-30 shadow-xl font-['Graduate'] text-center">
+                                        <div className="absolute top-0 lg:top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-black text-white z-30 shadow-xl font-['Graduate'] text-center rounded-tl-lg rounded-tr-lg lg:rounded-tl-none lg:rounded-tr-none">
                                             {item?.name}
                                         </div>
                                     )}

@@ -4,14 +4,13 @@ import { getOrder, OrderType } from '@/api/orderApi';
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { handleDownload, Order, status } from './Order';
+import { displayProducts, Order } from './Order';
 import {
     getAllProducts,
     getAllProductTypes,
     ProductType,
     ProductTypeType,
 } from '@/api/produktApi';
-import { isEmpty } from 'lodash';
 
 export default function OrderPage() {
     const [order, setOrder] = useState<OrderType>();
@@ -50,64 +49,6 @@ export default function OrderPage() {
         getProductRequest();
     }, []);
 
-    const displayProducts = (data: OrderType) => {
-        const productsIds: string[] = [];
-        productsTypes?.filter((prod) => {
-            const include = data.products.includes(prod.id);
-            if (include) {
-                productsIds.push(prod.productId);
-            }
-
-            return include;
-        });
-        const orderProducts = products?.filter((prod) =>
-            productsIds?.includes(prod.id),
-        );
-        const fileProducts = orderProducts?.filter((item) =>
-            item.category.includes('video'),
-        );
-
-        const clothProducts = orderProducts?.filter((item) =>
-            item.category.includes('clothes'),
-        );
-
-        return (
-            <div>
-                {fileProducts?.map((item) => {
-                    const productType = productsTypes?.find(
-                        (prod) => prod.productId === item.id,
-                    );
-
-                    if (!productType) {
-                        return;
-                    }
-
-                    return (
-                        <div key={item.id}>
-                            <div>{item.name}</div>
-                            <div
-                                className="underline text-blue-400"
-                                onClick={() =>
-                                    handleDownload(data.id, productType?.id)
-                                }
-                            >
-                                Pobierz trening
-                            </div>
-                        </div>
-                    );
-                })}
-                <div>
-                    {clothProducts?.map((item) => (
-                        <div key={item.id}>
-                            <div>{item.name}</div>
-                        </div>
-                    ))}
-                </div>
-                {!isEmpty(clothProducts) && status(data)}
-            </div>
-        );
-    };
-
     return (
         <Order error={error}>
             <div className="pt-35 w-screen h-screen flex flex-col items-center">
@@ -129,7 +70,7 @@ export default function OrderPage() {
                         <div className="font-bold pb-5">
                             Zamowienie: {order.id}
                         </div>
-                        {displayProducts(order)}
+                        {displayProducts(order, productsTypes, products)}
                     </div>
                 )}
             </div>

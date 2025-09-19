@@ -1,3 +1,5 @@
+'use client';
+
 import { Card, CardContent } from '@/components/ui/card';
 import {
     CloseOutlined,
@@ -13,28 +15,30 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import type { ProductType, ProductTypeType } from '../../../api/produktApi';
+import type { ProductType, ProductTypeType } from '../../api/produktApi';
 import pkg from 'lodash';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { SIZE_WEIGHT } from '../../../common/constants';
+import { SIZE_WEIGHT } from '../../common/constants';
 import 'react-image-gallery/styles/css/image-gallery.css';
-import ImageGalery from '../../../pages/components/ImageGalery';
+import ImageGalery from './ImageGalery';
 import { redirect, RedirectType } from 'next/navigation';
 
 type ProductCardProps = {
     product?: ProductType;
     products?: ProductTypeType[];
     addToCart: (item: { id: string; amount: number }) => void;
+    redirectPath: string;
 };
 
 export default function ProductCard({
     product,
     products,
     addToCart,
+    redirectPath,
 }: ProductCardProps) {
     const [pickedProduct, setPickedProduct] = useState<ProductTypeType>();
     const [size, setSize] = useState<string>('');
@@ -42,9 +46,18 @@ export default function ProductCard({
     const [sizes, setSizes] = useState<ProductTypeType[]>([]);
     const [pickedColor, setPickedColor] = useState<string>('');
     const { isEmpty } = pkg;
+    const [breakPoint, setBreakPoint] = useState(false);
 
-    const body = document?.body;
-    const breakPoint = body.clientWidth > 1024;
+    useEffect(() => {
+        const handleResize = () => {
+            setBreakPoint(window.innerWidth > 1024);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const colorsArray: string[] = [];
@@ -126,7 +139,7 @@ export default function ProductCard({
     );
 
     return (
-        <div className="pt-35 w-full h-max z-50">
+        <div className="lg:pt-35 pt-20 w-full h-max z-50 lg:font-comic">
             <Card className="h-full rounded-none">
                 <CardContent className="px-1 h-full">
                     <div className="flex lg:flex-row flex-col lg:gap-20 h-full">
@@ -147,7 +160,7 @@ export default function ProductCard({
                                                 {displayPrice} zł
                                             </div>
                                         </div>
-                                        <div className="text-lg pt-3 lg:pt-0">
+                                        <div className="text-lg pt-3 lg:pt-10 lg:pt-0 lg:w-3/4">
                                             {product?.description}
                                         </div>
                                     </div>
@@ -155,19 +168,19 @@ export default function ProductCard({
                                         <CloseOutlined
                                             onClick={() =>
                                                 redirect(
-                                                    '/shop',
+                                                    redirectPath,
                                                     RedirectType.push,
                                                 )
                                             }
                                         />
                                     </div>
                                 </div>
-                                <div className="flex flex-col mt-10">
+                                <div className="flex flex-col">
                                     <div className="text-2xl">
                                         Szczegóły produktu
                                     </div>
                                     <div
-                                        className="w-full flex flex-col h-full text-lg mt-5"
+                                        className="w-full flex flex-col h-full text-lg mt-5 lg:w-3/4"
                                         style={{ whiteSpace: 'pre-line' }}
                                     >
                                         {pickedProduct?.shortDescription}
@@ -197,11 +210,11 @@ export default function ProductCard({
                                                                 borderColor:
                                                                     isColorPicked
                                                                         ? 'green'
-                                                                        : '',
+                                                                        : 'grey',
                                                                 borderWidth:
                                                                     isColorPicked
-                                                                        ? '1px'
-                                                                        : '',
+                                                                        ? '2px'
+                                                                        : '1px',
                                                             }}
                                                         >
                                                             <div
@@ -227,7 +240,7 @@ export default function ProductCard({
                                                 <div>
                                                     <div className="flex flex-row items-center">
                                                         <div className="pl-1 text-base">
-                                                            Rozmiar:
+                                                            Rozmiarówka:
                                                         </div>
                                                         <div>
                                                             <Tooltip>
@@ -286,7 +299,7 @@ export default function ProductCard({
                                         {pickedProduct?.sizePlaceHolder && (
                                             <div className="mr-5 flex flex-col gap-2">
                                                 <div className="text-base">
-                                                    Rozmiar:{' '}
+                                                    Rozmiarówka:{' '}
                                                 </div>
                                                 <div>
                                                     {
@@ -319,23 +332,13 @@ export default function ProductCard({
                                             <div className="text-4xl font-bold w-max pb-3">
                                                 {displayPrice} zł
                                             </div>
-                                            <Button
-                                                disabled={disableButton}
-                                                className="w-full"
-                                                onClick={() => {
-                                                    addProduct();
-                                                }}
-                                            >
-                                                <ShoppingCartOutlined />
-                                                Dodaj do koszyka
-                                            </Button>
                                         </div>
                                     </div>
-                                    <div className="fixed top-35 right-0 flex items-start mr-5 mt-3">
+                                    <div className="fixed top-25 right-0 flex items-start mr-5 mt-3">
                                         <CloseOutlined
                                             onClick={() =>
                                                 redirect(
-                                                    '/shop',
+                                                    redirectPath,
                                                     RedirectType.push,
                                                 )
                                             }
@@ -394,9 +397,9 @@ export default function ProductCard({
                                         {sizes.length > 0 && (
                                             <div className="mr-5 flex flex-row items-center gap-2">
                                                 <div>
-                                                    <div className="flex flex-row items-center">
+                                                    <div className="flex flex-row items-center pb-3">
                                                         <div className="pl-1 text-base">
-                                                            Rozmiar:
+                                                            Rozmiarówka:
                                                         </div>
                                                         <div>
                                                             <Tooltip>
@@ -455,7 +458,7 @@ export default function ProductCard({
                                         {pickedProduct?.sizePlaceHolder && (
                                             <div className="mr-5 flex flex-col gap-2">
                                                 <div className="text-base">
-                                                    Rozmiar:{' '}
+                                                    Rozmiarówka:{' '}
                                                 </div>
                                                 <div>
                                                     {
@@ -464,9 +467,19 @@ export default function ProductCard({
                                                 </div>
                                             </div>
                                         )}
+                                        <Button
+                                            disabled={disableButton}
+                                            className="w-full"
+                                            onClick={() => {
+                                                addProduct();
+                                            }}
+                                        >
+                                            <ShoppingCartOutlined />
+                                            Dodaj do koszyka
+                                        </Button>
                                     </div>
                                 </div>
-                                <div className="flex flex-col mt-10">
+                                <div className="flex flex-col mt-5">
                                     <div className="text-2xl">
                                         Szczegóły produktu
                                     </div>

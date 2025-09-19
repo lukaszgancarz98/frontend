@@ -1,6 +1,6 @@
 interface MenuItem {
     title: string;
-    links: { text: string; url: string }[];
+    links: { text: string; url: string; openTab?: boolean }[];
 }
 
 interface Footer2Props {
@@ -29,14 +29,22 @@ const Footer2 = ({
                 { text: 'Produkty', url: '/#products' },
                 { text: 'Plany treningowe', url: '/#videos' },
                 { text: 'Rozmiarówka', url: '/sizes' },
+                { text: 'Regulamin', url: '/regulamin' },
             ],
         },
         {
             title: 'Social media',
             links: [
-                { text: 'Twitter', url: '#' },
-                { text: 'Instagram', url: '#' },
-                { text: 'LinkedIn', url: '#' },
+                {
+                    text: 'Facebook',
+                    url: 'https://www.facebook.com/Kalistenikazg',
+                    openTab: true,
+                },
+                {
+                    text: 'Instagram',
+                    url: 'https://www.instagram.com/theschoolofcalisthenics/?hl=en',
+                    openTab: true,
+                },
             ],
         },
     ],
@@ -58,7 +66,21 @@ const Footer2 = ({
                                             key={linkIdx}
                                             className="hover:text-primary font-medium"
                                         >
-                                            <a href={link.url}>{link.text}</a>
+                                            <a
+                                                href={link.url}
+                                                target={
+                                                    link.openTab
+                                                        ? '_blank'
+                                                        : undefined
+                                                }
+                                                rel={
+                                                    link.openTab
+                                                        ? 'noopener noreferrer'
+                                                        : undefined
+                                                }
+                                            >
+                                                {link.text}
+                                            </a>
                                         </li>
                                     ))}
                                 </ul>

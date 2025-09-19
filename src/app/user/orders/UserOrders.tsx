@@ -15,8 +15,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect, RedirectType } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { isEmpty } from 'lodash';
-import { handleDownload, status } from '@/app/order/Order';
+import { displayProducts } from '@/app/order/Order';
 import {
     getAllProducts,
     getAllProductTypes,
@@ -76,64 +75,6 @@ export default function UserOrders() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
-    const displayProducts = (data: OrderType) => {
-        const productsIds: string[] = [];
-        productsTypes?.filter((prod) => {
-            const include = data.products.includes(prod.id);
-            if (include) {
-                productsIds.push(prod.productId);
-            }
-
-            return include;
-        });
-        const orderProducts = products?.filter((prod) =>
-            productsIds?.includes(prod.id),
-        );
-        const fileProducts = orderProducts?.filter((item) =>
-            item.category.includes('video'),
-        );
-
-        const clothProducts = orderProducts?.filter((item) =>
-            item.category.includes('clothes'),
-        );
-
-        return (
-            <div>
-                {fileProducts?.map((item) => {
-                    const productType = productsTypes?.find(
-                        (prod) => prod.productId === item.id,
-                    );
-
-                    if (!productType) {
-                        return;
-                    }
-
-                    return (
-                        <div key={item.id}>
-                            <div>{item.name}</div>
-                            <div
-                                className="underline text-blue-400"
-                                onClick={() =>
-                                    handleDownload(data.id, productType?.id)
-                                }
-                            >
-                                Pobierz trening
-                            </div>
-                        </div>
-                    );
-                })}
-                <div>
-                    {clothProducts?.map((item) => (
-                        <div key={item.id}>
-                            <div>{item.name}</div>
-                        </div>
-                    ))}
-                </div>
-                {!isEmpty(clothProducts) && status(data)}
-            </div>
-        );
-    };
-
     return (
         <div>
             <div
@@ -187,7 +128,7 @@ export default function UserOrders() {
                         <div className="font-bold text-center">
                             Zamowienie: {order.id}
                         </div>
-                        {displayProducts(order)}
+                        {displayProducts(order, productsTypes, products)}
                     </div>
                 ))}
             </div>

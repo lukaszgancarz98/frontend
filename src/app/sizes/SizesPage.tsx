@@ -69,7 +69,7 @@ export default function SizesPage() {
                 <div className="lg:w-1/2 text-center text-4xl pb-5 font-bold">
                     Rozmiary
                 </div>
-                <div className="flex flex-row flex-wrap lg:flex-nowrap justify-center items-center lg:w-auto gap-5 lg:gap-10 lg:pb-10">
+                <div className="flex flex-row flex-wrap lg:w-[70vw] justify-center items-center gap-5 lg:gap-10 lg:pb-10">
                     {products?.map((product) => (
                         <a
                             key={product.name}

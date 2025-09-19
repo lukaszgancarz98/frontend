@@ -33,12 +33,14 @@ export default function Product({ product, price }: ProductProps) {
                     </div>
                 </div>
             </div>
-            <div className="mb-2 line-clamp-3 break-words pt-4 text-lg font-medium md:mb-3 md:pt-4 md:text-xl lg:pt-4 lg:text-2xl">
+            <div className="mb-2 line-clamp-3 break-words pt-4 text-lg font-medium md:mb-3 md:pt-4 md:text-xl lg:pt-4 lg:text-2xl text-center">
                 {product?.name}
             </div>
-            <div className="text-muted-foreground mb-8 line-clamp-2 text-sm md:mb-12 md:text-base lg:mb-9">
-                {product?.description}
-            </div>
+            {product?.description && (
+                <div className="text-muted-foreground mb-8 line-clamp-2 text-sm md:mb-12 md:text-base lg:mb-9">
+                    {product?.description}
+                </div>
+            )}
         </div>
     );
 }

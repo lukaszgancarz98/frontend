@@ -1,6 +1,6 @@
 'use client';
 
-import ProductCard from './ProductCard';
+import ProductCard from '../../../pages/components/ProductCard';
 import {
     getProduct,
     getProductTypesByProductId,
@@ -119,7 +119,7 @@ export default function Product({ productId }: ProductProps) {
         <div id={productId}>
             <div
                 id="header"
-                className={`flex flex-row justify-between items-center h-35 fixed top-0 left-0 lg:w-full w-[100vw] z-60 shadow-xl bg-black`}
+                className={`flex flex-row justify-between items-center lg:h-35 h-25 fixed top-0 left-0 lg:w-full w-[100vw] z-60 shadow-xl bg-black`}
             >
                 <Link
                     href="/shop"
@@ -127,7 +127,7 @@ export default function Product({ productId }: ProductProps) {
                 >
                     <Image
                         src={'/logo.png'}
-                        className="h-24 w-40 bg-transparent lg:ml-10"
+                        className="lg:h-24 lg:w-40 h-15 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}
                         height={1000}
@@ -148,6 +148,7 @@ export default function Product({ productId }: ProductProps) {
                 product={product}
                 products={productTypes}
                 addToCart={addProductToProductList}
+                redirectPath="/shop"
             />
         </div>
     );

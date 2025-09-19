@@ -37,7 +37,7 @@ export default function LoginForm() {
         <div className="flex flex-col gap-6">
             <Card className="border-0 shadow-none">
                 <CardHeader>
-                    <CardTitle className="text-xl">
+                    <CardTitle className="text-2xl text-center">
                         Wpisz poniżej swój adres e-mail, a my się do Ciebie
                         odezwiemy.
                     </CardTitle>
@@ -49,16 +49,16 @@ export default function LoginForm() {
                     >
                         <Input
                             className="w-full"
-                            placeholder="EMAIL"
+                            placeholder="Email"
                             name="email"
                             type="email"
                             required
                         />
                         <Button
                             type="submit"
-                            className="text-3xl bg-blue-300 py-7 px-5 rounded-lg text-black transition-all duration-300 hover:scale-120 hover:bg-blue-500"
+                            className="text-2xl bg-blue-300 py-7 px-5 rounded-lg text-black transition-all duration-300 hover:scale-120 hover:bg-blue-500"
                         >
-                            Poinformuj mnie
+                            Wyślij
                         </Button>
                     </form>
                 </CardContent>
