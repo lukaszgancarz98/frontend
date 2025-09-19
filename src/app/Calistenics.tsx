@@ -11,6 +11,16 @@ import Footer2 from '../pages/components/footer2';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Workshops from '@/pages/components/Workshops';
+import { Toaster } from '@/components/ui/sonner';
+import Kontakt from '@/pages/components/Kontakt';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 
 export default function Calistenics() {
     const randTriggered = useRef(false);
@@ -36,6 +46,7 @@ export default function Calistenics() {
     const footerRef = useRef<HTMLDivElement>(null);
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const [scrolled, setScrolled] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (!randTriggered.current && products.length > 0) {
@@ -160,6 +171,7 @@ export default function Calistenics() {
                     />
                 </div>
             </div>
+            <Toaster position="top-center" richColors />
             <div
                 id="home"
                 ref={homeRef}
@@ -180,9 +192,30 @@ export default function Calistenics() {
                             <div className="w-full text-center pb-5">
                                 ZALEŻY TYLKO I WYŁĄCZNIE OD CIEBIE
                             </div>
-                            <Button className="w-1/3 bg-blue-500 text-black hover:bg-green-400 hover:text-xl">
-                                KONTAKT
-                            </Button>
+                            <Dialog open={open}>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        className="w-1/3 bg-blue-500 text-black hover:bg-green-400 hover:text-xl"
+                                        onClick={() => setOpen(true)}
+                                    >
+                                        KONTAKT
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogTitle hidden />
+                                <DialogContent className="w-[100vw] lg:w-[30vw] z-80">
+                                    <Kontakt />
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => setOpen(false)}
+                                            >
+                                                Anuluj
+                                            </Button>
+                                        </DialogClose>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                             <div className="pb-2 pt-3">ZOSTAŃ JEDNYM Z NAS</div>
                         </div>
                     </TextFade>
