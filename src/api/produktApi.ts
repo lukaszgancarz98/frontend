@@ -2,12 +2,12 @@ import { BACKEND_URL } from '../common/constants';
 import type { ApiResponse } from './userApi';
 
 export type ProductType = {
+    page?: string;
     id: string;
     name: string;
     description: string;
     image: string;
     size_image: string;
-    type: string;
     category: string;
     tag?: string;
     file_id?: string;
@@ -25,6 +25,11 @@ export type ProductTypeType = {
     productId: string;
     sale_price: string;
     sale_amount: string;
+};
+
+export type ProductWithProductTypes = {
+    product: Partial<ProductType>;
+    productTypes: Partial<ProductTypeType>[];
 };
 
 const url = `${BACKEND_URL}/product`;
@@ -134,6 +139,70 @@ export const getProductTypesByProductId = async (
                 data: null,
                 isValid: false,
                 error: responseData.message || 'ProductTypes get failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const updateProduct = async (
+    data: ProductType,
+): Promise<ApiResponse<ProductType>> => {
+    try {
+        const res = await fetch(`${url}/${data.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error: responseData.message || 'Product update failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const createProductAndProductTypes = async (
+    data: ProductWithProductTypes,
+): Promise<ApiResponse<ProductWithProductTypes>> => {
+    try {
+        const res = await fetch(`${url}/createVariants`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error:
+                    responseData.message ||
+                    'Product and ProducTypes create failed',
                 status: res.status,
             };
         }

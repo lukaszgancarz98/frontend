@@ -47,7 +47,7 @@ export default function ProductCard({
     const [pickedColor, setPickedColor] = useState<string>('');
     const { isEmpty } = pkg;
     const [breakPoint, setBreakPoint] = useState(false);
-
+    console.log(sizes, 'XDDD');
     useEffect(() => {
         const handleResize = () => {
             setBreakPoint(window.innerWidth > 1024);
@@ -79,7 +79,17 @@ export default function ProductCard({
         );
 
         const sizes = filterProducts
-            ?.filter((size) => size.size !== null)
+            ?.filter((size) => {
+                if (size.size === null) {
+                    return false;
+                }
+
+                if (size.size === '') {
+                    return false;
+                }
+
+                return true;
+            })
             .sort(
                 (a, b) =>
                     SIZE_WEIGHT[a.size as keyof typeof SIZE_WEIGHT] -
@@ -87,6 +97,7 @@ export default function ProductCard({
             );
 
         if (sizes) {
+            console.log(sizes, 'sizes', filterProducts);
             setSizes(sizes);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -272,25 +283,26 @@ export default function ProductCard({
                                                             <SelectValue placeholder="Wybierz rozmiar" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            {sizes?.map(
-                                                                (size) => {
-                                                                    return (
-                                                                        <SelectItem
-                                                                            value={
-                                                                                size.size
-                                                                            }
-                                                                            key={
-                                                                                pickedProduct?.id +
-                                                                                size.size
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                size.size
-                                                                            }
-                                                                        </SelectItem>
-                                                                    );
-                                                                },
-                                                            )}
+                                                            {!isEmpty(sizes) &&
+                                                                sizes?.map(
+                                                                    (size) => {
+                                                                        return (
+                                                                            <SelectItem
+                                                                                value={
+                                                                                    size.size
+                                                                                }
+                                                                                key={
+                                                                                    pickedProduct?.id +
+                                                                                    size.size
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    size.size
+                                                                                }
+                                                                            </SelectItem>
+                                                                        );
+                                                                    },
+                                                                )}
                                                         </SelectContent>
                                                     </Select>
                                                 </div>

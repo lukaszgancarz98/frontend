@@ -19,7 +19,7 @@ type ItemType = {
     productId: string;
 };
 
-type Order = {
+export type Order = {
     id: string;
     createdDate: string;
     payment_date?: string;
@@ -28,9 +28,9 @@ type Order = {
     status: string;
 };
 
-type UseAdminReturnType = {
-    orders: { new: Order[]; paid: Order[]; finalized: Order[] };
-};
+export type Orders = { new: Order[]; paid: Order[]; finalized: Order[] };
+
+type UseAdminReturnType = { orders: Orders };
 
 export function useAdmin(): UseAdminReturnType {
     const [products, setProducts] = useState<ProductType[]>();
