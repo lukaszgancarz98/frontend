@@ -104,10 +104,10 @@ export default function VideoProducts({
                             onMouseLeave={() => setShowLevel('')}
                             onTouchStart={() => setShowLevel(productType?.id)}
                             onTouchEnd={() => setShowLevel('')}
-                            className="relative shadow-xl lg:w-[28vw] mb-5 lg:mb-0 h-auto mx-5 flex flex-col items-center min-h-1/3 rounded-xl min-w-[25vw] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                            className="relative shadow-xl w-full lg:w-[28vw] mb-5 lg:mb-0 h-auto px-5 lg:px-0 lg:mx-5 flex flex-col items-center min-h-1/3 rounded-xl min-w-[25vw] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                         >
                             <div onClick={() => setOpenAlert(productType?.id)}>
-                                <div className="relative w-full">
+                                <div className="relative lg:w-full">
                                     {hovered && (
                                         <div
                                             className={`absolute top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-[oklch(0.61_0.16_252.06)] text-white z-30 shadow-xl ${useFont ? "font-['Graduate']" : ''} text-center`}

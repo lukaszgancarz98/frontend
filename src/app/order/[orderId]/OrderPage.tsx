@@ -112,9 +112,9 @@ export default function OrderPage({ orderId }: { orderId: string }) {
             {order && (
                 <div
                     key={order.id}
-                    className="w-full flex flex-col pt-35 items-center gap-5"
+                    className="w-full flex flex-col lg:pt-35 pt-20 items-center gap-5"
                 >
-                    <div className="font-bold pt-10">
+                    <div className="font-bold pt-10 text-center">
                         Zamowienie: {order.id}
                     </div>
                     {displayProducts(order)}

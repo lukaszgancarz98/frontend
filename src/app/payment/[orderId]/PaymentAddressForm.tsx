@@ -20,6 +20,7 @@ type PaymentAddressFormPropsType = {
     pickedDelivery: string;
     details?: OrderAddressDetails;
     user: User | null;
+    displayDelivery: boolean;
 };
 
 export default function PaymentAddressForm({
@@ -29,6 +30,7 @@ export default function PaymentAddressForm({
     pickedDelivery,
     details,
     user,
+    displayDelivery,
 }: PaymentAddressFormPropsType) {
     const [editAddress, setEditAddress] = useState(false);
     const [additionalPaymentInfo, setAdditionalPaymentInfo] = useState<
@@ -341,36 +343,40 @@ export default function PaymentAddressForm({
                             </div>
                         )}
                     </div>
-                    <div className="relativemy-5 px-5 pb-5">
-                        <div className="text-2xl font-semibold pb-4">
-                            Rodzaj przesyłki
+                    {displayDelivery && (
+                        <div className="relativemy-5 px-5 pb-5">
+                            <div className="text-2xl font-semibold pb-4">
+                                Rodzaj przesyłki
+                            </div>
+                            <div className="flex flex-col gap-3">
+                                {deliverTypes &&
+                                    deliverTypes.map((type) => (
+                                        <div
+                                            className={`relative flex flex-col p-3 border-2 rounded shadow ${pickedDelivery === type.id ? 'border-green-600' : ''}`}
+                                            onClick={() =>
+                                                setDeliverType(type.id)
+                                            }
+                                            key={type.id}
+                                        >
+                                            <div className="font-semibold">
+                                                {type.name}
+                                            </div>
+                                            <div className="text-sm pl-1">
+                                                {returnDeliverDates(
+                                                    type.deliverTime,
+                                                )}
+                                            </div>
+                                            <div className="absolute top-0 right-0 font-bold text-lg pt-2 pr-2">
+                                                {type.price
+                                                    .toFixed(2)
+                                                    .replace('.', ',')}{' '}
+                                                zł
+                                            </div>
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
-                        <div className="flex flex-col gap-3">
-                            {deliverTypes &&
-                                deliverTypes.map((type) => (
-                                    <div
-                                        className={`relative flex flex-col p-3 border-2 rounded shadow ${pickedDelivery === type.id ? 'border-green-600' : ''}`}
-                                        onClick={() => setDeliverType(type.id)}
-                                        key={type.id}
-                                    >
-                                        <div className="font-semibold">
-                                            {type.name}
-                                        </div>
-                                        <div className="text-sm pl-1">
-                                            {returnDeliverDates(
-                                                type.deliverTime,
-                                            )}
-                                        </div>
-                                        <div className="absolute top-0 right-0 font-bold text-lg pt-2 pr-2">
-                                            {type.price
-                                                .toFixed(2)
-                                                .replace('.', ',')}{' '}
-                                            zł
-                                        </div>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
+                    )}
                     <div className="grid gap-3 px-5">
                         <Label htmlFor="phone">Telefon*</Label>
                         <Input

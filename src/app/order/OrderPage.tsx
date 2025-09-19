@@ -113,21 +113,21 @@ export default function OrderPage() {
             <div className="pt-35 w-screen h-screen flex flex-col items-center">
                 <form
                     onSubmit={(e) => searchOrder(e)}
-                    className="flex flex-row w-full items-center justify-center gap-10 py-10"
+                    className="flex lg:flex-row flex-col w-full items-center justify-center lg:gap-10 gap-3 lg:py-10 px-3 lg:px-0"
                 >
-                    <div className="text-3xl font-semibold">
+                    <div className="text-3xl font-semibold text-center">
                         Wprowadź numer zamówiena:
                     </div>
-                    <Input name="id" className="w-1/4" />
+                    <Input name="id" className="lg:w-1/4" />
                     <Button type="submit">Szukaj</Button>
                 </form>
                 {order && (
                     <div
                         key={order.id}
-                        className="w-[50vw] py-5 flex flex-col items-center"
+                        className="lg:w-[50vw] px-5 lg:px-0 py-5 flex flex-col items-center"
                     >
                         <div className="font-bold pb-5">
-                            Zamowienie {order.id}
+                            Zamowienie: {order.id}
                         </div>
                         {displayProducts(order)}
                     </div>

@@ -15,13 +15,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect, RedirectType } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { TbTruckDelivery } from 'react-icons/tb';
-import { GoPackageDependents } from 'react-icons/go';
+import { isEmpty } from 'lodash';
+import { handleDownload, status } from '@/app/order/Order';
+import {
+    getAllProducts,
+    getAllProductTypes,
+    ProductType,
+    ProductTypeType,
+} from '@/api/produktApi';
 
 export default function UserOrders() {
     const [userOrders, setUserOrders] = useState<OrderType[]>();
     const [error, setError] = useState<string>('');
     const { user } = useUser();
+    const [products, setProducts] = useState<ProductType[]>();
+    const [productsTypes, setProductsTypes] = useState<ProductTypeType[]>();
+
+    const getProductRequest = async () => {
+        const response = await getAllProducts();
+        const responseTypes = await getAllProductTypes();
+
+        if (response.isValid && responseTypes.isValid) {
+            setProducts(response?.data as ProductType[]);
+            setProductsTypes(responseTypes?.data as ProductTypeType[]);
+        }
+    };
+
+    useEffect(() => {
+        getProductRequest();
+    }, []);
 
     const getOrdersData = async (id: string) => {
         const response = await getAllOrdersById({ id });
@@ -54,59 +76,62 @@ export default function UserOrders() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
-    const status = (data: OrderType) => {
-        const preparingDelivery = <div>Przygotowanie do wysyłki</div>;
-        const delivery = <div>W drodze </div>;
+    const displayProducts = (data: OrderType) => {
+        const productsIds: string[] = [];
+        productsTypes?.filter((prod) => {
+            const include = data.products.includes(prod.id);
+            if (include) {
+                productsIds.push(prod.productId);
+            }
 
-        const formatDate = (date: string) => {
-            const newDate = new Date(date);
-            const formattedDate = newDate.toLocaleString('pl-PL', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'Europe/Warsaw',
-            });
+            return include;
+        });
+        const orderProducts = products?.filter((prod) =>
+            productsIds?.includes(prod.id),
+        );
+        const fileProducts = orderProducts?.filter((item) =>
+            item.category.includes('video'),
+        );
 
-            return formattedDate;
-        };
+        const clothProducts = orderProducts?.filter((item) =>
+            item.category.includes('clothes'),
+        );
 
-        if (data.payment_date && !data.finalize_date) {
-            return (
-                <div className="flex flex-col px-5 py-3 mt-2 border rounded-lg w-fit">
-                    <div className="flex flex-row gap-3 justify-start items-center text-lg font-semibold">
-                        <GoPackageDependents />
-                        {preparingDelivery}
-                    </div>
-                    <div>{formatDate(data.payment_date)}</div>
-                </div>
-            );
-        }
+        return (
+            <div>
+                {fileProducts?.map((item) => {
+                    const productType = productsTypes?.find(
+                        (prod) => prod.productId === item.id,
+                    );
 
-        if (data.payment_date && data.finalize_date) {
-            return (
-                <div className="flex flex-col px-5 py-3 mt-2 border rounded-lg w-fit">
-                    <div className="flex flex-col pb-4">
-                        <div className="flex flex-row gap-3 justify-start items-center text-lg font-semibold">
-                            <GoPackageDependents />
-                            {preparingDelivery}
+                    if (!productType) {
+                        return;
+                    }
+
+                    return (
+                        <div key={item.id}>
+                            <div>{item.name}</div>
+                            <div
+                                className="underline text-blue-400"
+                                onClick={() =>
+                                    handleDownload(data.id, productType?.id)
+                                }
+                            >
+                                Pobierz trening
+                            </div>
                         </div>
-                        <div>{formatDate(data.payment_date)}</div>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="flex flex-row gap-3 justify-start items-center text-lg font-semibold">
-                            <TbTruckDelivery />
-                            {delivery}
+                    );
+                })}
+                <div>
+                    {clothProducts?.map((item) => (
+                        <div key={item.id}>
+                            <div>{item.name}</div>
                         </div>
-                        <div>{formatDate(data.finalize_date)}</div>
-                    </div>
+                    ))}
                 </div>
-            );
-        }
-
-        return null;
+                {!isEmpty(clothProducts) && status(data)}
+            </div>
+        );
     };
 
     return (
@@ -155,9 +180,14 @@ export default function UserOrders() {
             <div className="pt-35 w-screen h-screen flex flex-col items-center">
                 <div className="pt-10 text-3xl font-semibold">Zamówienia:</div>
                 {userOrders?.map((order) => (
-                    <div key={order.id} className="w-[50vw] py-5">
-                        <div className="font-bold">Zamowienie {order.id}</div>
-                        {status(order)}
+                    <div
+                        key={order.id}
+                        className="lg:w-[50vw] py-5 flex flex-col items-center"
+                    >
+                        <div className="font-bold text-center">
+                            Zamowienie: {order.id}
+                        </div>
+                        {displayProducts(order)}
                     </div>
                 ))}
             </div>

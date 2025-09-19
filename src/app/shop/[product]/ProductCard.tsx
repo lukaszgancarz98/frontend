@@ -335,7 +335,7 @@ export default function ProductCard({
                                         <CloseOutlined
                                             onClick={() =>
                                                 redirect(
-                                                    '/#products',
+                                                    '/shop',
                                                     RedirectType.push,
                                                 )
                                             }

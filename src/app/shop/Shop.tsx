@@ -56,11 +56,11 @@ export default function Shop() {
         <div>
             <div
                 id="header"
-                className="flex flex-row flex-wrap lg:justify-between lg:items-center lg:h-35 fixed top-0 left-0 w-full z-60 h-[20vh] bg-black"
+                className="flex flex-row flex-wrap lg:justify-between lg:items-center lg:h-35 fixed top-0 left-0 w-full z-60 h-auto py-2 lg:py-0 bg-black"
             >
                 <Link
                     href={'/'}
-                    className="flex flex-col justify-center lg:w-1/4 w-1/3 lg:h-full h-[10vh]"
+                    className="flex flex-col justify-center lg:w-1/4 w-1/3 lg:h-full h-auto"
                 >
                     <Image
                         src={'/logo.png'}
@@ -70,7 +70,7 @@ export default function Shop() {
                         alt="/placeholder.png"
                     />
                 </Link>
-                <div className="flex flex-col lg:w-2/4 w-2/3 pr-3 lg:pr-0 justify-around lg:items-center lg:h-full h-[10vh]">
+                <div className="flex flex-col lg:w-2/4 w-2/3 pr-3 lg:pr-0 justify-around lg:items-center lg:h-full h-auto">
                     <Image
                         src={'/text.png'}
                         className="object-contain w-full h-full"
@@ -96,26 +96,26 @@ export default function Shop() {
                     )}
                 </div>
             </div>
-            <div className="h-screen flex flex-col pt-35 font-comic">
+            <div className="h-screen flex flex-col lg:pt-35 pt-25 font-comic">
                 {settings.map((setting, index) => {
                     const products = tagProducts(setting.tag);
 
                     return (
                         <div
                             key={index}
-                            className="w-full h-full flex flex-col pt-10"
+                            className="w-full lg:h-full flex flex-col pt-10 px-2 lg:px-0"
                         >
                             <div className="w-full text-center text-4xl font-semibold">
                                 {setting.title}
                             </div>
-                            <div className="flex flex-row flex-wrap">
+                            <div className="flex lg:flex-row flex-col flex-wrap">
                                 {products.map((product) => {
                                     const price = findPrice(product) | 0;
 
                                     return (
                                         <div
                                             key={product.id}
-                                            className="ml-8 lg:max-w-[400px] max-w-[90vw] w-full shadow-lg my-8 py-8 pl-4 rounded-lg"
+                                            className="lg:mx-8 lg:max-w-[400px] lg:max-w-[90vw] h-auto w-full shadow-lg py-8 lg:pl-4 rounded-lg"
                                             onClick={() =>
                                                 redirect(
                                                     `/shop/${product.id}`,

@@ -114,7 +114,7 @@ export default function Cart({
                         setOpenExtended(true);
                     }
                 }}
-                className={`${disabled ? 'bg-[oklch(0.6_0_0)]' : 'bg-white'} p-2 rounded-full relative cursor-pointer`}
+                className={`${disabled ? 'bg-[oklch(0.6_0_0)]' : 'lg:bg-white bg-stone-200'} p-2 rounded-full cursor-pointer fixed lg:relative bottom-3 right-3`}
             >
                 <ShoppingCartOutlined className="lg:text-3xl text-2xl" />
                 <div

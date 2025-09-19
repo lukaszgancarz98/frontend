@@ -4,6 +4,8 @@ import { useUser } from '../context/userContext';
 import pkg from 'lodash';
 import { jwtDecode } from 'jwt-decode';
 import { CredentialResponse } from '@react-oauth/google';
+import { useOrder } from '@/context/orderContext';
+import { updateOrder } from '@/api/orderApi';
 
 export type User = {
     email: string;
@@ -37,12 +39,17 @@ const { isUndefined } = pkg;
 
 export default function useUserHook(): UseUserReturnType {
     const { user, updateUser, clearUser } = useUser();
+    const { order } = useOrder();
     const [registerError, setRegisterError] = useState<string>();
     const [loginError, setLoginError] = useState<string>();
 
     const logged = useMemo(() => {
         return !!user?.email && !isUndefined(user?.email);
     }, [user]);
+
+    const updateExistingOrder = async (email: string) => {
+        await updateOrder({ id: order?.id as string, email: email });
+    };
 
     const loginFn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -59,6 +66,10 @@ export default function useUserHook(): UseUserReturnType {
         }
 
         updateUser(res.data);
+
+        if (order) {
+            await updateExistingOrder(email);
+        }
 
         return { email: res.data.email };
     };
@@ -80,6 +91,9 @@ export default function useUserHook(): UseUserReturnType {
         }
 
         if (res.data) {
+            if (order) {
+                await updateExistingOrder(email);
+            }
             updateUser(res.data);
         }
 
@@ -100,6 +114,9 @@ export default function useUserHook(): UseUserReturnType {
         }
 
         if (res.data) {
+            if (order) {
+                await updateExistingOrder(data.email);
+            }
             updateUser(res.data);
         }
     };

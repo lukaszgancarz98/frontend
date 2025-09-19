@@ -128,7 +128,7 @@ export default function Calistenics() {
         <div className="h-svh relative">
             <div
                 id="header"
-                className={`flex flex-row flex-wrap lg:justify-between lg:items-center lg:h-35 fixed top-0 left-0 w-full z-60 h-[20vh] transition-all duration-500 ease-in-out ${menuOpen || scrolled ? 'bg-black shadow-xl' : 'oklch(0.13_0.03_246.75)'}`}
+                className={`flex flex-row flex-wrap lg:justify-between p-2 lg:p-0 lg:h-35 fixed top-0 left-0 w-full z-60 h-[20vh] transition-all duration-500 ease-in-out ${menuOpen || scrolled ? 'bg-black shadow-xl' : 'oklch(0.13_0.03_246.75)'}`}
             >
                 <a
                     href="#home"
@@ -175,7 +175,7 @@ export default function Calistenics() {
             <div
                 id="home"
                 ref={homeRef}
-                className="flex lg:flex-row flex-col h-[100vh] lg:h-auto w-full pt-[20vh] lg:pt-35 pb-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl"
+                className="flex lg:flex-row flex-col w-full pt-[20vh] lg:pt-35 pb-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl"
             >
                 <BackgroundOnScroll
                     backgroundImageUrl="/kalintro02.jpg"
@@ -186,7 +186,9 @@ export default function Calistenics() {
                     <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
                         <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium font-comic">
                             <div className="pb-2">KIM JESTEŚ?</div>
-                            <div>JAKIE MASZ UMIEJĘTNOŚCI?</div>
+                            <div className="text-center">
+                                JAKIE MASZ UMIEJĘTNOŚCI?
+                            </div>
                             <div>JAK TRENUJESZ?</div>
                             <div className="pb-5">CO OSIĄGASZ?</div>
                             <div className="w-full text-center pb-5">

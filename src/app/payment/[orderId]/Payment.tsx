@@ -110,7 +110,10 @@ export default function Payment({ orderId }: { orderId: string }) {
         ? 0
         : Number(deliverType.price);
 
-    const totalAmount = Number(productListCart?.price) + deliveryPriceCheck;
+    const totalAmount = useMemo(
+        () => Number(productListCart?.price) + deliveryPriceCheck,
+        [productListCart?.price, deliveryPriceCheck],
+    );
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         if (token.length === 0) {
@@ -336,6 +339,7 @@ export default function Payment({ orderId }: { orderId: string }) {
                         deliverTypes={DELIVER_TYPES}
                         pickedDelivery={deliverType.id}
                         user={user}
+                        displayDelivery={!onlyTrainingProducts}
                     />
                 </div>
                 <div className="lg:w-[40%] w-full bg-white border lg:m-5 rounded-sm">

@@ -252,7 +252,7 @@ export default function Menu({
     };
 
     return (
-        <div className="relative">
+        <div className="fixed right-0 pb-5 lg:relative">
             <div
                 className="flex flex-row lg:mr-15 mr-5 gap-2 items-center transition-all duration-300 ease-in-out hover:scale-110"
                 onClick={openMenu}

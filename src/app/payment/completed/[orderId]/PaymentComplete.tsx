@@ -87,7 +87,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
     return (
         <div className="w-screen h-screen flex justify-center items-center">
             {done ? (
-                <div className="w-3/6 text-center flex flex-col gap-3 text-xl">
+                <div className="lg:w-3/6 text-center flex flex-col gap-3 text-xl px-3 lg:px-0">
                     <div className="text-2xl font-bold">
                         Numer zamówienia: {id}
                     </div>
@@ -99,7 +99,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                         zamówienia oraz wszystkimi szczegółami transakcji.
                     </div>
                     {user?.email ? (
-                        <div className="flex flex-row gap-1">
+                        <div className="flex lg:flex-row flex-col gap-1">
                             📦 Status zamówienia możesz śledzić w zakładce{' '}
                             <div
                                 onClick={() => redirectToMyShop()}
@@ -123,8 +123,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                     )}
                     <div>
                         ✉️ Jeśli nie otrzymasz potwierdzenia w ciągu kilku
-                        minut, sprawdź folder &quotSpam&quot lub skontaktuj się
-                        z nami.
+                        minut, sprawdź folder Spam lub skontaktuj się z nami.
                     </div>
                     <div className="font-medium">
                         Dziękujemy za zaufanie i życzymy udanych zakupów!
