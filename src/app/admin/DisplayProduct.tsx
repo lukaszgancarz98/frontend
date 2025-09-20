@@ -518,7 +518,9 @@ export default function DisplayProduct({
                                         Nie
                                     </AlertDialogCancel>
                                     <AlertDialogAction
-                                        onClick={() => deleteProduct()}
+                                        onClick={() =>
+                                            deleteProduct(product.id)
+                                        }
                                     >
                                         Tak
                                     </AlertDialogAction>
