@@ -9,11 +9,14 @@ import { toast } from 'sonner';
 import DisplayProduct from './DisplayProduct';
 import { Button } from '@/components/ui/button';
 import AddProduct from './AddProduct';
+import { Input } from '@/components/ui/input';
+import { isEmpty } from 'lodash';
 
 export default function Produkty() {
     const [products, setProducts] = useState<ProductType[]>();
     const [productsTypes, setProductsTypes] = useState<ProductTypeType[]>();
     const [edit, setEdit] = useState<boolean>(true);
+    const [filteredProducts, setFilteredProducts] = useState<ProductType[]>();
 
     const getProductsRequest = async () => {
         const getProd = await getAllProducts();
@@ -24,6 +27,7 @@ export default function Produkty() {
         }
 
         setProducts(getProd.data as ProductType[]);
+        setFilteredProducts(getProd.data as ProductType[]);
         setProductsTypes(getType.data as ProductTypeType[]);
     };
 
@@ -31,10 +35,32 @@ export default function Produkty() {
         getProductsRequest();
     }, []);
 
+    const filterProductData = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value;
+
+        if (isEmpty(value)) {
+            setFilteredProducts(products);
+
+            return;
+        }
+
+        const valueLoverCase = value.toLowerCase();
+
+        const res = filteredProducts?.filter((prod) =>
+            prod.name.toLowerCase().includes(valueLoverCase),
+        );
+        setFilteredProducts(res);
+    };
+
     return (
         <div>
             <div className="flex flex-col gap-5 items-end">
-                <div className="w-1/5">
+                <div className="w-full flex flex-row justify-evenly">
+                    <Input
+                        placeholder="Wyszukaj produkt"
+                        className="w-1/5"
+                        onChange={(value) => filterProductData(value)}
+                    />
                     <Button
                         className="w-fit"
                         onClick={() => setEdit((prev) => !prev)}
@@ -45,8 +71,8 @@ export default function Produkty() {
                     </Button>
                 </div>
                 {edit ? (
-                    <div className="flex flex-row flex-wrap gap-5 justify-center">
-                        {products?.map((product) => {
+                    <div className="flex flex-row flex-wrap gap-5 justify-center w-full">
+                        {filteredProducts?.map((product) => {
                             const productTypesData = productsTypes?.filter(
                                 (type) => type.productId === product.id,
                             );
@@ -59,12 +85,13 @@ export default function Produkty() {
                                 <DisplayProduct
                                     key={product.id}
                                     product={product}
+                                    productTypes={productTypesData}
                                 />
                             );
                         })}
                     </div>
                 ) : (
-                    <AddProduct />
+                    <AddProduct close={() => setEdit(false)} />
                 )}
             </div>
         </div>

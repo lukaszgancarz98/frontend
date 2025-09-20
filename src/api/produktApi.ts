@@ -21,7 +21,7 @@ export type ProductTypeType = {
     color: string;
     shortDescription: string;
     images: string[];
-    sizePlaceHolder: string;
+    size_placeholder: string;
     stock_quantity: string;
     productId: string;
     sale_price: string;
@@ -185,6 +185,37 @@ export const updateProduct = async (
     }
 };
 
+export const updateProductTypes = async (data: {
+    productTypes: ProductTypeType[];
+}): Promise<ApiResponse<ProductTypeType[]>> => {
+    try {
+        const res = await fetch(`${url}/productTypes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error: responseData.message || 'Product update failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
 export const createProductAndProductTypes = async (
     data: ProductWithProductTypes,
 ): Promise<ApiResponse<ProductWithProductTypes>> => {
@@ -193,6 +224,71 @@ export const createProductAndProductTypes = async (
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error:
+                    responseData.message ||
+                    'Product and ProducTypes create failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const createProductType = async (
+    data: ProductTypeType,
+): Promise<ApiResponse<ProductWithProductTypes>> => {
+    try {
+        const res = await fetch(`${url}/productType`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error:
+                    responseData.message ||
+                    'Product and ProducTypes create failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const deleteProductAndProductTypes = async (
+    id: string,
+): Promise<ApiResponse<ProductWithProductTypes>> => {
+    try {
+        const res = await fetch(`${url}/all/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
         });
 
         const responseData = await res.json();

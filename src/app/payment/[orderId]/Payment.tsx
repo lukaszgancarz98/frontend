@@ -59,7 +59,7 @@ export default function Payment({ orderId }: { orderId: string }) {
 
     const onlyTrainingProducts = useMemo(() => {
         const filter = cartProducts.filter(
-            (item) => !isEmpty(item.size) || !isEmpty(item.sizePlaceHolder),
+            (item) => !isEmpty(item.size) || !isEmpty(item.size_placeholder),
         );
 
         return filter.length === 0;

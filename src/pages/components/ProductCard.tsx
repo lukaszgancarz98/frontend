@@ -308,14 +308,14 @@ export default function ProductCard({
                                                 </div>
                                             </div>
                                         )}
-                                        {pickedProduct?.sizePlaceHolder && (
+                                        {pickedProduct?.size_placeholder && (
                                             <div className="mr-5 flex flex-col gap-2">
                                                 <div className="text-base">
                                                     Rozmiarówka:{' '}
                                                 </div>
                                                 <div>
                                                     {
-                                                        pickedProduct?.sizePlaceHolder
+                                                        pickedProduct?.size_placeholder
                                                     }
                                                 </div>
                                             </div>
@@ -467,14 +467,14 @@ export default function ProductCard({
                                                 </div>
                                             </div>
                                         )}
-                                        {pickedProduct?.sizePlaceHolder && (
+                                        {pickedProduct?.size_placeholder && (
                                             <div className="mr-5 flex flex-col gap-2">
                                                 <div className="text-base">
                                                     Rozmiarówka:{' '}
                                                 </div>
                                                 <div>
                                                     {
-                                                        pickedProduct?.sizePlaceHolder
+                                                        pickedProduct?.size_placeholder
                                                     }
                                                 </div>
                                             </div>

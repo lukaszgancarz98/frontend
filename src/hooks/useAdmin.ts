@@ -14,7 +14,7 @@ type ItemType = {
     size: string;
     color: string;
     images: string[];
-    sizePlaceHolder: string;
+    size_placeholder: string;
     stock_quantity: string;
     productId: string;
 };

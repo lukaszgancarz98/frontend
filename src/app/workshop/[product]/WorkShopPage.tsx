@@ -45,7 +45,7 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
 
     const descriptions = useMemo(
         () => product?.description.split(':'),
-        [productType],
+        [product],
     );
 
     const saveEmailForNotifications = async (
