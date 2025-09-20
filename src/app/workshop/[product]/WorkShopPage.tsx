@@ -44,7 +44,7 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
     }, [productId]);
 
     const descriptions = useMemo(
-        () => productType?.shortDescription.split(':'),
+        () => product?.description.split(':'),
         [productType],
     );
 

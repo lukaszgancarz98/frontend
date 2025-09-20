@@ -31,7 +31,7 @@ export default function DisplayProductVideo({
                         <div
                             className="pt-1 font-light text-xs"
                             dangerouslySetInnerHTML={{
-                                __html: product?.shortDescription,
+                                __html: parentProduct?.description,
                             }}
                         />
                     </div>

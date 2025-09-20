@@ -32,7 +32,7 @@ export default function DisplayProduct({
                     <div>
                         <p className="pt-1 font-bold">{parentProduct?.name}</p>
                         <p className="pt-1 font-light text-xs">
-                            {parentProduct?.description}
+                            {parentProduct?.short_description}
                         </p>
                     </div>
                     <div className="flex items-start">

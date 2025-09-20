@@ -140,7 +140,7 @@ export default function Workshops({
                                         </TextFade>
                                         <TextFade>
                                             <div className="flex flex-col text-lg text-start px-15 pb-5 prose">
-                                                {item.description}
+                                                {item.short_description}
                                             </div>
                                         </TextFade>
                                     </div>

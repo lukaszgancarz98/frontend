@@ -47,7 +47,7 @@ export default function ProductCard({
     const [pickedColor, setPickedColor] = useState<string>('');
     const { isEmpty } = pkg;
     const [breakPoint, setBreakPoint] = useState(false);
-    console.log(sizes, 'XDDD');
+
     useEffect(() => {
         const handleResize = () => {
             setBreakPoint(window.innerWidth > 1024);
@@ -172,7 +172,7 @@ export default function ProductCard({
                                             </div>
                                         </div>
                                         <div className="text-lg pt-3 lg:pt-10 lg:pt-0 lg:w-3/4">
-                                            {product?.description}
+                                            {product?.short_description}
                                         </div>
                                     </div>
                                     <div className="fixed top-35 right-0 flex items-start mr-5 mt-3">
@@ -194,7 +194,7 @@ export default function ProductCard({
                                         className="w-full flex flex-col h-full text-lg mt-5 lg:w-3/4"
                                         style={{ whiteSpace: 'pre-line' }}
                                     >
-                                        {pickedProduct?.shortDescription}
+                                        {product?.description}
                                     </div>
                                 </div>
                                 <div className="flex flex-row justify-between mr-50 items-center gap-0 mb-10">
@@ -496,13 +496,13 @@ export default function ProductCard({
                                         Szczegóły produktu
                                     </div>
                                     <div className="text-lg pt-2">
-                                        {product?.description}
+                                        {product?.short_description}
                                     </div>
                                     <div
                                         className="w-full flex flex-col h-full text-lg mt-3"
                                         style={{ whiteSpace: 'pre-line' }}
                                     >
-                                        {pickedProduct?.shortDescription}
+                                        {product?.description}
                                     </div>
                                 </div>
                             </div>

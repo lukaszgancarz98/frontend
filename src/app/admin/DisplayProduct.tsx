@@ -84,7 +84,7 @@ export default function DisplayProduct({ product }: DisplayProductProps) {
                                         id="description"
                                         type="text"
                                         name="description"
-                                        value={productData.description}
+                                        value={productData.short_description}
                                         onChange={(e) =>
                                             setProductData({
                                                 ...productData,

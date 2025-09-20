@@ -197,17 +197,17 @@ export default function VideoProducts({
                                             >
                                                 {!onlyTextDescription
                                                     ? formatText(
-                                                          item.description as string,
+                                                          item.short_description as string,
                                                       )
-                                                    : item.description}
+                                                    : item.short_description}
                                             </div>
                                         </TextFade>
-                                        {productType.shortDescription && (
+                                        {item.description && (
                                             <TextFade>
                                                 <div
                                                     className="flex flex-col text-lg text-center lg:px-15 pb-5 prose"
                                                     dangerouslySetInnerHTML={{
-                                                        __html: productType.shortDescription,
+                                                        __html: item.description,
                                                     }}
                                                 />
                                             </TextFade>
