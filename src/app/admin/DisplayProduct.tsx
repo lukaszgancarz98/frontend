@@ -160,7 +160,7 @@ export default function DisplayProduct({
 
     return (
         <div
-            className={`relative border border-black rounded p-3 ${edit ? 'w-full' : 'w-1/5'}`}
+            className={`relative border border-black rounded p-3 ${edit ? 'w-[98%]' : 'w-1/5'}`}
         >
             {!edit && <div>{product.name}</div>}
             <div
@@ -170,7 +170,7 @@ export default function DisplayProduct({
                 {edit ? 'Anuluj edycję' : 'Edytuj'}
             </div>
             {edit && (
-                <div>
+                <div className="w-full">
                     <form
                         className="w-full flex flex-col justify-end items-end"
                         onSubmit={(e) => updateProductReq(e)}

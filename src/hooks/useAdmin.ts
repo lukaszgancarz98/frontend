@@ -6,6 +6,7 @@ import {
     type ProductType,
     type ProductTypeType,
 } from '../api/produktApi';
+import { isEmpty } from 'lodash';
 
 type ItemType = {
     id: string;
@@ -23,14 +24,18 @@ export type Order = {
     id: string;
     createdDate: string;
     payment_date?: string;
+    finalize_date?: string;
     price: number;
     items: ItemType[];
     status: string;
 };
 
-export type Orders = { new: Order[]; paid: Order[]; finalized: Order[] };
+export type Orders = { paid: Order[]; finalized: Order[] };
 
-type UseAdminReturnType = { orders: Orders };
+type UseAdminReturnType = {
+    orders: Orders;
+    getOrdersRequest: () => Promise<void>;
+};
 
 export function useAdmin(): UseAdminReturnType {
     const [products, setProducts] = useState<ProductType[]>();
@@ -76,6 +81,7 @@ export function useAdmin(): UseAdminReturnType {
                 id: order.id,
                 createdDate: order.createDate,
                 payment_date: order.payment_date,
+                finalize_date: order.finalize_date,
                 price: Number(order.price),
                 items: [],
                 status: order.status,
@@ -111,9 +117,13 @@ export function useAdmin(): UseAdminReturnType {
 
     return {
         orders: {
-            new: orders.filter((order) => order.status === 'new'),
-            paid: orders.filter((order) => order.status === 'paid'),
-            finalized: orders.filter((order) => order.status === 'finalized'),
+            paid: orders.filter(
+                (order) =>
+                    !isEmpty(order.payment_date) &&
+                    isEmpty(order.finalize_date),
+            ),
+            finalized: orders.filter((order) => !isEmpty(order.finalize_date)),
         },
+        getOrdersRequest,
     };
 }

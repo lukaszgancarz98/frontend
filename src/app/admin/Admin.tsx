@@ -14,11 +14,12 @@ import type { TabsProps } from 'antd';
 import Orders from './Orders';
 import Produkty from './Produkty';
 import { Toaster } from '@/components/ui/sonner';
+import WorkShopsPage from './Workshops';
 
 export default function Admin() {
     const [error, setError] = useState('');
     const [logged, setLogged] = useState(false);
-    const { orders: ordersData } = useAdmin();
+    const { orders: ordersData, getOrdersRequest } = useAdmin();
     const { admin, updateAdmin } = useUser();
 
     const loginFn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,10 +48,15 @@ export default function Admin() {
         {
             key: '1',
             label: 'Zamówienia',
-            children: <Orders ordersData={ordersData} />,
+            children: (
+                <Orders
+                    ordersData={ordersData}
+                    refreshOrder={getOrdersRequest}
+                />
+            ),
         },
         { key: '2', label: 'Zarządzanie produktami', children: <Produkty /> },
-        { key: '3', label: 'Szkolenia etc', children: 'Szkolenia etc' },
+        { key: '3', label: 'Szkolenia etc', children: <WorkShopsPage /> },
     ];
 
     return (

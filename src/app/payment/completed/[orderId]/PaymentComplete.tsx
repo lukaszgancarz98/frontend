@@ -1,6 +1,11 @@
 'use client';
 
-import { getOrder, OrderType, updateOrder } from '@/api/orderApi';
+import {
+    checkOrderProducts,
+    getOrder,
+    OrderType,
+    updateOrder,
+} from '@/api/orderApi';
 import { checkPayment } from '@/api/paymentApi';
 import { redirect, RedirectType } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -23,21 +28,52 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
             return;
         }
 
-        if (getData.data?.payment_date) {
-            if (getData.data?.email_send) {
-                sendEmail({ order: getData.data as OrderType });
-            }
+        const check = await checkOrderProducts(order);
 
-            setDone(true);
-
+        if (!check.isValid) {
             return;
         }
+
+        const fileOrder = check.data?.includes('video');
+
+        const clothesOrder = check.data?.includes('clothes');
+
+        // if (getData.data?.payment_date) {
+        //     if (!getData.data?.email_send) {
+        //         const docs = await getDocumentsForEmail({
+        //             orderId: getData?.data?.id as string,
+        //             products: getData?.data?.products as string[],
+        //         });
+        //         if (isEmpty(docs.data)) {
+        //             sendEmail({
+        //                 order: getData.data as OrderType,
+        //                 fileOrder,
+        //                 clothesOrder,
+        //             });
+        //         }
+
+        //         sendEmail({
+        //             order: getData.data as OrderType,
+        //             files: docs.data as Attachment[],
+        //             fileOrder,
+        //             clothesOrder,
+        //         });
+        //     }
+
+        //     setDone(true);
+
+        //     return;
+        // }
 
         const response = await checkPayment(order);
 
         if (!response.isValid) {
             return;
         }
+
+        const finalizeDate =
+            fileOrder && !clothesOrder ? new Date() : undefined;
+        console.log(fileOrder, clothesOrder, finalizeDate);
 
         if (
             response.data?.orders?.[0].status === 'COMPLETED' &&
@@ -49,25 +85,30 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                 id: id,
                 payment_date: date,
                 payment_id: paymentId,
+                finalize_date: finalizeDate,
             });
 
-            const data = responseUpdate.data;
-
             const docs = await getDocumentsForEmail({
-                orderId: data?.id as string,
-                products: data?.products as string[],
+                orderId: getData?.data?.id as string,
+                products: getData?.data?.products as string[],
             });
 
             if (responseUpdate.isValid) {
                 setDone(true);
 
                 if (isEmpty(docs.data)) {
-                    sendEmail({ order: responseUpdate?.data as OrderType });
+                    sendEmail({
+                        order: responseUpdate?.data as OrderType,
+                        fileOrder,
+                        clothesOrder,
+                    });
                 }
 
                 sendEmail({
                     order: responseUpdate?.data as OrderType,
                     files: docs.data as Attachment[],
+                    fileOrder,
+                    clothesOrder,
                 });
             }
         }

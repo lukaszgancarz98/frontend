@@ -44,7 +44,7 @@ export const getAllWorkShopReceivers = async (): Promise<
     ApiResponse<ReciverResponseData[]>
 > => {
     try {
-        const res = await fetch(`${BACKEND_URL}/login/admin`, {
+        const res = await fetch(`${BACKEND_URL}/workshop/all`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });

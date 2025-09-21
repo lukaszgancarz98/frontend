@@ -57,6 +57,7 @@ type UpdateOrderData = {
     payment_date?: Date;
     payment_id?: string;
     email_send?: boolean;
+    finalize_date?: Date | null;
 };
 
 type UpdateOrderDetailsData = { id: string; orderDetails: OrderAddressDetails };
@@ -114,6 +115,36 @@ export const getAllOrders = async (): Promise<ApiResponse<OrderType[]>> => {
                 data: null,
                 isValid: false,
                 error: responseData.message || 'Order get failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const checkOrderProducts = async (
+    id: string,
+): Promise<ApiResponse<string[]>> => {
+    try {
+        const res = await fetch(`${url}/checkProducts/${id}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error: responseData.message || 'Check failed',
                 status: res.status,
             };
         }

@@ -196,7 +196,11 @@ export default function Calistenics() {
                             </div>
                             <Dialog
                                 open={open}
-                                onOpenChange={() => setOpen(false)}
+                                onOpenChange={() => {
+                                    if (open) {
+                                        setOpen((prev) => !prev);
+                                    }
+                                }}
                             >
                                 <DialogTrigger asChild>
                                     <Button
@@ -208,7 +212,7 @@ export default function Calistenics() {
                                 </DialogTrigger>
                                 <DialogTitle hidden />
                                 <DialogContent className="w-[100vw] lg:w-[30vw] z-80">
-                                    <Kontakt />
+                                    <Kontakt close={() => setOpen(false)} />
                                     <DialogFooter>
                                         <DialogClose asChild>
                                             <Button

@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { createWorkShopReceiver } from '@/api/workShopApi';
 import { isEmpty } from 'lodash';
 
-export default function LoginForm() {
+export default function Kontakt({ close }: { close: () => void }) {
     const saveEmailForNotifications = async (
         e: React.FormEvent<HTMLFormElement>,
     ) => {
@@ -29,6 +29,7 @@ export default function LoginForm() {
 
             if (response.isValid) {
                 toast.info('Wkrótce się do Ciebie odezwiemy.');
+                close();
             }
         }
     };

@@ -172,7 +172,7 @@ export const displayProducts = (
     );
 
     return (
-        <div>
+        <div className="mt-2 flex flex-col gap-2">
             {fileProducts?.map((item) => {
                 const productType = productsTypes?.find(
                     (prod) => prod.productId === item.id,
@@ -201,7 +201,7 @@ export const displayProducts = (
                     </div>
                 );
             })}
-            <div className="mt-2 bg-stone-200">
+            <div className="mt-2 flex flex-col gap-2">
                 {clothProducts?.map((item) => {
                     const productType = productTypesData?.find(
                         (type) => type.productId === item.id,
@@ -210,7 +210,7 @@ export const displayProducts = (
                     return (
                         <div
                             key={item.id}
-                            className="border border-black rounded-lg p-2"
+                            className="border border-black rounded-lg p-2 bg-stone-200"
                         >
                             <div className="text-xl">{item.name}</div>
                             <div className="py-2">
