@@ -118,7 +118,7 @@ export default function WorkShopsPage() {
         <div className="w-screen flex flex-row gap-10 w-full">
             {workShopsToDispaly?.map((item, index) => {
                 return (
-                    <div key={item.id} className="w-full pl-5 flex flex-row">
+                    <div key={item.id} className="w-full flex flex-row">
                         {index !== 0 && (
                             <div className="w-1 h-full bg-stone-200 mr-5" />
                         )}
