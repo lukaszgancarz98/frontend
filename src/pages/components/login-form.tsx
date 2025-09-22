@@ -79,7 +79,7 @@ export default function LoginForm({
                         </div>
                     </form>
                     <div className="pt-3 flex justify-center">
-                        <GoogleOAuthProvider clientId={CLIENT_ID}>
+                        <GoogleOAuthProvider clientId={CLIENT_ID as string}>
                             <GoogleLogin
                                 size="large"
                                 onSuccess={(e) => googleAuth(e)}

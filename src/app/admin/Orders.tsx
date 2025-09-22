@@ -82,49 +82,74 @@ export default function Orders({ ordersData, refreshOrder }: OrderProps) {
                 {isEmpty(ordersData.paid) && (
                     <div className="py-10 text-2xl text-red-600">Pusto ;C</div>
                 )}
-                {ordersData.paid?.map((order, index) => (
-                    <div
-                        key={order.id + index}
-                        className="border-y-2 my-1 w-[90%]"
-                        onClick={() => setOpenModal(order)}
-                    >
-                        <div className="text-lg font-semibold">
-                            Zamówienie: {order.id}
-                        </div>
-                        <div>
-                            Opłacono:{' '}
-                            {formatter.format(
-                                new Date(order.payment_date as string),
-                            )}
-                        </div>
-                        <div>
-                            {order.items.map((product) => {
-                                return (
-                                    <div className="py-1" key={product.id}>
-                                        <div>{product.name}</div>
-                                        {product.size && (
-                                            <div className="flex flex-row items-center gap-5">
-                                                <div>
-                                                    Rozmiar {product.size}
-                                                </div>
-                                                <div
-                                                    className="h-7 w-7 rounded-full border border-stone-200"
-                                                    style={{
-                                                        backgroundColor:
-                                                            product.color?.replaceAll(
-                                                                ',',
-                                                                '',
-                                                            ),
-                                                    }}
-                                                />
-                                            </div>
-                                        )}
+                {ordersData.paid?.map((order, index) => {
+                    const addressData = order.orderDetails?.address;
+                    console.log(addressData);
+
+                    const homeNumber = addressData?.parcelNumber
+                        ? `${addressData?.streetNumber}/${addressData?.parcelNumber}`
+                        : '';
+                    const address = `${addressData?.city} ${addressData?.postalCode}, ${addressData?.street} ${homeNumber}`;
+                    return (
+                        <div
+                            key={order.id + index}
+                            className="border-y-2 my-1 w-[90%]"
+                            onClick={() => setOpenModal(order)}
+                        >
+                            <div className="text-lg font-semibold">
+                                Zamówienie: {order.id}
+                            </div>
+                            <div>
+                                Opłacono:{' '}
+                                {formatter.format(
+                                    new Date(order.payment_date as string),
+                                )}
+                            </div>
+                            <div className="pb-3">
+                                <div className="flex gap-2">
+                                    Zamawiający:{' '}
+                                    <div className="font-bold">
+                                        {addressData?.name}{' '}
+                                        {addressData?.surname}
                                     </div>
-                                );
-                            })}
+                                </div>
+                                <div className="flex gap-2">
+                                    Adres dostawy:{' '}
+                                    <div className="font-bold">{address}</div>
+                                </div>
+                            </div>
+                            <div>
+                                {order.items.map((product, index) => {
+                                    return (
+                                        <div
+                                            className={`py-1 ${order.items.length - 1 !== index ? 'border-b-1' : ''}`}
+                                            key={product.id}
+                                        >
+                                            <div>{product.name}</div>
+                                            {product.size && (
+                                                <div className="flex flex-row items-center gap-5">
+                                                    <div>
+                                                        Rozmiar {product.size}
+                                                    </div>
+                                                    <div
+                                                        className="h-7 w-7 rounded-full border border-stone-200"
+                                                        style={{
+                                                            backgroundColor:
+                                                                product.color?.replaceAll(
+                                                                    ',',
+                                                                    '',
+                                                                ),
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
             <div className="w-[30%] border-2 h-[90%] flex flex-col items-center">
                 <div>Zamówienia zrealizowane</div>

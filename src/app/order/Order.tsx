@@ -185,7 +185,7 @@ export const displayProducts = (
                 return (
                     <div
                         key={item.id}
-                        className="border border-black rounded-lg my-2 bg-stone-200"
+                        className="border border-black rounded-lg my-2 bg-stone-200 min-w-[200px]"
                     >
                         <div className="w-full text-center text-xl pt-1">
                             {item.name}

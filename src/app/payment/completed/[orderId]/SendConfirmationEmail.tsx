@@ -53,19 +53,19 @@ export default async function sendEmail({
                         <p>Cześć ${userData?.name},</p>
                         <p>Twoje zamówienie o numerze <strong>${order.id}</strong> zostało przyjęte dnia <strong>${formatter.format(orderDate)}</strong> i jest w trakcie realizacji.</p>
                         <p>Wkrótce otrzymasz e-mail z informacją o wysyłce.</p>
-
+                        <br />
                         <!-- Przycisk do strony zamówienia -->
                         <div style="text-align:center; margin:20px 0;">
-                            <a href="https://theschoolofcalisthenics.pl/orders/${order.id}" 
+                            <a href="https://theschoolofcalisthenics.pl/order/${order.id}" 
                                 style="display:inline-block; padding:14px 24px; background:#0ea5e9; color:#fff; font-weight:bold; text-decoration:none; border-radius:8px; font-size:16px;">
                                 Sprawdź swoje zamówienie
                             </a>
                         </div>
-
+                        <br />
                         <p style="font-size:13px;color:#777;">W razie pytań napisz do nas: kontakt@theschoolofcalisthenics.pl</p>
                     </div>
                     <div class="footer">
-                        The School of Calisthenics Shop • ul. Przykładowa 1, 00-000 Miasto
+                        The School of Calisthenics Shop
                     </div>
                     </div>
                 </body>
@@ -78,23 +78,23 @@ export default async function sendEmail({
                     <div class="content">
                         <p>Cześć ${userData?.name},</p>
                         <p>Twoje zamówienie o numerze <strong>${order.id}</strong> zostało przyjęte dnia <strong>${formatter.format(orderDate)}</strong>.</p>
-                        <p>Produkty w formie pdf/doc możesz pobrać z złącznika</p>
+                        <p><strong>Produkty w formie pdf/doc możesz pobrać z złącznika.</strong></p>
                         <p>Jeżeli w mailu nie ma żadnego załącznika z zakupionym treningiem proszę niezwłocznie powiadomić nas o tym w mailu: kontakt@theschoolofcalisthenics.pl. W tytule proszę podać numer zamówienia.</p>
-
+                        <br />
 
                         <p>Produkty w formie pdf/doc można również pobrać na stronie sklepu wchodząc do zakładki "Zamówienia", lub kliknąć w link poniżej.</p>
                         <!-- Przycisk do strony zamówienia -->
                         <div style="text-align:center; margin:20px 0;">
-                            <a href="https://theschoolofcalisthenics.pl/orders/${order.id}" 
+                            <a href="https://theschoolofcalisthenics.pl/order/${order.id}" 
                                 style="display:inline-block; padding:14px 24px; background:#0ea5e9; color:#fff; font-weight:bold; text-decoration:none; border-radius:8px; font-size:16px;">
                                 Przejdź do zamówienia.
                             </a>
                         </div>
-
+                        <br />
                         <p style="font-size:13px;color:#777;">W razie pytań napisz do nas: kontakt@theschoolofcalisthenics.pl</p>
                     </div>
                     <div class="footer">
-                        The School of Calisthenics Shop • ul. Przykładowa 1, 00-000 Miasto
+                        The School of Calisthenics Shop
                     </div>
                     </div>
                 </body>
@@ -108,14 +108,14 @@ export default async function sendEmail({
                         <p>Cześć ${userData?.name},</p>
                         <p>Twoje zamówienie o numerze <strong>${order.id}</strong> zostało przyjęte dnia <strong>${formatter.format(orderDate)}</strong> i jest w trakcie realizacji.</p>
                         <p>Wkrótce otrzymasz e-mail z informacją o wysyłce.</p>
-
-                        <p>Produkty w formie pdf/doc możesz pobrać z złącznika</p>
+                        <br />
+                        <p><strong>Produkty w formie pdf/doc możesz pobrać z złącznika.</strong></p>
                         <p>Jeżeli w mailu nie ma żadnego załącznika z zakupionym treningiem proszę niezwłocznie powiadomić nas o tym w mailu: kontakt@theschoolofcalisthenics.pl. W tytule proszę podać numer zamówienia.</p>
-
+                        <br/ >
                         <p>Produkty w formie pdf/doc można również pobrać na stronie sklepu wchodząc do zakładki "Zamówienia", lub kliknąć w link poniżej.</p>
                         <!-- Przycisk do strony zamówienia -->
                         <div style="text-align:center; margin:20px 0;">
-                            <a href="https://theschoolofcalisthenics.pl/orders/${order.id}" 
+                            <a href="https://theschoolofcalisthenics.pl/order/${order.id}" 
                                 style="display:inline-block; padding:14px 24px; background:#0ea5e9; color:#fff; font-weight:bold; text-decoration:none; border-radius:8px; font-size:16px;">
                                 Sprawdź swoje zamówienie
                             </a>
@@ -124,7 +124,7 @@ export default async function sendEmail({
                         <p style="font-size:13px;color:#777;">W razie pytań napisz do nas: kontakt@theschoolofcalisthenics.pl</p>
                     </div>
                     <div class="footer">
-                        The School of Calisthenics Shop • ul. Przykładowa 1, 00-000 Miasto
+                        The School of Calisthenics Shop
                     </div>
                     </div>
                 </body>
@@ -138,19 +138,19 @@ export default async function sendEmail({
                         <p>Cześć ${userData?.name},</p>
                         <p>Twoje zamówienie o numerze <strong>${order.id}</strong> zostało przyjęte dnia <strong>${formatter.format(orderDate)}</strong> i jest w trakcie realizacji.</p>
                         <p>Wkrótce otrzymasz e-mail z informacją o wysyłce.</p>
-
+                        <br />   
                         <!-- Przycisk do strony zamówienia -->
                         <div style="text-align:center; margin:20px 0;">
-                            <a href="https://theschoolofcalisthenics.pl/orders/${order.id}" 
+                            <a href="https://theschoolofcalisthenics.pl/order/${order.id}" 
                                 style="display:inline-block; padding:14px 24px; background:#0ea5e9; color:#fff; font-weight:bold; text-decoration:none; border-radius:8px; font-size:16px;">
                                 Sprawdź swoje zamówienie
                             </a>
                         </div>
-
+                        <br />
                         <p style="font-size:13px;color:#777;">W razie pytań napisz do nas: kontakt@theschoolofcalisthenics.pl</p>
                     </div>
                     <div class="footer">
-                        The School of Calisthenics Shop • ul. Przykładowa 1, 00-000 Miasto
+                        The School of Calisthenics Shop
                     </div>
                     </div>
                 </body>
@@ -174,7 +174,7 @@ export default async function sendEmail({
             .footer {background:#f1f3f5;padding:14px 20px;font-size:13px;color:#666;text-align:center;}
             </style>
         </head>
-        ${body}
+        ${body()}
         </html>
     `;
 

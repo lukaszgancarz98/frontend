@@ -38,32 +38,34 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
 
         const clothesOrder = check.data?.includes('clothes');
 
-        // if (getData.data?.payment_date) {
-        //     if (!getData.data?.email_send) {
-        //         const docs = await getDocumentsForEmail({
-        //             orderId: getData?.data?.id as string,
-        //             products: getData?.data?.products as string[],
-        //         });
-        //         if (isEmpty(docs.data)) {
-        //             sendEmail({
-        //                 order: getData.data as OrderType,
-        //                 fileOrder,
-        //                 clothesOrder,
-        //             });
-        //         }
+        if (getData.data?.payment_date) {
+            if (!getData.data?.email_send) {
+                const docs = await getDocumentsForEmail({
+                    orderId: getData?.data?.id as string,
+                    products: getData?.data?.products as string[],
+                });
+                if (isEmpty(docs.data)) {
+                    sendEmail({
+                        order: getData.data as OrderType,
+                        fileOrder,
+                        clothesOrder,
+                    });
 
-        //         sendEmail({
-        //             order: getData.data as OrderType,
-        //             files: docs.data as Attachment[],
-        //             fileOrder,
-        //             clothesOrder,
-        //         });
-        //     }
+                    return;
+                }
 
-        //     setDone(true);
+                sendEmail({
+                    order: getData.data as OrderType,
+                    files: docs.data as Attachment[],
+                    fileOrder,
+                    clothesOrder,
+                });
+            }
 
-        //     return;
-        // }
+            setDone(true);
+
+            return;
+        }
 
         const response = await checkPayment(order);
 
@@ -73,7 +75,6 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
 
         const finalizeDate =
             fileOrder && !clothesOrder ? new Date() : undefined;
-        console.log(fileOrder, clothesOrder, finalizeDate);
 
         if (
             response.data?.orders?.[0].status === 'COMPLETED' &&
@@ -102,6 +103,8 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                         fileOrder,
                         clothesOrder,
                     });
+
+                    return;
                 }
 
                 sendEmail({

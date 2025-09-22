@@ -125,7 +125,7 @@ export default function Calistenics() {
     }, []);
 
     return (
-        <div className="h-svh relative">
+        <div className="h-svh relative w-[100%]">
             <div
                 id="header"
                 className={`flex flex-row flex-wrap lg:justify-between p-2 lg:p-0 lg:h-35 fixed top-0 left-0 w-full z-60 h-[20vh] transition-all duration-500 ease-in-out ${menuOpen || scrolled ? 'bg-black shadow-xl' : 'oklch(0.13_0.03_246.75)'}`}

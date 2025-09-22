@@ -3,6 +3,7 @@ import type { AddressData, OrderAddressDetails } from '../../../api/orderApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export type DeliverTypesType = {
     id: string;
@@ -387,12 +388,25 @@ export default function PaymentAddressForm({
                             value={address?.phone}
                         />
                     </div>
-                    <Button
-                        type="submit"
-                        className="mt-5 lg:w-1/4 w-[90vw] lg:ml-5 mx-[5vw] bg-green-400 hover:bg-green-600"
-                    >
-                        Zamawiam i płacę
-                    </Button>
+                    <div className="flex items-center my-5 flex-col-reverse lg:flex-row-reverse justify-evenly gap-5">
+                        <Button
+                            type="submit"
+                            className="lg:w-1/4 w-[90vw] mx-[5vw] bg-green-400 hover:bg-green-600"
+                        >
+                            Zamawiam i płacę
+                        </Button>
+                        <div className="flex items-start gap-3 lg:mt-5">
+                            <Checkbox id="terms-2" required />
+                            <div className="grid gap-2">
+                                <Label htmlFor="terms-2">
+                                    Akceptuję regulamin sklepu
+                                </Label>
+                                <p className="text-muted-foreground text-sm">
+                                    Klikając to pole, akceptujesz regulamin.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

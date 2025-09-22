@@ -67,12 +67,12 @@ export default function Menu({
             body.style.overflowY = 'hidden';
             body.style.position = 'fixed';
             body.style.top = `-${scrollPosition.current}px`;
-            body.style.width = '100vw';
+            body.style.width = 'w-[100%]';
         } else {
             body.style.overflowY = '';
             body.style.position = '';
             body.style.top = '';
-            body.style.width = '100vw';
+            body.style.width = 'w-[100%]';
 
             window.scrollTo(0, scrollPosition.current);
 

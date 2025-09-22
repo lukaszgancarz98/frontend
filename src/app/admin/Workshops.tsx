@@ -66,9 +66,8 @@ export default function WorkShopsPage() {
                     const emptyIdInArrayExist = arr.findIndex((x) =>
                         isEmpty(x.id),
                     );
-                    console.log(emptyIdInArrayExist, 'XD!2', arr);
+
                     if (productIdEmpty && emptyIdInArrayExist !== -1) {
-                        console.log(arr[emptyIdInArrayExist], 'XD!1');
                         arr[emptyIdInArrayExist]?.workshops.push(item);
 
                         return arr;

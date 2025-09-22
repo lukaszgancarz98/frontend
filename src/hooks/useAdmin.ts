@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getAllOrders, type OrderType } from '../api/orderApi';
+import {
+    getAllOrders,
+    OrderAddressDetails,
+    type OrderType,
+} from '../api/orderApi';
 import {
     getAllProducts,
     getAllProductTypes,
@@ -28,6 +32,7 @@ export type Order = {
     price: number;
     items: ItemType[];
     status: string;
+    orderDetails: OrderAddressDetails;
 };
 
 export type Orders = { paid: Order[]; finalized: Order[] };
@@ -85,6 +90,9 @@ export function useAdmin(): UseAdminReturnType {
                 price: Number(order.price),
                 items: [],
                 status: order.status,
+                orderDetails: JSON.parse(
+                    order.orderDetails as unknown as string,
+                ),
             };
 
             order.products.forEach((product) => {

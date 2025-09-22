@@ -287,7 +287,7 @@ export default function Payment({ orderId }: { orderId: string }) {
         }
     };
 
-    const hardcodedEmail = 'kalistenikazg@gmail.com';
+    const hardcodedEmail = 'kontakt@theschoolofcalisthenics.pl';
 
     return (
         <div className="lg:w-[100%] w-[100vw] shadow-lg z-50 flex flex-col">

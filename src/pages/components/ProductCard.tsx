@@ -97,7 +97,6 @@ export default function ProductCard({
             );
 
         if (sizes) {
-            console.log(sizes, 'sizes', filterProducts);
             setSizes(sizes);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,7 +159,7 @@ export default function ProductCard({
                             )}
                         </div>
                         {breakPoint && (
-                            <div className="flex flex-col justify-between h-[80vh] w-full ml-10">
+                            <div className="flex flex-col justify-between h-[80vh] w-full">
                                 <div className="flex flex-row justify-between">
                                     <div className="flex flex-col justify-center">
                                         <div className="flex lg:flex-row flex-col items-center lg:gap-15">

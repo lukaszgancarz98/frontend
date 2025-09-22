@@ -119,6 +119,8 @@ const getClientIp = async () => {
     return data.ip;
 };
 
+const redirectUrl = process.env.NEXT_PUBLIC_REDIRECT_URL || 'http://localhost:3000';
+
 export const createOrder = async (id: string, data: PaymentCreateOrderData) => {
     const clientId = await getClientIp();
 
@@ -126,10 +128,9 @@ export const createOrder = async (id: string, data: PaymentCreateOrderData) => {
         customerIp: clientId,
         description: 'Calistenics shop',
         currencyCode: 'PLN',
-        continueUrl: `${process.env.NEXT_PUBLIC_REDIRECT_URL}/payment/completed/${id}`,
+        continueUrl: `${redirectUrl}/payment/completed/${id}`,
         ...data,
     };
-    console.log(payload);
 
     try {
         const response = await fetch(`${url}/payment/${id}`, {
