@@ -348,12 +348,6 @@ export default function Rage() {
                         </div>
                     </div>
                 </div>
-                § 8 POZASĄDOWE SPOSOBY ROZPATRYWANIA REKLAMACJI i DOCHODZENIA
-                ROSZCZEŃ 1. Konsument ma możliwość skorzystania m.in. z: a.
-                mediacji prowadzonej przez Wojewódzkie Inspektoraty Inspekcji
-                Handlowej. b. pomocy stałych polubownych sądów konsumenckich
-                działających przy Wojewódzkich Inspektoratach Inspekcji
-                Handlowej
                 <div className="py-8">
                     <div className="text-xl font-semibold pb-2">
                         § 9 DANE OSOBOWE
