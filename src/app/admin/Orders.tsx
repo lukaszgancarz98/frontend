@@ -84,7 +84,6 @@ export default function Orders({ ordersData, refreshOrder }: OrderProps) {
                 )}
                 {ordersData.paid?.map((order, index) => {
                     const addressData = order.orderDetails?.address;
-                    console.log(addressData);
 
                     const homeNumber = addressData?.parcelNumber
                         ? `${addressData?.streetNumber}/${addressData?.parcelNumber}`

@@ -119,7 +119,8 @@ const getClientIp = async () => {
     return data.ip;
 };
 
-const redirectUrl = process.env.NEXT_PUBLIC_REDIRECT_URL || 'http://localhost:3000';
+const redirectUrl =
+    process.env.NEXT_PUBLIC_REDIRECT_URL || 'http://localhost:3000';
 
 export const createOrder = async (id: string, data: PaymentCreateOrderData) => {
     const clientId = await getClientIp();
