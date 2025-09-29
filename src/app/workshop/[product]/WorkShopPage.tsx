@@ -121,7 +121,6 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                             <BackgroundOnScroll
                                 backgroundImageUrl={image as string}
                                 className="lg:w-1/2 lg:h-150 h-80"
-                                bgClassName="object-contain"
                             />
                             <div className="text-black lg:w-1/2">
                                 <TextFade className="lg:p-10 lg:h-full flex justify-center lg:items-center">
