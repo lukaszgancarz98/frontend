@@ -63,7 +63,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                 });
 
                 if (!docs.isValid) {
-                    toast.error("Coś poszło nie tak. Odśwież stronę");
+                    toast.error('Coś poszło nie tak. Odśwież stronę');
 
                     return;
                 }
