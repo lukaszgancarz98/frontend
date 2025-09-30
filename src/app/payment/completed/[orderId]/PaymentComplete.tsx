@@ -212,15 +212,20 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                     </div>
                     {includesMixed && displayContent}
                     {includesFileOrMixed && (
-                        <div>
+                        <div className="flex flex-row justify-center align-center">
                             Pobierz plany treningowe klikając{' '}
-                            <Button onClick={() => downloadAll()}>tutaj</Button>
-                            , w zakładce{' '}
-                            <Link
-                                href={`/order/${id}`}
-                                className="underline text-blue-600 hover:text-blue-900"
+                            <div
+                                onClick={() => downloadAll()}
+                                className="pl-1 bg-transparent text-blue-600 hover:text-blue-900"
                             >
                                 tutaj
+                            </div>
+                            , w menu w zakładce
+                            <Link
+                                href={`/order/${id}`}
+                                className="text-blue-600 hover:text-blue-900 px-1"
+                            >
+                                Zamówienia
                             </Link>{' '}
                             lub z maila.
                         </div>
