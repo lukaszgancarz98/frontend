@@ -14,23 +14,32 @@ import { useUser } from '@/context/userContext';
 import Link from 'next/link';
 import { isEmpty } from 'lodash';
 import { Attachment, getDocumentsForEmail } from '@/api/documentApi';
+import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
+import { Button } from '@/components/ui/button';
 
 type PaymentCompletedProps = { id: string };
 
 export default function PaymentCompleted({ id }: PaymentCompletedProps) {
     const [done, setDone] = useState<boolean>(false);
     const { user } = useUser();
+    const [documents, setDocuments] = useState<Attachment[]>();
+    const [type, setType] = useState<string>();
 
     const checkPaymentRequest = async (order: string) => {
         const getData = await getOrder({ id: order });
 
         if (!getData.isValid) {
+            toast.error('Coś poszło nie tak. Odśwież stronę');
+
             return;
         }
 
         const check = await checkOrderProducts(order);
 
         if (!check.isValid) {
+            toast.error('Coś poszło nie tak. Odśwież stronę');
+
             return;
         }
 
@@ -38,12 +47,27 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
 
         const clothesOrder = check.data?.includes('clothes');
 
+        if (fileOrder && clothesOrder) {
+            setType(undefined);
+        } else if (fileOrder) {
+            setType('file');
+        } else if (clothesOrder) {
+            setType('cloth');
+        }
+
         if (getData.data?.payment_date) {
             if (!getData.data?.email_send) {
                 const docs = await getDocumentsForEmail({
                     orderId: getData?.data?.id as string,
                     products: getData?.data?.products as string[],
                 });
+
+                if (!docs.isValid) {
+                    toast.error("Coś poszło nie tak. Odśwież stronę");
+
+                    return;
+                }
+
                 if (isEmpty(docs.data)) {
                     sendEmail({
                         order: getData.data as OrderType,
@@ -53,6 +77,8 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
 
                     return;
                 }
+
+                setDocuments(docs.data as Attachment[]);
 
                 sendEmail({
                     order: getData.data as OrderType,
@@ -107,6 +133,8 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                     return;
                 }
 
+                setDocuments(docs.data as Attachment[]);
+
                 sendEmail({
                     order: responseUpdate?.data as OrderType,
                     files: docs.data as Attachment[],
@@ -128,8 +156,47 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
+    const includesFileOrMixed = type !== 'cloth';
+    const includesMixed = type === 'mixed';
+
+    const displayContent = user?.email ? (
+        <div className="flex lg:flex-row flex-col gap-1">
+            📦 Status zamówienia możesz śledzić w zakładce{' '}
+            <div
+                onClick={() => redirectToMyShop()}
+                className="underline text-blue-600 hover:text-blue-900"
+            >
+                Moje zamówienia
+            </div>{' '}
+            po zalogowaniu się na swoje konto.
+        </div>
+    ) : (
+        <div>
+            Zapisz numer zamówienia i śledź zamówienie{' '}
+            <Link
+                href={`/order/${id}`}
+                className="underline text-blue-600 hover:text-blue-900"
+            >
+                tutaj
+            </Link>
+            .
+        </div>
+    );
+
+    const downloadAll = () => {
+        documents?.forEach((doc) => {
+            const url = URL.createObjectURL(doc.file);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = doc.name;
+            link.click();
+            URL.revokeObjectURL(url);
+        });
+    };
+
     return (
         <div className="w-screen h-screen flex justify-center items-center">
+            <Toaster position="top-center" richColors />
             {done ? (
                 <div className="lg:w-3/6 text-center flex flex-col gap-3 text-xl px-3 lg:px-0">
                     <div className="text-2xl font-bold flex flex-col lg:flex-row gap-0 lg:gap-2 items-center justify-center">
@@ -143,33 +210,31 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                         Wkrótce otrzymasz wiadomość e-mail z potwierdzeniem
                         zamówienia oraz wszystkimi szczegółami transakcji.
                     </div>
-                    {user?.email ? (
-                        <div className="flex lg:flex-row flex-col gap-1">
-                            📦 Status zamówienia możesz śledzić w zakładce{' '}
-                            <div
-                                onClick={() => redirectToMyShop()}
-                                className="underline text-blue-600 hover:text-blue-900"
-                            >
-                                Moje zamówienia
-                            </div>{' '}
-                            po zalogowaniu się na swoje konto.
-                        </div>
-                    ) : (
+                    {includesMixed && displayContent}
+                    {includesFileOrMixed && (
                         <div>
-                            Zapisz numer zamówienia i śledź zamówienie{' '}
+                            Pobierz plany treningowe klikając{' '}
+                            <Button onClick={() => downloadAll()}>tutaj</Button>
+                            , w zakładce{' '}
                             <Link
                                 href={`/order/${id}`}
                                 className="underline text-blue-600 hover:text-blue-900"
                             >
                                 tutaj
-                            </Link>
-                            .
+                            </Link>{' '}
+                            lub z maila.
                         </div>
                     )}
                     <div>
                         ✉️ Jeśli nie otrzymasz potwierdzenia w ciągu kilku
                         minut, sprawdź folder Spam lub skontaktuj się z nami.
                     </div>
+                    {!user?.email && (
+                        <div>
+                            Prosimy zapisać numer zamówienia w przypadku braku
+                            otrzymania potwierdzenia drogą mailową.
+                        </div>
+                    )}
                     <div className="font-medium">
                         Dziękujemy za zaufanie i życzymy udanych zakupów!
                     </div>
