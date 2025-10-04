@@ -193,7 +193,7 @@ export const getAllOrdersById = async ({
 
 export const getOrderByEmail = async ({
     email,
-}: GetOrderByEmailData): Promise<ApiResponse<OrderType>> => {
+}: GetOrderByEmailData): Promise<ApiResponse<OrderType[]>> => {
     try {
         const res = await fetch(`${url}/email/${email}`, {
             method: 'GET',

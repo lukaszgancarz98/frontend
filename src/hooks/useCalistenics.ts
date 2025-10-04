@@ -60,18 +60,24 @@ export function useCalistenics() {
             return;
         }
 
-        setProductListCart(request.data);
+        const freshOrder = request.data.filter(order => !order.payment_date);
+
+        setProductListCart(freshOrder[0]);
     };
 
     const getOrderFunc = async () => {
         const request = await getOrder({ id: order?.id as string });
 
         if (!request.data) {
+            updateOrderContext(null);
+            
             return;
         }
 
         if (request.data.payment_date) {
             updateOrderContext(null);
+
+            return;
         }
 
         setProductListCart(request.data);

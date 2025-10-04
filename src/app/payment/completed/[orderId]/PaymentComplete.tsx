@@ -16,7 +16,6 @@ import { isEmpty } from 'lodash';
 import { Attachment, getDocumentsForEmail } from '@/api/documentApi';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
-import { Button } from '@/components/ui/button';
 
 type PaymentCompletedProps = { id: string };
 
