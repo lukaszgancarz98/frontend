@@ -1,5 +1,7 @@
 import {
+    createProductType,
     deleteProductAndProductTypes,
+    deleteProductType,
     ProductType,
     ProductTypeType,
     updateProduct,
@@ -14,19 +16,22 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
+    AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { FormProductTypesData } from './AddProduct';
 import { isEmpty } from 'lodash';
+import { SIZE_WEIGHT } from '@/common/constants';
 
 type DisplayProductProps = {
     product: ProductType;
     productTypes: ProductTypeType[];
+    triggerRefresh: Dispatch<SetStateAction<boolean>>;
 };
 
 type Sizes = { sizes: string; color: string };
@@ -34,14 +39,20 @@ type Sizes = { sizes: string; color: string };
 export default function DisplayProduct({
     product,
     productTypes,
+    triggerRefresh,
 }: DisplayProductProps) {
     const [edit, setIsEdited] = useState<boolean>();
     const [productData, setProductData] = useState<ProductType>(product);
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
-    const [productTypesData, setProductsTypesData] =
-        useState<ProductTypeType[]>(productTypes);
+    const [productTypesData, setProductsTypesData] = useState<
+        ProductTypeType[]
+    >([]);
     const [sizes, setSizes] = useState<Sizes[]>();
+    const [newSize, setNewSize] = useState<string>();
 
+    useEffect(() => {
+        setProductsTypesData(productTypes);
+    }, [productTypes]);
     const updateProductReq = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -70,6 +81,7 @@ export default function DisplayProduct({
         if (response.isValid) {
             toast.info('Udana edycja');
             setIsEdited(false);
+            triggerRefresh(true);
         }
     };
 
@@ -155,6 +167,53 @@ export default function DisplayProduct({
 
         if (resp.isValid) {
             toast.success('Usunięto produkt i podprodukty');
+            triggerRefresh(true);
+        }
+    };
+
+    const deleteProductTypeFn = async (size: string, color: string) => {
+        const findItemId = productTypesData.find(
+            (item) => item.size === size && item.color === color,
+        )?.id;
+
+        if (!findItemId) {
+            toast.error('Nie udało się usunąć');
+
+            return;
+        }
+
+        const deleteReq = await deleteProductType(findItemId);
+
+        if (deleteReq.isValid) {
+            toast.success('Usunięto rozmiar');
+            triggerRefresh(true);
+        } else {
+            toast.error('Nie udało się usunąć');
+        }
+    };
+
+    const createNewSize = async (color: string) => {
+        const findItem = productTypesData.find((item) => item.color === color);
+
+        if (!findItem) {
+            toast.error('Nie udało się usunąć');
+
+            return;
+        }
+
+        const newData = {
+            ...findItem,
+            id: product.id,
+            size: newSize as string,
+        };
+
+        const createReq = await createProductType(newData);
+
+        if (createReq.isValid) {
+            toast.success('Dodano rozmiar');
+            triggerRefresh(true);
+        } else {
+            toast.error('Nie udało się dodać');
         }
     };
 
@@ -340,16 +399,121 @@ export default function DisplayProduct({
                                         <div className="flex lg:flex-row flex-col gap-5 mx-5">
                                             <div className="grid gap-3 w-1/4">
                                                 <Label htmlFor="size">
-                                                    Rozmiary (jak chcesz dodać
-                                                    to pisz do Garnka)
+                                                    Rozmiary
                                                 </Label>
-                                                <Input
-                                                    id="size"
-                                                    type="text"
-                                                    name="size"
-                                                    value={item.size}
-                                                    readOnly
-                                                />
+                                                <div className="flex flex-row gap-2">
+                                                    {item.size
+                                                        .split(',')
+                                                        .sort(
+                                                            (a, b) =>
+                                                                SIZE_WEIGHT[
+                                                                    a as keyof typeof SIZE_WEIGHT
+                                                                ] -
+                                                                SIZE_WEIGHT[
+                                                                    b as keyof typeof SIZE_WEIGHT
+                                                                ],
+                                                        )
+                                                        .map((size) => (
+                                                            <AlertDialog key={item.id+size}>
+                                                                <AlertDialogTrigger>
+                                                                    {size}
+                                                                </AlertDialogTrigger>
+                                                                <AlertDialogContent>
+                                                                    <AlertDialogHeader>
+                                                                        <AlertDialogTitle
+                                                                            hidden
+                                                                        >
+                                                                            Usuwanie
+                                                                            rozmiaru
+                                                                        </AlertDialogTitle>
+                                                                        <AlertDialogDescription>
+                                                                            Czy
+                                                                            na
+                                                                            peweno
+                                                                            chcesz
+                                                                            usunąć
+                                                                            rozmiar{' '}
+                                                                            {
+                                                                                size
+                                                                            }
+                                                                            ?
+                                                                        </AlertDialogDescription>
+                                                                    </AlertDialogHeader>
+                                                                    <AlertDialogFooter>
+                                                                        <AlertDialogCancel>
+                                                                            Nie
+                                                                        </AlertDialogCancel>
+                                                                        <AlertDialogAction
+                                                                            onClick={() =>
+                                                                                deleteProductTypeFn(
+                                                                                    size,
+                                                                                    item.color,
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Tak
+                                                                        </AlertDialogAction>
+                                                                    </AlertDialogFooter>
+                                                                </AlertDialogContent>
+                                                            </AlertDialog>
+                                                        ))}
+                                                    {item.size?.length > 0 && (
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger
+                                                                onClick={() =>
+                                                                    setNewSize(
+                                                                        '',
+                                                                    )
+                                                                }
+                                                                className="text-green-700 pl-2"
+                                                            >
+                                                                +
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent>
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle
+                                                                        hidden
+                                                                    >
+                                                                        Usuwanie
+                                                                        rozmiaru
+                                                                    </AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Dodaj
+                                                                        rozmiar?
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <Input
+                                                                    value={
+                                                                        newSize
+                                                                    }
+                                                                    onChange={(
+                                                                        val,
+                                                                    ) =>
+                                                                        setNewSize(
+                                                                            val
+                                                                                .target
+                                                                                .value,
+                                                                        )
+                                                                    }
+                                                                ></Input>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>
+                                                                        Nie
+                                                                    </AlertDialogCancel>
+                                                                    <AlertDialogAction
+                                                                        onClick={() =>
+                                                                            createNewSize(
+                                                                                item.color,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Tak
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    )}
+                                                </div>
                                             </div>
                                             <div className="grid gap-3 w-1/4">
                                                 <Label htmlFor="color">

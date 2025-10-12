@@ -1,4 +1,4 @@
-import { BACKEND_URL } from '../common/constants';
+import { BACKEND_URL, PAGE } from '../common/constants';
 
 export type UserType = {
     id: string;
@@ -33,7 +33,7 @@ export const loginUser = async (
         const res = await fetch(`${BACKEND_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ ...data, type: PAGE }),
         });
 
         const responseData = await res.json();
@@ -95,7 +95,7 @@ export const loginUserGoogle = async (
         const res = await fetch(`${BACKEND_URL}/auth/google`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ ...data, type: PAGE }),
         });
 
         const responseData = await res.json();
@@ -127,7 +127,7 @@ export const registerUser = async (
         const res = await fetch(`${BACKEND_URL}/user`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ ...data, type: PAGE }),
         });
 
         const responseData = await res.json();

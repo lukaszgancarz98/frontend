@@ -1,4 +1,4 @@
-import { BACKEND_URL } from '../common/constants';
+import { BACKEND_URL, PAGE } from '../common/constants';
 import type { ApiResponse } from './userApi';
 
 export type ProductType = {
@@ -40,7 +40,7 @@ export const getAllProducts = async (): Promise<ApiResponse<ProductType[]>> => {
         const res = await fetch(`${url}/products`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ page: 'kalistenika' }),
+            body: JSON.stringify({ page: PAGE }),
         });
 
         const responseData = await res.json();
@@ -287,6 +287,38 @@ export const deleteProductAndProductTypes = async (
 ): Promise<ApiResponse<ProductWithProductTypes>> => {
     try {
         const res = await fetch(`${url}/all/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        const responseData = await res.json();
+
+        if (!res.ok) {
+            return {
+                data: null,
+                isValid: false,
+                error:
+                    responseData.message ||
+                    'Product and ProducTypes create failed',
+                status: res.status,
+            };
+        }
+
+        return { data: responseData.data, isValid: true };
+    } catch {
+        return {
+            data: null,
+            isValid: false,
+            error: 'Network error or server unreachable',
+        };
+    }
+};
+
+export const deleteProductType = async (
+    id: string,
+): Promise<ApiResponse<ProductWithProductTypes>> => {
+    try {
+        const res = await fetch(`${url}/productType/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
         });

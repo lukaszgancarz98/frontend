@@ -3,6 +3,7 @@ import {
     ProductType,
     ProductTypeType,
 } from '@/api/produktApi';
+import { PAGE } from '@/common/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -43,7 +44,7 @@ export default function AddProduct({ close }: AddProductProps) {
             short_description: formData.get('short_description') as string,
             image: formData.get('image') as string,
             category: formData.get('category') as string,
-            page: formData.get('page') as string,
+            page: PAGE,
             tag: formData.get('tag') as string,
             size_image: formData.get('size_image') as string,
             file_id: formData.get('file_id') as string,
@@ -137,10 +138,6 @@ export default function AddProduct({ close }: AddProductProps) {
                                 name="category"
                                 required
                             />
-                        </div>
-                        <div className="grid gap-3 w-full">
-                            <Label htmlFor="page">Strona*</Label>
-                            <Input id="page" type="text" name="page" required />
                         </div>
                         <div className="grid gap-3 w-full">
                             <Label htmlFor="tag">Tagi</Label>

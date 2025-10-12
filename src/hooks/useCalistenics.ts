@@ -60,7 +60,7 @@ export function useCalistenics() {
             return;
         }
 
-        const freshOrder = request.data.filter(order => !order.payment_date);
+        const freshOrder = request.data.filter((order) => !order.payment_date);
 
         setProductListCart(freshOrder[0]);
     };
@@ -70,7 +70,7 @@ export function useCalistenics() {
 
         if (!request.data) {
             updateOrderContext(null);
-            
+
             return;
         }
 

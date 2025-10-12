@@ -17,6 +17,7 @@ export default function Produkty() {
     const [productsTypes, setProductsTypes] = useState<ProductTypeType[]>();
     const [edit, setEdit] = useState<boolean>(true);
     const [filteredProducts, setFilteredProducts] = useState<ProductType[]>();
+    const [refreshData, setRefresh] = useState<boolean>(false);
 
     const getProductsRequest = async () => {
         const getProd = await getAllProducts();
@@ -34,6 +35,13 @@ export default function Produkty() {
     useEffect(() => {
         getProductsRequest();
     }, []);
+
+    useEffect(() => {
+        if (refreshData) {
+            getProductsRequest();
+            setRefresh(false);
+        }
+    }, [refreshData]);
 
     const filterProductData = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
@@ -60,6 +68,7 @@ export default function Produkty() {
                         placeholder="Wyszukaj produkt"
                         className="w-1/5"
                         onChange={(value) => filterProductData(value)}
+                        disabled={!edit}
                     />
                     <Button
                         className="w-fit"
@@ -86,6 +95,7 @@ export default function Produkty() {
                                     key={product.id}
                                     product={product}
                                     productTypes={productTypesData}
+                                    triggerRefresh={setRefresh}
                                 />
                             );
                         })}

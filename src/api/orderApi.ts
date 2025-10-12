@@ -1,5 +1,5 @@
 import { DeliverTypesType } from '@/app/payment/[orderId]/PaymentAddressForm';
-import { BACKEND_URL } from '../common/constants';
+import { BACKEND_URL, PAGE } from '../common/constants';
 import type { ApiResponse } from './userApi';
 
 export type AddressData = {
@@ -103,7 +103,7 @@ export const createOrder = async (
 
 export const getAllOrders = async (): Promise<ApiResponse<OrderType[]>> => {
     try {
-        const res = await fetch(`${url}/all`, {
+        const res = await fetch(`${url}/all/${PAGE}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });

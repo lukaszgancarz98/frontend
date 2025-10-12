@@ -248,8 +248,8 @@ export default function Calistenics() {
                                 JEST NIESAMOWITY.
                             </div>
                             <div>
-                                KIEDY Z NISKIEJ SAMOOCENY WYRSTA OGROMNA PEWNOŚĆ
-                                SIEBIE.
+                                KIEDY Z NISKIEJ SAMOOCENY WYRASTA OGROMNA
+                                PEWNOŚĆ SIEBIE.
                             </div>
                             <div>
                                 KIEDY PRZECIĘTNOŚĆ PRZERADZA SIĘ W WYBITNOŚĆ.
