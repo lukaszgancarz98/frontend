@@ -290,7 +290,6 @@ export default function DisplayProduct({
             public_id?: string;
             id?: string;
         }) => {
-            console.log(image, 'COOOOOO');
             if (!image) {
                 return undefined;
             }
@@ -304,7 +303,7 @@ export default function DisplayProduct({
 
             return;
         }
-        console.log(imageData.data, 'xDDDDDDDDD');
+
         const mainImage = imageData.data
             ? createImageString(imageData.data)
             : createImageString(
