@@ -266,6 +266,7 @@ export default function DisplayProduct({
 
     const updateProductReq = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setPending(true);
 
         if (!productData.image) {
             toast.error('zdjęcie jest wymagane w produkcie');
@@ -453,7 +454,8 @@ export default function DisplayProduct({
         }
 
         if (response.isValid) {
-            toast.info('Udana edycja');
+            setPending(true);
+            toast.info(`Udana edycja ${product.name}`);
             setIsEdited(false);
             triggerRefresh(true);
         }

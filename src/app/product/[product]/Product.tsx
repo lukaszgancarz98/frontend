@@ -34,6 +34,7 @@ export default function Product({ productId }: ProductProps) {
         order: orderId,
         updateOrder: updateOrderContext,
         updateExpanded,
+        clearOrder,
     } = useOrder();
     const getProductRequest = async (id: string) => {
         const response = await getProduct(id);
@@ -53,6 +54,10 @@ export default function Product({ productId }: ProductProps) {
 
     const getOrderRequest = async (id: string) => {
         const response = await getOrder({ id });
+
+        if (!response.isValid) {
+            clearOrder();
+        }
 
         if (response.isValid && response.data) {
             if (!response.data.payment_date) {
