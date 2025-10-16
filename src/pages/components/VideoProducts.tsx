@@ -119,7 +119,7 @@ export default function VideoProducts({
                                         </div>
                                     )}
                                     <Image
-                                        src={item?.image}
+                                        src={item?.image?.url as string}
                                         alt={item?.id}
                                         width={1000}
                                         height={1000}

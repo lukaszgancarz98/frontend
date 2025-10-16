@@ -91,7 +91,7 @@ export default function SizesPage() {
                         </div>
                         <div className={picturesContainer}>
                             <Image
-                                src={product.size_image}
+                                src={product.size_image?.url as string}
                                 className="object-center h-full"
                                 alt="/placeholder.png"
                                 width={500}

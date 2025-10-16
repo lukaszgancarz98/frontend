@@ -84,7 +84,7 @@ export default function Workshops({
                                         </div>
                                     )}
                                     <Image
-                                        src={item?.image}
+                                        src={item?.image?.url as string}
                                         alt={item?.id}
                                         width={900}
                                         height={400}

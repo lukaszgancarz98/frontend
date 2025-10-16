@@ -27,8 +27,12 @@ export default function Produkty() {
             toast.error('Request to get products failed');
         }
 
+        const data = getProd.data?.sort((a, b) =>
+            a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+        );
+
         setProducts(getProd.data as ProductType[]);
-        setFilteredProducts(getProd.data as ProductType[]);
+        setFilteredProducts(data);
         setProductsTypes(getType.data as ProductTypeType[]);
     };
 
@@ -57,7 +61,13 @@ export default function Produkty() {
         const res = filteredProducts?.filter((prod) =>
             prod.name.toLowerCase().includes(valueLoverCase),
         );
+
         setFilteredProducts(res);
+    };
+
+    const closeCreation = () => {
+        setEdit(true);
+        setRefresh(true);
     };
 
     return (
@@ -101,7 +111,7 @@ export default function Produkty() {
                         })}
                     </div>
                 ) : (
-                    <AddProduct close={() => setEdit(false)} />
+                    <AddProduct close={() => closeCreation()} />
                 )}
             </div>
         </div>

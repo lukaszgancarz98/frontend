@@ -1,13 +1,17 @@
 import {
     createProductAndProductTypes,
-    ProductType,
-    ProductTypeType,
+    ProductTypeRaw,
+    ProductTypeTypeRaw,
 } from '@/api/produktApi';
 import { PAGE } from '@/common/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { FileType, getBase64, handleCreate } from '@/service/service';
+import { PlusOutlined } from '@ant-design/icons';
+import { Image, Upload, UploadFile } from 'antd';
+import { UploadChangeParam } from 'antd/es/upload';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -15,7 +19,7 @@ export type FormProductTypesData = {
     id?: string;
     size: string;
     color: string;
-    images: string;
+    images: string[];
     size_placeholder: string;
     price: string;
     stock_quantity: string;
@@ -27,6 +31,57 @@ type AddProductProps = { close: () => void };
 
 export default function AddProduct({ close }: AddProductProps) {
     const [productTypesAmount, setProductTypesAmount] = useState<number>(1);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [mainImage, saveMainImage] = useState<UploadFile[]>([]);
+    const [sizeImage, saveSizeImage] = useState<UploadFile[]>([]);
+    const [fileList, setFileList] = useState<
+        { images: UploadFile[]; index: string }[]
+    >([]);
+    const [submitPending, setSubmitPending] = useState<boolean>(false);
+
+    const handlePreview = async (file: UploadFile) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj as FileType);
+        }
+
+        setPreviewImage(file.url || (file.preview as string));
+        setPreviewOpen(true);
+    };
+
+    const handleBeforeUpload = () => {
+        return false;
+    };
+
+    const handleChange = async (
+        info: UploadChangeParam<UploadFile<any>>,
+        type: string,
+    ) => {
+        if (type === 'main') {
+            saveMainImage(info.fileList);
+        } else if (type === 'size') {
+            saveSizeImage(info.fileList);
+        } else {
+            setFileList((prev) => {
+                const index = prev.findIndex((item) => item.index === type);
+                const newImages = info.fileList;
+                if (index !== -1) {
+                    const newArr = [...prev];
+                    newArr[index] = { ...newArr[index], images: newImages };
+                    return newArr;
+                } else {
+                    return [...prev, { index: type, images: newImages }];
+                }
+            });
+        }
+    };
+
+    const uploadButton = (
+        <button style={{ border: 0, background: 'none' }} type="button">
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </button>
+    );
 
     const array = useMemo(
         () => Array(productTypesAmount).fill(''),
@@ -35,28 +90,70 @@ export default function AddProduct({ close }: AddProductProps) {
 
     const createProduct = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setSubmitPending(true);
 
         const formData = new FormData(e.currentTarget);
 
-        const data: Partial<ProductType> = {
+        const imageData = await handleCreate(
+            mainImage[0]?.originFileObj as File,
+        );
+        const sizeImageData = await handleCreate(
+            sizeImage[0]?.originFileObj as File,
+        );
+
+        if (!imageData.isValid || !sizeImageData.isValid) {
+            toast.error('Coś poszło nie tak');
+            setSubmitPending(false);
+
+            return;
+        }
+
+        const data: Partial<ProductTypeRaw> = {
             name: formData.get('name') as string,
             description: formData.get('description') as string,
             short_description: formData.get('short_description') as string,
-            image: formData.get('image') as string,
+            image: imageData.data?.public_id + ':url:' + imageData.data?.url,
             category: formData.get('category') as string,
             page: PAGE,
             tag: formData.get('tag') as string,
-            size_image: formData.get('size_image') as string,
+            size_image:
+                sizeImageData.data?.public_id +
+                ':url:' +
+                sizeImageData.data?.url,
             file_id: formData.get('file_id') as string,
         };
 
         const dataTypes: FormProductTypesData[] = [];
 
-        array.forEach((item, index) => {
+        for (const [index, item] of array.entries()) {
+            const images = fileList.find(
+                (color) => color.index === index.toString(),
+            );
+
+            const requests = images?.images.map((item) =>
+                handleCreate(item?.originFileObj as File),
+            );
+
+            const results = requests && (await Promise.all(requests));
+
+            if (results?.some((result) => !result.isValid)) {
+                toast.error('One or more images are invalid');
+                setSubmitPending(false);
+
+                return;
+            }
+
+            const imageArray =
+                results?.reduce((arr: string[], item) => {
+                    arr.push(item.data?.public_id + ':url:' + item.data?.url);
+
+                    return arr;
+                }, []) || [];
+
             const data: FormProductTypesData = {
                 size: formData.get(`size-${index}`) as string,
                 color: formData.get(`color-${index}`) as string,
-                images: formData.get(`images-${index}`) as string,
+                images: imageArray,
                 size_placeholder: formData.get(
                     `size_placeholder-${index}`,
                 ) as string,
@@ -69,11 +166,11 @@ export default function AddProduct({ close }: AddProductProps) {
             };
 
             dataTypes.push(data);
-        });
+        }
 
         const productTypesDataReq = dataTypes.reduce(
-            (arr: Partial<ProductTypeType>[], item) => {
-                const images = item.images.split(',');
+            (arr: Partial<ProductTypeTypeRaw>[], item) => {
+                const images = item.images;
                 item.size.split(',').forEach((s) => {
                     return arr.push({
                         ...item,
@@ -94,12 +191,14 @@ export default function AddProduct({ close }: AddProductProps) {
 
         if (!response.isValid) {
             toast.error('Coś poszło nie tak');
+            setSubmitPending(false);
 
             return;
         }
 
         if (response.isValid) {
             toast.info('Dodano produkt i podprodukty');
+
             close();
         }
     };
@@ -120,13 +219,35 @@ export default function AddProduct({ close }: AddProductProps) {
                             <Input id="name" name="name" type="text" required />
                         </div>
                         <div className="grid gap-3 w-full">
-                            <Label htmlFor="image">Scieżka do zdjęcia*</Label>
-                            <Input
-                                id="image"
-                                type="text"
-                                name="image"
-                                required
-                            />
+                            <Label htmlFor="image">Zdjęcie*</Label>
+                            <div>
+                                <Upload
+                                    listType="picture-card"
+                                    fileList={mainImage}
+                                    onPreview={handlePreview}
+                                    beforeUpload={handleBeforeUpload}
+                                    onChange={(e) => handleChange(e, 'main')}
+                                    maxCount={1}
+                                >
+                                    {mainImage?.length >= 1
+                                        ? null
+                                        : uploadButton}
+                                </Upload>
+                                {previewImage && (
+                                    <Image
+                                        alt=""
+                                        wrapperStyle={{ display: 'none' }}
+                                        preview={{
+                                            visible: previewOpen,
+                                            onVisibleChange: (visible) =>
+                                                setPreviewOpen(visible),
+                                            afterOpenChange: (visible) =>
+                                                !visible && setPreviewImage(''),
+                                        }}
+                                        src={previewImage}
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
                     <div className="flex lg:flex-row flex-col gap-5 mx-5">
@@ -145,13 +266,36 @@ export default function AddProduct({ close }: AddProductProps) {
                         </div>
                         <div className="grid gap-3 w-full">
                             <Label htmlFor="size_image">
-                                Zdjęcie rozmiarówki (ścieżka)
+                                Zdjęcie rozmiarówki
                             </Label>
-                            <Input
-                                id="size_image"
-                                type="text"
-                                name="size_image"
-                            />
+                            <div>
+                                <Upload
+                                    listType="picture-card"
+                                    fileList={sizeImage}
+                                    onPreview={handlePreview}
+                                    beforeUpload={handleBeforeUpload}
+                                    onChange={(e) => handleChange(e, 'size')}
+                                    maxCount={1}
+                                >
+                                    {sizeImage?.length >= 1
+                                        ? null
+                                        : uploadButton}
+                                </Upload>
+                                {previewImage && (
+                                    <Image
+                                        alt=""
+                                        wrapperStyle={{ display: 'none' }}
+                                        preview={{
+                                            visible: previewOpen,
+                                            onVisibleChange: (visible) =>
+                                                setPreviewOpen(visible),
+                                            afterOpenChange: (visible) =>
+                                                !visible && setPreviewImage(''),
+                                        }}
+                                        src={previewImage}
+                                    />
+                                )}
+                            </div>
                         </div>
                         <div className="grid gap-3 w-full">
                             <Label htmlFor="file_id">ID pliku</Label>
@@ -201,6 +345,11 @@ export default function AddProduct({ close }: AddProductProps) {
                     </div>
                 </div>
                 {array.map((item, index) => {
+                    const colorIndex = index.toString();
+                    const colorImages =
+                        fileList.find((f) => f.index === colorIndex)?.images ||
+                        [];
+
                     return (
                         <div key={index} className="flex flex-col gap-6 w-full">
                             <div className="flex lg:flex-row flex-col gap-5 mx-5">
@@ -226,14 +375,46 @@ export default function AddProduct({ close }: AddProductProps) {
                                 </div>
                                 <div className="grid gap-3 w-2/4">
                                     <Label htmlFor={`images-${index}`}>
-                                        Zdjęcia (ścieżki np.
-                                        /clothes/fota.jpg,/clothesfota2.jpg)
+                                        Zdjęcia
                                     </Label>
-                                    <Input
-                                        id={`images-${index}`}
-                                        type="text"
-                                        name={`images-${index}`}
-                                    />
+                                    <div>
+                                        <Upload
+                                            listType="picture-card"
+                                            fileList={colorImages}
+                                            onPreview={handlePreview}
+                                            beforeUpload={handleBeforeUpload}
+                                            onChange={(e) =>
+                                                handleChange(e, colorIndex)
+                                            }
+                                            multiple
+                                        >
+                                            {colorImages.length >= 8
+                                                ? null
+                                                : uploadButton}
+                                        </Upload>
+
+                                        {previewImage && (
+                                            <Image
+                                                alt=""
+                                                wrapperStyle={{
+                                                    display: 'none',
+                                                }}
+                                                preview={{
+                                                    visible: previewOpen,
+                                                    onVisibleChange: (
+                                                        visible,
+                                                    ) =>
+                                                        setPreviewOpen(visible),
+                                                    afterOpenChange: (
+                                                        visible,
+                                                    ) =>
+                                                        !visible &&
+                                                        setPreviewImage(''),
+                                                }}
+                                                src={previewImage}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -299,7 +480,9 @@ export default function AddProduct({ close }: AddProductProps) {
                     );
                 })}
                 <div className="w-fit pt-3">
-                    <Button className="w-fit">Zapisz</Button>
+                    <Button className="w-fit" disabled={submitPending}>
+                        Zapisz
+                    </Button>
                 </div>
             </form>
         </div>

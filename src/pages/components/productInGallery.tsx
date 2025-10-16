@@ -10,6 +10,8 @@ type ProductProps = { product: ProductType; price: number };
 export default function Product({ product, price }: ProductProps) {
     const imagesExisting = !isEmpty(product?.image);
 
+    const url = product?.image?.url;
+
     return (
         <div className="group flex flex-col justify-between">
             <div>
@@ -19,7 +21,7 @@ export default function Product({ product, price }: ProductProps) {
                             <Image
                                 src={
                                     imagesExisting
-                                        ? product?.image
+                                        ? (url as string)
                                         : '/app/img/placeholder.png'
                                 }
                                 alt={product?.name}

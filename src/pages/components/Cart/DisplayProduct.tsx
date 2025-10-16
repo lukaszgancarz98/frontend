@@ -18,12 +18,14 @@ export default function DisplayProduct({
     parentProduct,
     functions,
 }: DispalyProductProps) {
+    const url = product?.images[0]?.url;
+
     return (
         <div className="flex flex-col  border rounded-lg mb-2 p-2">
             <div className="flex flex-row pt-2 px-2">
                 <Image
                     className="h-26 w-26 rounded-lg bg-top object-contain min-w-24 min-h-24"
-                    src={product?.images[0]}
+                    src={url as string}
                     alt="/palceholder.png"
                     width={50}
                     height={50}

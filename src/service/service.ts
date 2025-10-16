@@ -1,3 +1,4 @@
+import { GetProp, UploadProps } from 'antd';
 import type { OrderType } from '../api/orderApi';
 import type { ProductType, ProductTypeType } from '../api/produktApi';
 import type { DisplayProductType } from '../pages/components/Cart/Cart';
@@ -68,4 +69,42 @@ export const displayProducts = ({
     );
 
     return arrayOfProducts;
+};
+
+export type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+export const getBase64 = (file: FileType): Promise<string> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+    });
+
+export const handleCreate = async (file: File & { uid?: string }) => {
+    if (!file) return { isValid: true };
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch(`/api/products/images`, {
+        method: 'POST',
+        body: formData,
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+        return { isValid: false };
+    }
+
+    return { isValid: true, data: { ...data, uid: file.uid } };
+};
+
+export const generateThumb = (file: FileType) => {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target?.result);
+        reader.readAsDataURL(file);
+    });
 };

@@ -7,6 +7,19 @@ export type ProductType = {
     name: string;
     description: string;
     short_description: string;
+    image?: { id?: string; url?: string; file?: File; del?: boolean };
+    size_image?: { id?: string; url?: string; file?: File; del?: boolean };
+    category: string;
+    tag?: string;
+    file_id?: string;
+};
+
+export type ProductTypeRaw = {
+    page?: string;
+    id: string;
+    name: string;
+    description: string;
+    short_description: string;
     image: string;
     size_image: string;
     category: string;
@@ -14,7 +27,7 @@ export type ProductType = {
     file_id?: string;
 };
 
-export type ProductTypeType = {
+export type ProductTypeTypeRaw = {
     id: string;
     price: number;
     size: string;
@@ -26,11 +39,26 @@ export type ProductTypeType = {
     productId: string;
     sale_price: string;
     sale_amount: string;
+    del?: boolean;
+};
+
+export type ProductTypeType = {
+    id: string;
+    price: number;
+    size: string;
+    color: string;
+    shortDescription: string;
+    images: { id?: string; url?: string; file?: File; del?: boolean }[];
+    size_placeholder: string;
+    stock_quantity: string;
+    productId: string;
+    sale_price: string;
+    sale_amount: string;
 };
 
 export type ProductWithProductTypes = {
-    product: Partial<ProductType>;
-    productTypes: Partial<ProductTypeType>[];
+    product: Partial<ProductTypeRaw>;
+    productTypes: Partial<ProductTypeTypeRaw>[];
 };
 
 const url = `${BACKEND_URL}/product`;
@@ -54,7 +82,28 @@ export const getAllProducts = async (): Promise<ApiResponse<ProductType[]>> => {
             };
         }
 
-        return { data: responseData.data, isValid: true };
+        const newData = responseData.data.reduce(
+            (arr: ProductType[], item: ProductTypeRaw) => {
+                const image = item.image?.split(':url:');
+                const imageData = { id: image[0], url: image[1] || item.image };
+                const sizeImage = item.size_image?.split(':url:');
+                const sizeImageData = {
+                    id: sizeImage?.[0],
+                    url: sizeImage?.[1] || item.size_image,
+                };
+
+                arr.push({
+                    ...item,
+                    image: imageData,
+                    size_image: sizeImageData.id ? sizeImageData : undefined,
+                });
+
+                return arr;
+            },
+            [],
+        );
+
+        return { data: newData, isValid: true };
     } catch {
         return {
             data: null,
@@ -84,7 +133,29 @@ export const getAllProductTypes = async (): Promise<
             };
         }
 
-        return { data: responseData.data, isValid: true };
+        const newData = responseData.data.reduce(
+            (arr: ProductTypeType[], item: ProductTypeTypeRaw) => {
+                const array: { id: string; url: string }[] = [];
+
+                item.images?.forEach((image) => {
+                    const splitImageData = image?.split(':url:');
+
+                    const imageData = {
+                        id: splitImageData?.[0],
+                        url: splitImageData?.[1] || image,
+                    };
+
+                    array.push(imageData);
+                });
+
+                arr.push({ ...item, images: array });
+
+                return arr;
+            },
+            [],
+        );
+
+        return { data: newData, isValid: true };
     } catch {
         return {
             data: null,
@@ -114,7 +185,24 @@ export const getProduct = async (
             };
         }
 
-        return { data: responseData.data, isValid: true };
+        const image = responseData?.data?.image?.split(':url:');
+        const imageData = {
+            id: image[0],
+            url: image[1] || responseData?.data?.image,
+        };
+        const sizeImage = responseData?.data?.size_image?.split(':url:');
+        const sizeImageData = {
+            id: sizeImage?.[0],
+            url: sizeImage?.[1] || responseData?.data?.size_image,
+        };
+
+        const data = {
+            ...responseData.data,
+            image: imageData,
+            size_image: sizeImageData,
+        };
+
+        return { data: data, isValid: true };
     } catch {
         return {
             data: null,
@@ -144,7 +232,29 @@ export const getProductTypesByProductId = async (
             };
         }
 
-        return { data: responseData.data, isValid: true };
+        const newData = responseData.data.reduce(
+            (arr: ProductTypeType[], item: ProductTypeTypeRaw) => {
+                const array: { id: string; url: string }[] = [];
+
+                item.images?.forEach((image) => {
+                    const splitImageData = image?.split(':url:');
+
+                    const imageData = {
+                        id: splitImageData?.[0],
+                        url: splitImageData?.[1] || image,
+                    };
+
+                    array.push(imageData);
+                });
+
+                arr.push({ ...item, images: array });
+
+                return arr;
+            },
+            [],
+        );
+
+        return { data: newData, isValid: true };
     } catch {
         return {
             data: null,
@@ -186,7 +296,7 @@ export const updateProduct = async (
 };
 
 export const updateProductTypes = async (data: {
-    productTypes: ProductTypeType[];
+    productTypes: ProductTypeTypeRaw[];
 }): Promise<ApiResponse<ProductTypeType[]>> => {
     try {
         const res = await fetch(`${url}/productTypes`, {
@@ -251,7 +361,7 @@ export const createProductAndProductTypes = async (
 
 export const createProductType = async (
     data: ProductTypeType,
-): Promise<ApiResponse<ProductWithProductTypes>> => {
+): Promise<ApiResponse<string>> => {
     try {
         const res = await fetch(`${url}/productType`, {
             method: 'POST',
@@ -272,7 +382,7 @@ export const createProductType = async (
             };
         }
 
-        return { data: responseData.data, isValid: true };
+        return { data: 'ok', isValid: true };
     } catch {
         return {
             data: null,
@@ -316,7 +426,7 @@ export const deleteProductAndProductTypes = async (
 
 export const deleteProductType = async (
     id: string,
-): Promise<ApiResponse<ProductWithProductTypes>> => {
+): Promise<ApiResponse<string>> => {
     try {
         const res = await fetch(`${url}/productType/${id}`, {
             method: 'DELETE',
@@ -336,7 +446,7 @@ export const deleteProductType = async (
             };
         }
 
-        return { data: responseData.data, isValid: true };
+        return { data: 'ok', isValid: true };
     } catch {
         return {
             data: null,

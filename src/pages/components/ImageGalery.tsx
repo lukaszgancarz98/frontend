@@ -9,7 +9,7 @@ import {
 import Image from 'next/image';
 
 interface GalleryProps {
-    images: string[];
+    images: { id: string; url: string }[];
 }
 
 const ImageGalery = ({ images }: GalleryProps) => {
@@ -27,19 +27,22 @@ const ImageGalery = ({ images }: GalleryProps) => {
 
     const mainImage = useMemo(
         () =>
-            images?.map((image, index) => (
-                <CarouselItem
-                    key={index}
-                    className="relative aspect-square w-full"
-                >
-                    <Image
-                        src={image}
-                        alt={`Carousel Main Image ${index + 1}`}
-                        className="h-[60vh] object-center object-contain"
-                        fill
-                    />
-                </CarouselItem>
-            )),
+            images?.map((image, index) => {
+                const url = image.url;
+                return (
+                    <CarouselItem
+                        key={index}
+                        className="relative aspect-square w-full"
+                    >
+                        <Image
+                            src={url}
+                            alt={`Carousel Main Image ${index + 1}`}
+                            className="h-[60vh] object-center object-contain"
+                            fill
+                        />
+                    </CarouselItem>
+                );
+            }),
         [images],
     );
 
@@ -58,21 +61,24 @@ const ImageGalery = ({ images }: GalleryProps) => {
 
     const thumbnailImages = useMemo(
         () =>
-            images?.map((image, index) => (
-                <CarouselItem
-                    key={index}
-                    className="relative aspect-square w-full basis-1/4"
-                    onClick={() => handleClick(index)}
-                >
-                    <Image
-                        className={`${index === current ? 'ring-1' : ''} rounded h-32 w-24`}
-                        src={image}
-                        alt={`Carousel Thumbnail Image ${index + 1}`}
-                        style={{ objectFit: 'cover' }}
-                        fill
-                    />
-                </CarouselItem>
-            )),
+            images?.map((image, index) => {
+                const url = image.url;
+                return (
+                    <CarouselItem
+                        key={index}
+                        className="relative aspect-square w-full basis-1/4"
+                        onClick={() => handleClick(index)}
+                    >
+                        <Image
+                            className={`${index === current ? 'ring-1' : ''} rounded h-32 w-24`}
+                            src={url}
+                            alt={`Carousel Thumbnail Image ${index + 1}`}
+                            style={{ objectFit: 'cover' }}
+                            fill
+                        />
+                    </CarouselItem>
+                );
+            }),
         [images, current],
     );
 

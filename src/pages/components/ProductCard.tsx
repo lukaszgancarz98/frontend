@@ -155,7 +155,14 @@ export default function ProductCard({
                     <div className="flex lg:flex-row flex-col lg:gap-20 h-full">
                         <div className="lg:ml-40 lg:w-1/2">
                             {pickedProduct?.images && (
-                                <ImageGalery images={pickedProduct?.images} />
+                                <ImageGalery
+                                    images={
+                                        pickedProduct?.images as {
+                                            id: string;
+                                            url: string;
+                                        }[]
+                                    }
+                                />
                             )}
                         </div>
                         {breakPoint && (

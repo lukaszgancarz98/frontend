@@ -28,10 +28,10 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
 
     const getProducts = async () => {
         const responseProductType = await getProductTypesByProductId(productId);
-        const respnseProduct = await getProduct(productId);
+        const responseProduct = await getProduct(productId);
 
-        if (responseProductType.isValid && respnseProduct.isValid) {
-            setProduct(respnseProduct?.data as ProductType);
+        if (responseProductType.isValid && responseProduct.isValid) {
+            setProduct(responseProduct?.data as ProductType);
             setProductType(responseProductType?.data?.[0]);
         }
     };
@@ -119,7 +119,7 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                             className={`flex ${displayVarian ? 'lg:flex-row' : 'lg:flex-row-reverse'} flex-col lg:h-[100vh] lg:h-auto w-full pb-25 lg:pb-10 shadow-2xl`}
                         >
                             <BackgroundOnScroll
-                                backgroundImageUrl={image as string}
+                                backgroundImageUrl={image?.url as string}
                                 className="lg:w-1/2 lg:h-150 h-80"
                             />
                             <div className="text-black lg:w-1/2">
