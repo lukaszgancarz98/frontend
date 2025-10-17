@@ -2,6 +2,7 @@ import { GetProp, UploadProps } from 'antd';
 import type { OrderType } from '../api/orderApi';
 import type { ProductType, ProductTypeType } from '../api/produktApi';
 import type { DisplayProductType } from '../pages/components/Cart/Cart';
+import { BACKEND_URL } from '@/common/constants';
 
 type DisplayProductPropsType = {
     products: OrderType;
@@ -87,7 +88,7 @@ export const handleCreate = async (file: File & { uid?: string }) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const res = await fetch(`/api/products/images`, {
+    const res = await fetch(`${BACKEND_URL}/product/images`, {
         method: 'POST',
         body: formData,
     });
@@ -99,6 +100,22 @@ export const handleCreate = async (file: File & { uid?: string }) => {
     }
 
     return { isValid: true, data: { ...data, uid: file.uid } };
+};
+
+export const handleDelete = async (publicId: string) => {
+    const res = await fetch(`${BACKEND_URL}/product/images`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId }),
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+        return { isValid: false };
+    }
+
+    return { isValid: true, data: data };
 };
 
 export const generateThumb = (file: FileType) => {

@@ -26,13 +26,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { isEmpty } from 'lodash';
-import { REDIRECT_URL, SIZE_WEIGHT } from '@/common/constants';
+import { SIZE_WEIGHT } from '@/common/constants';
 import { Image, Upload, UploadFile } from 'antd';
 import {
     FileType,
     generateThumb,
     getBase64,
     handleCreate,
+    handleDelete,
 } from '@/service/service';
 import { PlusOutlined } from '@ant-design/icons';
 import { UploadChangeParam } from 'antd/es/upload';
@@ -243,22 +244,6 @@ export default function DisplayProduct({
               )
             : undefined;
     }, [productData.size_image]);
-
-    const handleDelete = async (publicId: string) => {
-        const res = await fetch(`${REDIRECT_URL}/api/products/images`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ publicId }),
-        });
-
-        const data = await res.json();
-
-        if (data.error) {
-            return { isValid: false };
-        }
-
-        return { isValid: true, data: data };
-    };
 
     useEffect(() => {
         setProductsTypesData(productTypes);
