@@ -264,26 +264,34 @@ export default function DisplayProduct({
             ? await handleCreate(productData.image.file as File)
             : { isValid: true };
 
-        const sizeImageData =
-            !productData.size_image?.url && productData.size_image
-                ? await handleCreate(
-                      productData.size_image.file as unknown as File,
-                  )
-                : { isValid: true };
+        const sizeImageData = async () => {
+            if (!productData.size_image && product.size_image?.id) {
+                return await handleDelete(product.size_image.id);
+            } else if (!productData.size_image?.url && productData.size_image) {
+                return await handleCreate(
+                    productData.size_image.file as unknown as File,
+                );
+            } else {
+                return { isValid: true };
+            }
+        };
+
+        const sizeImageReq = await sizeImageData();
 
         const createImageString = (image: {
             url: string;
             public_id?: string;
             id?: string;
+            result?: string;
         }) => {
-            if (!image) {
+            if (!image || image.result) {
                 return undefined;
             }
 
             return (image.public_id || image.id) + ':url:' + image.url;
         };
 
-        if (!imageData?.isValid || !sizeImageData.isValid) {
+        if (!imageData?.isValid || !sizeImageReq.isValid) {
             toast.error('Coś poszło nie tak');
             setPending(false);
 
@@ -296,8 +304,8 @@ export default function DisplayProduct({
                   productData.image as { id: string; url: string },
               );
 
-        const sizeImage = sizeImageData.data
-            ? createImageString(sizeImageData.data)
+        const sizeImage = sizeImageReq.data
+            ? createImageString(sizeImageReq.data)
             : createImageString(
                   productData.size_image as { id: string; url: string },
               );
@@ -363,13 +371,24 @@ export default function DisplayProduct({
         }
 
         const extractNonExistingImages = productTypeDataToUpdate.reduce(
-            (arr: UploadedFile[], item: ProductTypeType) => {
+            (
+                arr: { new: UploadedFile[]; delete: string[] },
+                item: ProductTypeType,
+            ) => {
                 item.images.forEach((image) => {
                     if (!image.file) {
+                        if (
+                            image.del &&
+                            !arr.delete.includes(image.id as string)
+                        ) {
+                            arr.delete.push(image.id as string);
+                            return arr;
+                        }
+
                         return;
                     }
 
-                    const find = arr.find(
+                    const find = arr.new.find(
                         (x) =>
                             x.uid ===
                             (image.file as unknown as UploadedFile).uid,
@@ -378,23 +397,32 @@ export default function DisplayProduct({
                         return;
                     }
 
-                    arr.push(image.file as unknown as UploadedFile);
+                    arr.new.push(image.file as unknown as UploadedFile);
                 });
 
                 return arr;
             },
-            [],
+            { new: [], delete: [] },
         );
 
         const responseFiles =
-            extractNonExistingImages &&
+            extractNonExistingImages.new &&
             (await Promise.all(
-                extractNonExistingImages.map((x) =>
+                extractNonExistingImages.new.map((x) =>
                     handleCreate(x as unknown as File),
                 ),
             ));
 
-        if (responseFiles?.some((result) => !result.isValid)) {
+        const responseRemoveFiles =
+            extractNonExistingImages.delete &&
+            (await Promise.all(
+                extractNonExistingImages.delete.map((x) => handleDelete(x)),
+            ));
+
+        if (
+            responseFiles?.some((result) => !result.isValid) ||
+            responseRemoveFiles?.some((result) => !result.isValid)
+        ) {
             toast.error('Nie udało dodać nowych zdjęć');
             setPending(false);
 
