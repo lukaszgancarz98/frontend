@@ -88,6 +88,7 @@ export default function Workshops({
                                         alt={item?.id}
                                         width={900}
                                         height={400}
+                                        unoptimized
                                         className="h-max lg:w-max w-full object-center object-contain rounded-tl-lg rounded-t-lg rounded-tr-lg z-20"
                                     />
                                     {hovered && priceExist && (

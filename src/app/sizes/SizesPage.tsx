@@ -96,6 +96,7 @@ export default function SizesPage() {
                                 alt="/placeholder.png"
                                 width={500}
                                 height={500}
+                                unoptimized
                             />
                         </div>
                     </div>

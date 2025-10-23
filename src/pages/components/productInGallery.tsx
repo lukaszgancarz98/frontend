@@ -27,6 +27,7 @@ export default function Product({ product, price }: ProductProps) {
                                 alt={product?.name}
                                 className="h-full w-full object-center object-contain"
                                 fill
+                                unoptimized
                             />
                         </div>
                         <div className="absolute top-0 right-0 mr-5 shadow-md rounded-sm px-2 py-1 text-md self-center font-medium transition duration-300 group-hover:scale-130">

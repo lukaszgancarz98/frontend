@@ -29,6 +29,7 @@ export default function DisplayProduct({
                     alt="/palceholder.png"
                     width={50}
                     height={50}
+                    unoptimized
                 />
                 <div className="pl-2 flex flex-row w-full justify-between">
                     <div>

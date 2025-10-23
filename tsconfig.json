@@ -33,14 +33,16 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/app/api/sendConfirmation"  ],
+    ".next/types/**/*.ts",
+    "src/app/api/sendConfirmation",
+    ".next/dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ],
   "formatCodeOptions": {
-		"tabSize": 4,
-		"indentSize": 4,
-		"convertTabsToSpaces": false
-	}
+    "tabSize": 4,
+    "indentSize": 4,
+    "convertTabsToSpaces": false
+  }
 }

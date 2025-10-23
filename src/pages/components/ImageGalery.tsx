@@ -39,6 +39,7 @@ const ImageGalery = ({ images }: GalleryProps) => {
                             alt={`Carousel Main Image ${index + 1}`}
                             className="h-[60vh] object-center object-contain"
                             fill
+                            unoptimized
                         />
                     </CarouselItem>
                 );
@@ -75,6 +76,7 @@ const ImageGalery = ({ images }: GalleryProps) => {
                             alt={`Carousel Thumbnail Image ${index + 1}`}
                             style={{ objectFit: 'cover' }}
                             fill
+                            unoptimized
                         />
                     </CarouselItem>
                 );
