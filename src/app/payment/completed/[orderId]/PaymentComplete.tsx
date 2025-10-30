@@ -212,7 +212,7 @@ export default function PaymentCompleted({ id }: PaymentCompletedProps) {
                     {includesMixed && displayContent}
                     {includesFileOrMixed && (
                         <div className="flex flex-row justify-center align-center">
-                            Pobierz plany treningowe klikając{' '}
+                            Pobierz produkty klikając{' '}
                             <div
                                 onClick={() => downloadAll()}
                                 className="pl-1 bg-transparent text-blue-600 hover:text-blue-900"

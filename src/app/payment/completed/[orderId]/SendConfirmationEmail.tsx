@@ -78,11 +78,11 @@ export default async function sendEmail({
                     <div class="content">
                         <p>Cześć ${userData?.name},</p>
                         <p>Twoje zamówienie o numerze <strong>${order.id}</strong> zostało przyjęte dnia <strong>${formatter.format(orderDate)}</strong>.</p>
-                        <p><strong>Produkty w formie pdf/doc możesz pobrać z złącznika.</strong></p>
+                        <p><strong>Produkty możesz pobrać z złącznika.</strong></p>
                         <p>Jeżeli w mailu nie ma żadnego załącznika z zakupionym treningiem proszę niezwłocznie powiadomić nas o tym w mailu: kontakt@theschoolofcalisthenics.pl. W tytule proszę podać numer zamówienia.</p>
                         <br />
 
-                        <p>Produkty w formie pdf/doc można również pobrać na stronie sklepu wchodząc do zakładki "Zamówienia", lub kliknąć w link poniżej.</p>
+                        <p>Produkty można również pobrać na stronie sklepu wchodząc do zakładki "Zamówienia", lub kliknąć w link poniżej.</p>
                         <!-- Przycisk do strony zamówienia -->
                         <div style="text-align:center; margin:20px 0;">
                             <a href="https://theschoolofcalisthenics.pl/order/${order.id}" 
@@ -109,10 +109,10 @@ export default async function sendEmail({
                         <p>Twoje zamówienie o numerze <strong>${order.id}</strong> zostało przyjęte dnia <strong>${formatter.format(orderDate)}</strong> i jest w trakcie realizacji.</p>
                         <p>Wkrótce otrzymasz e-mail z informacją o wysyłce.</p>
                         <br />
-                        <p><strong>Produkty w formie pdf/doc możesz pobrać z złącznika.</strong></p>
+                        <p><strong>Produkty możesz pobrać z złącznika.</strong></p>
                         <p>Jeżeli w mailu nie ma żadnego załącznika z zakupionym treningiem proszę niezwłocznie powiadomić nas o tym w mailu: kontakt@theschoolofcalisthenics.pl. W tytule proszę podać numer zamówienia.</p>
                         <br/ >
-                        <p>Produkty w formie pdf/doc można również pobrać na stronie sklepu wchodząc do zakładki "Zamówienia", lub kliknąć w link poniżej.</p>
+                        <p>Produkty można również pobrać na stronie sklepu wchodząc do zakładki "Zamówienia", lub kliknąć w link poniżej.</p>
                         <!-- Przycisk do strony zamówienia -->
                         <div style="text-align:center; margin:20px 0;">
                             <a href="https://theschoolofcalisthenics.pl/order/${order.id}" 

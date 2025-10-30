@@ -23,6 +23,7 @@ type VideoProductsProps = {
     description: string;
     useFont?: boolean;
     onlyTextDescription?: boolean;
+    type: string;
 };
 
 export default function VideoProducts({
@@ -33,6 +34,7 @@ export default function VideoProducts({
     description,
     useFont = true,
     onlyTextDescription = false,
+    type,
 }: VideoProductsProps) {
     const [showLevel, setShowLevel] = useState<string>('');
     const [openAlert, setOpenAlert] = useState<string>('');
@@ -72,6 +74,10 @@ export default function VideoProducts({
         });
     };
 
+    const levelType = type === 'levels';
+
+    const ebooksType = type === 'ebooks';
+
     return (
         <div className="flex flex-col lg:pt-35" id="trainings">
             <div className="flex flex-col justify-center items-center">
@@ -85,7 +91,9 @@ export default function VideoProducts({
                     dangerouslySetInnerHTML={{ __html: description }}
                 />
             </div>
-            <div className="flex items-stretch lg:flex-row flex-col py-20 h-max justify-evenly flex-wrap">
+            <div
+                className={`flex items-stretch lg:flex-row flex-col ${ebooksType ? 'pb-20 pt-5' : 'py-20'} h-max justify-evenly flex-wrap`}
+            >
                 {videoProducts?.map((item) => {
                     const productType = findProductType(item?.id);
 
@@ -111,7 +119,7 @@ export default function VideoProducts({
                                 className="flex flex-col"
                             >
                                 <div className="relative lg:w-full">
-                                    {hovered && (
+                                    {hovered && levelType && (
                                         <div
                                             className={`absolute top-0 rounded-tl-lg rounded-tr-lg lg:rounded-tl-none lg:rounded-tr-none lg:top-[40%] left-0 w-full flex text-5xl py-5 px-3 font-medium items-center justify-center bg-[oklch(0.61_0.16_252.06)] text-white z-30 shadow-xl ${useFont ? "font-['Graduate']" : ''} text-center`}
                                         >
@@ -126,97 +134,98 @@ export default function VideoProducts({
                                         unoptimized
                                         className="h-max lg:w-max w-full object-center object-contain rounded-tl-lg rounded-t-lg rounded-tr-lg z-20"
                                     />
-                                    {hovered && (
-                                        <div className="absolute bottom-0 right-0 w-full text-3xl font-semibold text-white text-shadow-lg/30 flex  justify-center">
-                                            <div
-                                                className={`flex flex-col gap-5 ${!hovered ? 'bg-transparent' : 'bg-[oklch(0.61_0.16_252.06)] animate-bounce'} text-center w-fit py-4 px-3 rounded-xl px-4`}
-                                            >
-                                                <div className="relative inline-block ">
-                                                    {Number(productType?.price)
-                                                        ?.toFixed(2)
-                                                        .replace('.', ',')}{' '}
-                                                    zł
-                                                    {saleActive && (
-                                                        <svg
-                                                            className="absolute top-0 left-0 w-full h-full"
-                                                            preserveAspectRatio="none"
-                                                        >
-                                                            <line
-                                                                x1="0"
-                                                                y1="9"
-                                                                x2="100%"
-                                                                y2="90%"
-                                                                stroke="red"
-                                                                strokeWidth="3"
-                                                            />
-                                                        </svg>
-                                                    )}
-                                                    {saleActive && (
-                                                        <svg
-                                                            className="absolute top-0 left-0 w-full h-full"
-                                                            preserveAspectRatio="none"
-                                                        >
-                                                            <line
-                                                                x1="100%"
-                                                                y1="9"
-                                                                x2="0"
-                                                                y2="90%"
-                                                                stroke="red"
-                                                                strokeWidth="3"
-                                                            />
-                                                        </svg>
-                                                    )}
-                                                </div>
+                                    <div className="absolute bottom-0 right-0 w-full text-3xl font-semibold text-white text-shadow-lg/30 flex  justify-center">
+                                        <div
+                                            className={`flex flex-col gap-5 bg-[oklch(0.61_0.16_252.06)] ${!hovered ? '' : 'animate-bounce'} text-center w-fit py-4 px-3 rounded-xl px-4`}
+                                        >
+                                            <div className="relative inline-block ">
+                                                {Number(productType?.price)
+                                                    ?.toFixed(2)
+                                                    .replace('.', ',')}{' '}
+                                                zł
                                                 {saleActive && (
-                                                    <div>
-                                                        {productType.sale_price}{' '}
-                                                        zł
-                                                    </div>
+                                                    <svg
+                                                        className="absolute top-0 left-0 w-full h-full"
+                                                        preserveAspectRatio="none"
+                                                    >
+                                                        <line
+                                                            x1="0"
+                                                            y1="9"
+                                                            x2="100%"
+                                                            y2="90%"
+                                                            stroke="red"
+                                                            strokeWidth="3"
+                                                        />
+                                                    </svg>
+                                                )}
+                                                {saleActive && (
+                                                    <svg
+                                                        className="absolute top-0 left-0 w-full h-full"
+                                                        preserveAspectRatio="none"
+                                                    >
+                                                        <line
+                                                            x1="100%"
+                                                            y1="9"
+                                                            x2="0"
+                                                            y2="90%"
+                                                            stroke="red"
+                                                            strokeWidth="3"
+                                                        />
+                                                    </svg>
                                                 )}
                                             </div>
+                                            {saleActive && (
+                                                <div>
+                                                    {productType.sale_price} zł
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
-                                <div className="text-center w-full flex flex-col justify-between mt-5">
-                                    <div className="flex flex-col">
-                                        <TextFade>
-                                            <div
-                                                className={`text-3xl text-center font-bold lg:px-10 px-1 pb-5 indent-4 prose ${useFont ? "font-['Graduate']" : ''}`}
-                                                style={{
-                                                    whiteSpace: 'pre-line',
-                                                }}
-                                            >
-                                                {item?.name}
-                                            </div>
-                                        </TextFade>
-                                        <TextFade>
-                                            <div
-                                                className="flex flex-col text-lg text-justify lg:px-15 pb-5 prose"
-                                                style={{
-                                                    whiteSpace: 'pre-line',
-                                                }}
-                                            >
-                                                {!onlyTextDescription
-                                                    ? formatText(
-                                                          item.short_description as string,
-                                                      )
-                                                    : item.short_description}
-                                            </div>
-                                        </TextFade>
-                                        {item.description && (
-                                            <TextFade>
-                                                <div
-                                                    className="flex flex-col text-lg text-center lg:px-15 pb-5 prose"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: item.description,
-                                                    }}
-                                                />
-                                            </TextFade>
-                                        )}
                                     </div>
                                 </div>
+                                {levelType && (
+                                    <div className="text-center w-full flex flex-col justify-between mt-5">
+                                        <div className="flex flex-col">
+                                            <TextFade>
+                                                <div
+                                                    className={`text-3xl text-center font-bold lg:px-10 px-1 pb-5 indent-4 prose ${useFont ? "font-['Graduate']" : ''}`}
+                                                    style={{
+                                                        whiteSpace: 'pre-line',
+                                                    }}
+                                                >
+                                                    {item?.name}
+                                                </div>
+                                            </TextFade>
+                                            <TextFade>
+                                                <div
+                                                    className="flex flex-col text-lg text-justify lg:px-15 pb-5 prose"
+                                                    style={{
+                                                        whiteSpace: 'pre-line',
+                                                    }}
+                                                >
+                                                    {!onlyTextDescription
+                                                        ? formatText(
+                                                              item.short_description as string,
+                                                          )
+                                                        : item.short_description}
+                                                </div>
+                                            </TextFade>
+                                            {item.description && (
+                                                <TextFade>
+                                                    <div
+                                                        className="flex flex-col text-lg text-center lg:px-15 pb-5 prose"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: item.description,
+                                                        }}
+                                                    />
+                                                </TextFade>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                            <div className="w-full text-center flex justify-center items-center pb-7">
+                            <div
+                                className={`w-full text-center flex justify-center items-center pb-7 ${ebooksType ? 'mt-6' : ''}`}
+                            >
                                 <Button
                                     className="bg-blue-400 text-white font-bold px-6 py-3 rounded-xl hover:bg-green-500 transition hover:scale-120"
                                     onClick={() =>
@@ -253,6 +262,7 @@ export default function VideoProducts({
                                 addProductToProductList({
                                     id: openAlert,
                                     amount: 1,
+                                    trening: true,
                                 });
                                 setOpenAlert('');
                             }}

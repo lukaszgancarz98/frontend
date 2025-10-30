@@ -440,6 +440,7 @@ export default function AddProduct({ close }: AddProductProps) {
                                         id={`price-${index}`}
                                         name={`price-${index}`}
                                         type="number"
+                                        step="0.01"
                                         required
                                     />
                                 </div>

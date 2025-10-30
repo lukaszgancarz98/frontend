@@ -210,7 +210,7 @@ export default function DisplayProduct({
         }
 
         const filter = items.filter((x) => !x.del);
-
+        console.log(filter, product.id, 'XD2');
         return filter.map((item, index) => {
             if (item.file) {
                 return {
@@ -238,6 +238,13 @@ export default function DisplayProduct({
     }, [productData.image]);
 
     const sizeImage = useMemo(() => {
+        if (
+            productData.size_image?.url === 'undefined' &&
+            !productData.size_image?.file
+        ) {
+            return;
+        }
+
         return productData.size_image
             ? createFileListFromImages(
                   productData.size_image ? [productData.size_image] : undefined,
@@ -1172,6 +1179,7 @@ export default function DisplayProduct({
                                                     name="price"
                                                     type="number"
                                                     required
+                                                    step="0.01"
                                                     value={item.price}
                                                     onChange={(value) =>
                                                         updateProductType(

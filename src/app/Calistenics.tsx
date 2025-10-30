@@ -8,19 +8,10 @@ import VideoProducts from '../pages/components/VideoProducts';
 import type { ProductType } from '@/api/produktApi';
 import Menu from './Menu';
 import Footer2 from '../pages/components/footer2';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Workshops from '@/pages/components/Workshops';
 import { Toaster } from '@/components/ui/sonner';
-import Kontakt from '@/pages/components/Kontakt';
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogFooter,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
+import Link from 'next/link';
 
 export default function Calistenics() {
     const randTriggered = useRef(false);
@@ -41,12 +32,24 @@ export default function Calistenics() {
     const homeRef = useRef<HTMLDivElement>(null);
     const prodRef = useRef<HTMLDivElement>(null);
     const vidRef = useRef<HTMLDivElement>(null);
+    const ebookRef = useRef<HTMLDivElement>(null);
     const vidLevelsRef = useRef<HTMLDivElement>(null);
     const additionalActivities = useRef<HTMLDivElement>(null);
     const footerRef = useRef<HTMLDivElement>(null);
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const [scrolled, setScrolled] = useState<boolean>(false);
-    const [open, setOpen] = useState<boolean>(false);
+    const [breakPoint, setBreakPoint] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setBreakPoint(window.innerWidth > 1024);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (!randTriggered.current && products.length > 0) {
@@ -61,12 +64,17 @@ export default function Calistenics() {
     ) => {
         e.preventDefault();
         if (ref) {
-            ref.scrollIntoView({ behavior: 'smooth' });
+            const offset = breakPoint ? 0 : 100;
+            const top =
+                ref.getBoundingClientRect().top + window.scrollY - offset;
+
+            window.scrollTo({ top, behavior: 'smooth' });
         }
     };
 
     const settings = [
         { title: 'STRONA GŁÓWNA', href: '#home', ref: homeRef.current },
+        { title: 'E-BOOK', href: '#ebook', ref: ebookRef.current },
         {
             title: 'PLANY TRENINGOWE',
             href: '#videosLevels',
@@ -178,63 +186,57 @@ export default function Calistenics() {
                 className="flex lg:flex-row flex-col w-full pt-[20vh] lg:pt-35 pb-10 bg-[oklch(0.13_0.03_246.56)] shadow-2xl"
             >
                 <BackgroundOnScroll
-                    backgroundImageUrl="/kalintro02.jpg"
+                    backgroundImageUrl="/kalintro04.jpg"
                     className="w-[70vw] lg:h-200 h-80 w-full"
                     bgClassName=""
                 />
                 <div className="lg:w-1/2 text-white">
                     <TextFade className="lg:p-10 h-full flex justify-center lg:items-center">
-                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center font-medium lg:font-comic">
-                            <div className="pb-2">KIM JESTEŚ?</div>
-                            <div className="text-center">
-                                JAKIE MASZ UMIEJĘTNOŚCI?
+                        <div className="flex flex-col gap-5 lg:text-3xl text-2xl p-3 w-full justify-center items-center text-center font-medium lg:font-comic">
+                            <div>
+                                NIE CZEKAJ NA IDEALNY MOMENT!
+                                <br />
+                                NIE POTRZEBUJESZ SIŁOWNI I DROGICH KARNETÓW!
                             </div>
-                            <div>JAK TRENUJESZ?</div>
-                            <div className="pb-5">CO OSIĄGASZ?</div>
-                            <div className="w-full text-center pb-5">
-                                ZALEŻY TYLKO I WYŁĄCZNIE OD CIEBIE
+                            <div>
+                                WYSTARCZY PODŁOGA, DRĄŻEK I LUDZIE KTÓRZY
+                                POCIĄGNĄ CIĘ W GÓRĘ!
                             </div>
-                            <Dialog
-                                open={open}
-                                onOpenChange={() => {
-                                    if (open) {
-                                        setOpen((prev) => !prev);
-                                    }
-                                }}
+                            <div>
+                                ZRÓB PIERWSZY RUCH! RESZTA PRZYJDZIE W TRAKCIE.
+                            </div>
+                            <a
+                                onClick={(e) => handleScroll(e, vidRef.current)}
+                                className="rounded-xl bg-green-500 p-3 shadow-xl transition-transform hover:scale-110"
                             >
-                                <DialogTrigger asChild>
-                                    <Button
-                                        className="w-1/3 bg-blue-500 text-black hover:bg-green-400 hover:text-xl"
-                                        onClick={() => setOpen(true)}
-                                    >
-                                        KONTAKT
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogTitle hidden />
-                                <DialogContent className="w-[100vw] lg:w-[30vw] z-80">
-                                    <Kontakt close={() => setOpen(false)} />
-                                    <DialogFooter>
-                                        <DialogClose asChild>
-                                            <Button
-                                                variant="outline"
-                                                onClick={() => setOpen(false)}
-                                            >
-                                                Anuluj
-                                            </Button>
-                                        </DialogClose>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
-                            <div className="pb-2 pt-3">ZOSTAŃ JEDNYM Z NAS</div>
+                                CHCĘ TRENOWAĆ
+                            </a>
+                            <Link
+                                href={'/instructortraining'}
+                                className="rounded-xl bg-blue-500 p-3 shadow-xl transition-transform hover:scale-110 text-center w-min lg:w-auto"
+                            >
+                                CHCĘ ZOSTAĆ INSTRUKTOREM
+                            </Link>
                         </div>
                     </TextFade>
                 </div>
+            </div>
+            <div id="ebook" ref={ebookRef} className="min-h-[100%]">
+                <VideoProducts
+                    videoProducts={filteredTrainings('ebook')}
+                    productTypes={productTypes}
+                    addProductToProductList={addProductToProductList}
+                    type="ebooks"
+                    title="E-BOOK"
+                    description=""
+                />
             </div>
             <div id="videos" ref={vidRef} className="min-h-[100%]">
                 <VideoProducts
                     videoProducts={filteredTrainings('levels')}
                     productTypes={productTypes}
                     addProductToProductList={addProductToProductList}
+                    type="levels"
                     title="PLANY TRENINGOWE"
                     description="ZACZYNASZ? MASZ DOSWIADCZENIE? TRENUJESZ OD LAT?<br />WYBIERZ POZIOM DLA SIEBIE"
                 />
@@ -258,7 +260,7 @@ export default function Calistenics() {
                     </TextFade>
                 </div>
                 <BackgroundOnScroll
-                    backgroundImageUrl="/kalintro04.jpg"
+                    backgroundImageUrl="/kalintro02.jpg"
                     className="w-[70vw] lg:h-200 h-80 w-full"
                     bgClassName=""
                 />
@@ -275,6 +277,7 @@ export default function Calistenics() {
                     productTypes={productTypes}
                     addProductToProductList={addProductToProductList}
                     title="TRENINGI SPECJALISTYCZNE"
+                    type="levels"
                     description="SZUKASZ BARDZIEJ UKIERUNKOWANYCH TRENINGÓW?"
                     useFont={false}
                     onlyTextDescription={true}
@@ -304,7 +307,7 @@ export default function Calistenics() {
                     products={filteredTrainings('optional')}
                     productTypes={productTypes}
                     addProductToProductList={addProductToProductList}
-                    title=" OPCJE DODATKOWE"
+                    title="OPCJE DODATKOWE"
                     description="CHCESZ WIECEJ? <br />SKORZYSTAJ Z ROZSZERZONEJ OFERTY"
                 />
             </div>

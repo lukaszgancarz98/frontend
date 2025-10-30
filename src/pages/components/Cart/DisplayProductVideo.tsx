@@ -1,7 +1,7 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import type { ProductType } from '../../../api/produktApi';
 import type { DisplayProductType, DisplaySize } from './Cart';
-import { Dumbbell } from 'lucide-react';
+import { BookText, Dumbbell } from 'lucide-react';
 
 type DispalyProductProps = {
     product: DisplayProductType;
@@ -20,11 +20,16 @@ export default function DisplayProductVideo({
 }: DispalyProductProps) {
     const sale = Number(product?.sale_amount) > 0;
     const price = sale ? Number(product?.sale_price) : Number(product?.price);
+    const ebookType = parentProduct?.category?.includes('ebook');
 
     return (
         <div className="flex flex-col border rounded-lg mb-2 p-2">
             <div className="flex flex-row pt-2 px-2">
-                <Dumbbell className="h-24 w-24 rounded-lg bg-top object-contain min-w-20 min-h-20 pt-3 mx-2" />
+                {ebookType ? (
+                    <BookText className="h-24 w-24 rounded-lg bg-top object-contain min-w-20 min-h-20 pt-3 mx-2" />
+                ) : (
+                    <Dumbbell className="h-24 w-24 rounded-lg bg-top object-contain min-w-20 min-h-20 pt-3 mx-2" />
+                )}
                 <div className="pl-2 flex flex-row w-full justify-between">
                     <div>
                         <p className="pt-1 font-bold">{parentProduct?.name}</p>
