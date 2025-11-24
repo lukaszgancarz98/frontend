@@ -199,10 +199,6 @@ export default function Calistenics() {
                                 NIE POTRZEBUJESZ SIŁOWNI I DROGICH KARNETÓW!
                             </div>
                             <div>
-                                WYSTARCZY PODŁOGA, DRĄŻEK I LUDZIE KTÓRZY
-                                POCIĄGNĄ CIĘ W GÓRĘ!
-                            </div>
-                            <div>
                                 ZRÓB PIERWSZY RUCH! RESZTA PRZYJDZIE W TRAKCIE.
                             </div>
                             <a

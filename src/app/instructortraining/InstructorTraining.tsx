@@ -93,19 +93,19 @@ export default function InstructorTraining() {
                 <div className="flex lg:w-[50%] w-[90vw] items-center lg:justify-evenly justify-between pt-5 text-xl font-semibold">
                     <a
                         onClick={(e) => handleScroll(e, basicRef.current)}
-                        className="transition-transform hover:scale-120"
+                        className="transition-transform hover:scale-120 bg-blue-400 rounded py-1 px-2"
                     >
                         BASIC
                     </a>
                     <a
                         onClick={(e) => handleScroll(e, advancedRef.current)}
-                        className="transition-transform hover:scale-120"
+                        className="transition-transform hover:scale-120 bg-blue-400 rounded py-1 px-2"
                     >
                         ADVANCED
                     </a>
                     <a
                         onClick={(e) => handleScroll(e, mentoringRef.current)}
-                        className="transition-transform hover:scale-120"
+                        className="transition-transform hover:scale-120 bg-blue-400 rounded py-1 px-2"
                     >
                         MENTORING
                     </a>
