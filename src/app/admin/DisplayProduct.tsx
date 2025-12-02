@@ -37,6 +37,13 @@ import {
 } from '@/service/service';
 import { PlusOutlined } from '@ant-design/icons';
 import { UploadChangeParam } from 'antd/es/upload';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 type DisplayProductProps = {
     product: ProductType;
@@ -773,19 +780,48 @@ export default function DisplayProduct({
                                 </div>
                                 <div className="grid gap-3 w-full">
                                     <Label htmlFor="category">Kategoria*</Label>
-                                    <Input
-                                        id="category"
-                                        type="text"
-                                        name="category"
-                                        required
+                                    <Select
                                         value={productData.category}
-                                        onChange={(e) =>
+                                        onValueChange={(e) =>
                                             setProductData({
                                                 ...productData,
-                                                category: e.target.value,
+                                                category: e,
                                             })
                                         }
-                                    />
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Wybierz kategorię" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="clothes">
+                                                Ciuchy
+                                            </SelectItem>
+                                            <SelectItem value="video-ebook">
+                                                E-book
+                                            </SelectItem>
+                                            <SelectItem value="video-optional-1">
+                                                Trening specjalistyczny 1
+                                            </SelectItem>
+                                            <SelectItem value="video-optional-2">
+                                                Trening specjalistyczny 2
+                                            </SelectItem>
+                                            <SelectItem value="video-optional-3">
+                                                Trening specjalistyczny 3
+                                            </SelectItem>
+                                            <SelectItem value="video-levels-1">
+                                                Trening poziom 1
+                                            </SelectItem>
+                                            <SelectItem value="video-levels-2">
+                                                Trening poziom 2
+                                            </SelectItem>
+                                            <SelectItem value="video-levels-3">
+                                                Trening poziom 3
+                                            </SelectItem>
+                                            <SelectItem value="video-extend">
+                                                Opcje dodatkowe
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
                             <div className="flex lg:flex-row flex-col gap-5 mx-5">

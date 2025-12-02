@@ -28,7 +28,8 @@ export default function WorkShopsPage() {
         }
 
         if (response.isValid) {
-            setWorkShops(response.data as ReciverResponseData[]);
+            const filter = response.data?.filter((item) => item.page === 'cal');
+            setWorkShops(filter as ReciverResponseData[]);
         }
     };
 

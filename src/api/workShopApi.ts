@@ -4,6 +4,7 @@ import { ApiResponse } from './userApi';
 export type ReciverData = { email: string; id: string };
 
 export type ReciverResponseData = {
+    page: string;
     email: string;
     workshop_id: string;
     id: string;
@@ -16,7 +17,7 @@ export const createWorkShopReceiver = async (
         const res = await fetch(`${BACKEND_URL}/workshop/create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ ...data, page: 'cal' }),
         });
 
         const responseData = await res.json();

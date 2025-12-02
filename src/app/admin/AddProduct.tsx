@@ -7,6 +7,13 @@ import { PAGE } from '@/common/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { FileType, getBase64, handleCreate } from '@/service/service';
 import { PlusOutlined } from '@ant-design/icons';
@@ -39,6 +46,7 @@ export default function AddProduct({ close }: AddProductProps) {
         { images: UploadFile[]; index: string }[]
     >([]);
     const [submitPending, setSubmitPending] = useState<boolean>(false);
+    const [category, setCategory] = useState<string>();
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -113,7 +121,7 @@ export default function AddProduct({ close }: AddProductProps) {
             description: formData.get('description') as string,
             short_description: formData.get('short_description') as string,
             image: imageData.data?.public_id + ':url:' + imageData.data?.url,
-            category: formData.get('category') as string,
+            category: category,
             page: PAGE,
             tag: formData.get('tag') as string,
             size_image:
@@ -253,12 +261,45 @@ export default function AddProduct({ close }: AddProductProps) {
                     <div className="flex lg:flex-row flex-col gap-5 mx-5">
                         <div className="grid gap-3 w-full">
                             <Label htmlFor="category">Kategoria*</Label>
-                            <Input
-                                id="category"
-                                type="text"
-                                name="category"
-                                required
-                            />
+                            <Select
+                                value={category}
+                                onValueChange={setCategory}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Wybierz kategorię" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectContent>
+                                        <SelectItem value="clothes">
+                                            Ciuchy
+                                        </SelectItem>
+                                        <SelectItem value="video-ebook">
+                                            E-book
+                                        </SelectItem>
+                                        <SelectItem value="video-optional-1">
+                                            Trening specjalistyczny 1
+                                        </SelectItem>
+                                        <SelectItem value="video-optional-2">
+                                            Trening specjalistyczny 2
+                                        </SelectItem>
+                                        <SelectItem value="video-optional-3">
+                                            Trening specjalistyczny 3
+                                        </SelectItem>
+                                        <SelectItem value="video-levels-1">
+                                            Trening poziom 1
+                                        </SelectItem>
+                                        <SelectItem value="video-levels-2">
+                                            Trening poziom 2
+                                        </SelectItem>
+                                        <SelectItem value="video-levels-3">
+                                            Trening poziom 3
+                                        </SelectItem>
+                                        <SelectItem value="video-extend">
+                                            Opcje dodatkowe
+                                        </SelectItem>
+                                    </SelectContent>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="grid gap-3 w-full">
                             <Label htmlFor="tag">Tagi</Label>
