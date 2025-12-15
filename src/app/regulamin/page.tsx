@@ -1,3 +1,4 @@
+import { LOGO } from '@/common/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,7 +11,7 @@ export default function Rage() {
             >
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-24 lg:w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}

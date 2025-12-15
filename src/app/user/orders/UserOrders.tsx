@@ -22,6 +22,7 @@ import {
     ProductType,
     ProductTypeType,
 } from '@/api/produktApi';
+import { LOGO } from '@/common/constants';
 
 export default function UserOrders() {
     const [userOrders, setUserOrders] = useState<OrderType[]>();
@@ -83,7 +84,7 @@ export default function UserOrders() {
             >
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-24 h-18 w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}

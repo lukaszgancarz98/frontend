@@ -9,6 +9,7 @@ import Product from '@/pages/components/productInGallery';
 import { ProductType } from '@/api/produktApi';
 import { redirect, RedirectType } from 'next/navigation';
 import Footer2 from '@/pages/components/footer2';
+import { LOGO } from '@/common/constants';
 
 export default function Shop() {
     const {
@@ -64,7 +65,7 @@ export default function Shop() {
                     className="flex flex-col justify-center lg:w-1/4 w-1/3 lg:h-full h-auto"
                 >
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-30 lg:w-50 bg-transparent lg:ml-10"
                         width={500}
                         height={500}

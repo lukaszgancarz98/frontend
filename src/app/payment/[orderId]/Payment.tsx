@@ -14,7 +14,7 @@ import {
 import PaymentAddressForm, {
     type DeliverTypesType,
 } from './PaymentAddressForm';
-import { DELIVER_TYPES } from '../../../common/constants';
+import { DELIVER_TYPES, LOGO } from '../../../common/constants';
 import Link from 'next/link';
 import { useUser } from '@/context/userContext';
 import Image from 'next/image';
@@ -296,7 +296,7 @@ export default function Payment({ orderId }: { orderId: string }) {
             >
                 <Link href={'/'}>
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="h-24 w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={500}

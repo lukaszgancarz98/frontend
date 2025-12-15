@@ -16,6 +16,7 @@ import { GoPackageDependents } from 'react-icons/go';
 import { getDocument } from '@/api/documentApi';
 import { ProductType, ProductTypeType } from '@/api/produktApi';
 import { isEmpty } from 'lodash';
+import { LOGO } from '@/common/constants';
 
 export type OrderPageProps = { error: string; children: React.ReactNode };
 
@@ -28,7 +29,7 @@ export function Order({ error, children }: OrderPageProps) {
             >
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-24 h-15 w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}

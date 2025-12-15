@@ -12,6 +12,7 @@ import Image from 'next/image';
 import Workshops from '@/pages/components/Workshops';
 import { Toaster } from '@/components/ui/sonner';
 import Link from 'next/link';
+import { LOGO } from '@/common/constants';
 
 export default function Calistenics() {
     const randTriggered = useRef(false);
@@ -144,7 +145,7 @@ export default function Calistenics() {
                     onClick={(e) => handleScroll(e, homeRef.current)}
                 >
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-30 lg:w-50 bg-transparent lg:ml-10"
                         width={500}
                         height={500}

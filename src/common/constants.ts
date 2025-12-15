@@ -43,3 +43,5 @@ export const CLIENT_ID =
     '621775169522-e9i5tqri2o8t7u080qtti15vvabuemno.apps.googleusercontent.com';
 
 export const PAGE = 'kalistenika';
+
+export const LOGO = '/logo.png';

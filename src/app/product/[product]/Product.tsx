@@ -21,6 +21,7 @@ import { useUser } from '@/context/userContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/pages/components/ProductCard';
+import { LOGO } from '@/common/constants';
 
 type ProductProps = { productId: string };
 
@@ -129,7 +130,7 @@ export default function Product({ productId }: ProductProps) {
             >
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-24 lg:w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}

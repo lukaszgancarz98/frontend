@@ -5,6 +5,7 @@ import Footer2 from '../../pages/components/footer2';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getAllProducts, ProductType } from '@/api/produktApi';
+import { LOGO } from '@/common/constants';
 
 export default function SizesPage() {
     const [products, setProducts] = useState<ProductType[]>();
@@ -47,7 +48,7 @@ export default function SizesPage() {
             >
                 <Link href="/" className="flex flex-col justify-start w-1/4">
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-24 h-18 w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}

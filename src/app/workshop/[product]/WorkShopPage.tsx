@@ -7,6 +7,7 @@ import {
     ProductTypeType,
 } from '@/api/produktApi';
 import { createWorkShopReceiver } from '@/api/workShopApi';
+import { LOGO } from '@/common/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Toaster } from '@/components/ui/sonner';
@@ -86,7 +87,7 @@ export default function WorkShopPage({ productId }: WorkShopPageProps) {
                     className="flex flex-col justify-start lg:w-1/4 w-1/3"
                 >
                     <Image
-                        src={'/logo.png'}
+                        src={LOGO}
                         className="lg:h-24 lg:w-40 bg-transparent lg:ml-10"
                         alt="/placeholder.png"
                         width={1000}
