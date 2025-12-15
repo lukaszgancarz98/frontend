@@ -20,8 +20,8 @@ export default async function sendEmail({
         port: 465,
         secure: true,
         auth: {
-            user: 'AKIAQO55YSKNRM52J5XJ',
-            pass: 'BLJqUz77Pbjuxu+0MW+8TwAxZM/LYNqS5e7fS74Ju6M9',
+            user: process.env.NEXT_PUBLIC_SES_USER,
+            pass: process.env.NEXT_PUBLIC_SES_PASS,
         },
     });
 
