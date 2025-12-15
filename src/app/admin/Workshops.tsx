@@ -19,11 +19,13 @@ type DispalyWorkShop = {
 export default function WorkShopsPage() {
     const [workshops, setWorkShops] = useState<ReciverResponseData[]>();
     const [products, setProducts] = useState<ProductType[]>();
+    const [error, setError] = useState(false);
 
     const getAllProductsRequest = async () => {
         const response = await getAllWorkShopReceivers();
 
         if (!response.isValid) {
+            setError(true);
             toast.error('Błąd przy pobieraniu danych newslettera');
         }
 
@@ -99,6 +101,7 @@ export default function WorkShopsPage() {
         const response = await getAllProducts();
 
         if (!response.isValid) {
+            setError(true);
             toast.error('Błąd przy pobieraniu danych produktów');
         }
 
@@ -108,7 +111,7 @@ export default function WorkShopsPage() {
     };
 
     useEffect(() => {
-        if (isEmpty(workshops) && isEmpty(products)) {
+        if (isEmpty(workshops) && isEmpty(products) && !error) {
             getAllProductsRequest();
             getAllRequest();
         }
