@@ -38,9 +38,7 @@ export const DELIVER_TYPES = [
     },
 ];
 
-export const CLIENT_ID =
-    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-    '621775169522-e9i5tqri2o8t7u080qtti15vvabuemno.apps.googleusercontent.com';
+export const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 export const PAGE = 'kalistenika';
 
